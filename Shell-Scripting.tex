@@ -25,7 +25,7 @@
 % \usepackage{movie15} 
 
 \hypersetup{
-  pdftitle={HPC User Environment, Job Management with PBS/Loadleveler},
+  pdftitle={Shell Scripting}
   pdfauthor={Alexander B. Pacheco, User Services Consultant, Louisiana State University}
 }                                                         
 \usepackage{times}
@@ -58,6 +58,7 @@
   \ensuremath{\blacktriangledown}}}
 \newcommand*\const{\textcolor{darkgray}%
   {\textbf{--}}}
+\newcommand*\enter{\tikz[baseline=-0.5ex] \draw[<-] (0,0) -| (0.5,0.1);}
 
 
 \setbeamercolor{uppercol}{fg=white,bg=red!30!black}%
@@ -86,7 +87,7 @@
 {\end{beamerboxesrounded}}
 
 
-\title{BASH Shell Scripting}
+\title{Shell Scripting}
 
 
 \author[Alex Pacheco]{\large{Alexander~B.~Pacheco}}
@@ -94,7 +95,7 @@
 %\institute[High Performance Computing @ Louisiana State University - http://www.hpc.lsu.edu] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
 \institute[HPC Training: Fall 2012] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
 
-\date[\hfill{September 26, 2012\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{HPC Training Fall 2012\\Louisiana State University\\Baton Rouge\\September 26, 2012}}
+\date[\hfill{February 27, 2013\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{HPC Training Spring 2013\\Louisiana State University\\Baton Rouge\\February 27, 2013}}
      
 \subject{Talks}
 \keywords{LONI \& LSU HPC Computing Resources, Bash Shell Scripting}
@@ -123,14 +124,14 @@
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
-% \AtBeginSection[]
-% {
-%   \begin{frame}<beamer>
-%    \frametitle{\small{Outline}}
-%     \small
-%     \tableofcontents[currentsection,currentsubsection]
-%   \end{frame}
-% }
+ \AtBeginSection[]
+ {
+   \begin{frame}<beamer>
+    \frametitle{\small{Outline}}
+     \scriptsize
+     \tableofcontents[currentsection,currentsubsection]
+   \end{frame}
+ }
 
 \begin{document}
 
@@ -138,7 +139,7 @@
 
 \footnotesize
 \begin{frame}[label=toc,squeeze]
-  \footnotesize
+  \scriptsize
   \frametitle{\small{Outline}}
   \tableofcontents
 \end{frame}
@@ -147,7 +148,6 @@
 \section{Overview of Introduction to Linux}
 \begin{frame}
   \frametitle{\small Overview: Introduction to Linux}
-  \fontsize{7}{9}\selectfont{
   \begin{eblock}{What is a SHELL}
     \begin{itemize}
       \item The command line interface is the primary interface to Linux/Unix operating systems.
@@ -156,9 +156,9 @@
       \item The shell is simply an application running on top of the kernel and provides a powerful interface to the system.
     \end{itemize}
   \end{eblock}
-  }
 \end{frame}
- 
+
+\subsection{Types of Shell} 
 \begin{frame}
   \frametitle{\small Types of Shell}
   {\scriptsize
@@ -204,136 +204,138 @@
 
 \begin{frame}
   \frametitle{\small Shell Comparison}
-
-\begin{center}
-\begin{tikzpicture}
-\node (tbl) {
-\begin{tabularx}{\textwidth}{cccccc}
-\arrayrulecolor{tigersgold}
-\textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{sh}} &\textcolor{white}{\textbf {csh}} & \textcolor{white}{\textbf{tcsh}} & \textcolor{white}{\textbf{ksh}} & \textcolor{white}{\textbf{bash}} \\
-Programming Language\rule{0pt}{3.5ex} & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Shell Variables & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Command alias & \xmark & \cmark & \cmark & \cmark & \cmark \\
-Command history & \xmark & \cmark & \cmark & \cmark & \cmark \\
-Filename completion & \xmark & \smark & \cmark & \smark & \cmark \\
-Command line editing & \xmark & \xmark & \cmark & \smark & \cmark \\
-Job control & \xmark & \cmark & \cmark & \cmark & \cmark \\
-[1.0ex]
-\end{tabularx}};
-\begin{pgfonlayer}{background}
-\draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-    draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
-    rectangle ($(tbl.north east)-(0.13,0.9)$);
-%\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
- %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
- %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
-\draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
-    ($(tbl.north east)-(0.13,0.6)$)
-    rectangle ($(tbl.south west)+(0.13,0.2)$);
-\end{pgfonlayer}
-\end{tikzpicture}
-\begin{itemize}
-  \item[\cmark]: Yes
-  \item[\xmark]: No
-  \item[\smark]: Yes, not set by default
-  \item[Ref]: {\tiny\url{http://www.cis.rit.edu/class/simg211/unixintro/Shell.html}}
-\end{itemize}
-\end{center}
+  \begin{center}
+    \begin{columns}
+      \column{0.8\textwidth}
+      \begin{tikzpicture}
+        \node (tbl) {
+          \begin{tabularx}{\textwidth}{cccccc}
+            \arrayrulecolor{tigersgold}
+            \textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{sh}} &\textcolor{white}{\textbf {csh}} & \textcolor{white}{\textbf{tcsh}} & \textcolor{white}{\textbf{ksh}} & \textcolor{white}{\textbf{bash}} \\
+            Programming Language\rule{0pt}{3.5ex} & \cmark & \cmark & \cmark & \cmark & \cmark \\
+            Shell Variables & \cmark & \cmark & \cmark & \cmark & \cmark \\
+            Command alias & \xmark & \cmark & \cmark & \cmark & \cmark \\
+            Command history & \xmark & \cmark & \cmark & \cmark & \cmark \\
+            Filename completion & \xmark & \smark & \cmark & \smark & \cmark \\
+            Command line editing & \xmark & \xmark & \cmark & \smark & \cmark \\
+            Job control & \xmark & \cmark & \cmark & \cmark & \cmark \\
+            [1.0ex]
+        \end{tabularx}};
+        \begin{pgfonlayer}{background}
+          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
+            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          rectangle ($(tbl.north east)-(0.13,0.9)$);
+          %\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
+          %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
+          %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
+          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          ($(tbl.north east)-(0.13,0.6)$)
+          rectangle ($(tbl.south west)+(0.13,0.2)$);
+        \end{pgfonlayer}
+      \end{tikzpicture}
+      \begin{itemize}
+      \item[\cmark]: Yes
+      \item[\xmark]: No
+      \item[\smark]: Yes, not set by default
+      \item[Ref]: {\tiny\url{http://www.cis.rit.edu/class/simg211/unixintro/Shell.html}}
+      \end{itemize}
+    \end{columns}
+  \end{center}
 \end{frame}
 
-\begin{frame}[allowframebreaks]
-  \frametitle{\small Frequently used commands}
-  \begin{itemize}
-    {\scriptsize
-    \item[\texttt{cat}]: Show contents of a file
-    {\tiny \item[$\vardiamond$] \texttt{cat filename}}
-    \item[\texttt{cd}]: Change Directory
-    {\tiny \item[$\vardiamond$] \texttt{cd Tutorials}}
-    \item[\texttt{cp}]: Copy a file
-    {\tiny \item[$\vardiamond$] \texttt{cp file1 file2}}
-    \item[\texttt{mv}]: Move or rename a file
-    {\tiny\item[$\vardiamond$] \texttt{mv file1 file2}}
-    \item[\texttt{ls}]: List files in a directory
-    {\tiny
-    \item[$\vardiamond$] {\tiny\texttt{ls Tutorials}}
-    \item[$\vardiamond$] Options to \texttt{ls}
-    \begin{enumerate}
-      \fontsize{6}{8}\selectfont{
-        \item[-l] show long listing format
-        \item[-a] show hidden files
-        \item[-r] reverse order while sorting
-        \item[-t] show modification times
-      }
-    \end{enumerate}
-    }
-    \item[\texttt{mkdir}]: Create a directory
-    {\tiny\item[$\vardiamond$] \texttt{mkdir dir1}}
-    \framebreak
-    \item[\texttt{rm}]: Remove a file
-    {\tiny
-    \item[$\vardiamond$] \texttt{rm file1 file2}
-    \item[$\vardiamond$] Options to \texttt{rm}
-    \begin{enumerate}
-      \fontsize{6}{8}\selectfont{
-      \item[-i] interactive
-      \item[-r] remove files recursively used to delete directories and its contents
-      \item[-f] force, ignore nonexistent files
-      }
-    \end{enumerate}
-    }
-    \item[\texttt{rmdir}]: Remove a directory
-    {\tiny\item[$\vardiamond$] \texttt{rmdir dir1}}
-    \item[\texttt{file}]: Determine file type
-    \item[\texttt{more}]: Display a file one page at a time
-    \item[\texttt{less}]: Same as \texttt{more} but allow scrolling
-    \item[\texttt{man}]: Access Manual for given application
-    \item[\texttt{vi}]: Edit a file using VI/VIM
-    \item[\texttt{emacs}]: Edit a file using Emacs
-    \item[\texttt{wc}]: Count words, lines and characters in a file
-    \item[\texttt{awk}]: File processing and report generating
-    {\tiny\item[$\vardiamond$] \texttt{awk '\{print \$1\}' file1}}
-    \framebreak
-    \item[\texttt{grep}]: Find lines in a file
-    {\tiny\item[$\vardiamond$] \texttt{grep alias .bashrc}}
-    \item[\texttt{sed}]: Stream Editor
-    {\tiny\item[$\vardiamond$] \texttt{sed 's/home/HOME/g' .bashrc}}
-    \item[\texttt{find}]: Find a file
-    \item[\texttt{ln}]: Link a file to another file
-    {\tiny\item[$\vardiamond$] \texttt{ln -s file1 file2}}
-    \item[\texttt{top}]: Produces an ordered list of running processes
-    \item[\texttt{ps}]: Displays statistics on running processes
-    \item[\texttt{scp}]: secure copy a file/directory between two machines
-    {\tiny\item[$\vardiamond$] \texttt{scp username@host1:/path/to/file1 username@host2:/path/to/file2}}
-    \item[\texttt{sftp}]: connect to another machine using secure ftp
-    \item[\texttt{export}]: export variables to your \texttt{PATH} (\texttt{sh,ksh \& bash} only)
-    {\tiny\item[$\vardiamond$] \texttt{export PATH=/home/apacheco/bin:\$\{PATH\}}}
-    \item[\texttt{setenv}]: equivalent of \texttt{export} for \texttt{csh \& tcsh}
-    {\tiny\item[$\vardiamond$] \texttt{setenv LD\_LIBRARY\_PATH /home/apacheco/lib:\$\{LD\_LIBRARY\_PATH\}}}
-    \framebreak
-    \item[\texttt{alias}]: enables replacement of a word by another string
-    {\tiny\item[$\vardiamond$] \texttt{sh/ksh/bash: alias ll="ls -l"}}
-    {\tiny\item[$\vardiamond$] \texttt{csh/tcsh: alias rm "rm -i"}}
-    \item[\texttt{set}]: manipulate environment variables
-    {\tiny\item[$\vardiamond$] \texttt{set -o emacs}}
-    \item[\texttt{echo}]: print to screen or standard output
-    {\tiny\item[$\vardiamond$] \texttt{echo \$LD\_INCLUDE\_PATH}}
-    \item[\texttt{date}]: display or set date and time
-    \item[\texttt{\&}]: run a job in background
-    \item[\texttt{CNTRL-Z}]: suspend a running job
-    \item[{\texttt{CNTRL-C}}]: Kill a running job
-    \item[{\texttt{jobs}}]: Show list of background jobs
-    \item[{\texttt{fg}}]: run a suspended job in foreground
-    \item[{\texttt{bg}}]: run a suspended job in background
-    \item[{\texttt{wait}}]: wait until all backgrounded jobs have completed
-    \item[\texttt{kill}]: kill a running job, need to provide process id
-    }
-  \end{itemize}
-  To learn more about these commands, type \texttt{man \textit{command}} on the command prompt
-\end{frame}
+%\begin{frame}<0>[allowframebreaks]
+%  \frametitle{\small Frequently used commands}
+%  \begin{itemize}
+%    {\scriptsize
+%    \item[\texttt{cat}]: Show contents of a file
+%    {\tiny \item[$\vardiamond$] \texttt{cat filename}}
+%    \item[\texttt{cd}]: Change Directory
+%    {\tiny \item[$\vardiamond$] \texttt{cd Tutorials}}
+%    \item[\texttt{cp}]: Copy a file
+%    {\tiny \item[$\vardiamond$] \texttt{cp file1 file2}}
+%    \item[\texttt{mv}]: Move or rename a file
+%    {\tiny\item[$\vardiamond$] \texttt{mv file1 file2}}
+%    \item[\texttt{ls}]: List files in a directory
+%    {\tiny
+%    \item[$\vardiamond$] {\tiny\texttt{ls Tutorials}}
+%    \item[$\vardiamond$] Options to \texttt{ls}
+%    \begin{enumerate}
+%      \fontsize{6}{8}\selectfont{
+%        \item[-l] show long listing format
+%        \item[-a] show hidden files
+%        \item[-r] reverse order while sorting
+%        \item[-t] show modification times
+%      }
+%    \end{enumerate}
+%    }
+%    \item[\texttt{mkdir}]: Create a directory
+%    {\tiny\item[$\vardiamond$] \texttt{mkdir dir1}}
+%    \framebreak
+%    \item[\texttt{rm}]: Remove a file
+%    {\tiny
+%    \item[$\vardiamond$] \texttt{rm file1 file2}
+%    \item[$\vardiamond$] Options to \texttt{rm}
+%    \begin{enumerate}
+%      \fontsize{6}{8}\selectfont{
+%      \item[-i] interactive
+%      \item[-r] remove files recursively used to delete directories and its contents
+%      \item[-f] force, ignore nonexistent files
+%      }
+%    \end{enumerate}
+%    }
+%    \item[\texttt{rmdir}]: Remove a directory
+%    {\tiny\item[$\vardiamond$] \texttt{rmdir dir1}}
+%    \item[\texttt{file}]: Determine file type
+%    \item[\texttt{more}]: Display a file one page at a time
+%    \item[\texttt{less}]: Same as \texttt{more} but allow scrolling
+%    \item[\texttt{man}]: Access Manual for given application
+%    \item[\texttt{vi}]: Edit a file using VI/VIM
+%    \item[\texttt{emacs}]: Edit a file using Emacs
+%    \item[\texttt{wc}]: Count words, lines and characters in a file
+%    \item[\texttt{awk}]: File processing and report generating
+%    {\tiny\item[$\vardiamond$] \texttt{awk '\{print \$1\}' file1}}
+%    \framebreak
+%    \item[\texttt{grep}]: Find lines in a file
+%    {\tiny\item[$\vardiamond$] \texttt{grep alias .bashrc}}
+%    \item[\texttt{sed}]: Stream Editor
+%    {\tiny\item[$\vardiamond$] \texttt{sed 's/home/HOME/g' .bashrc}}
+%    \item[\texttt{find}]: Find a file
+%    \item[\texttt{ln}]: Link a file to another file
+%    {\tiny\item[$\vardiamond$] \texttt{ln -s file1 file2}}
+%    \item[\texttt{top}]: Produces an ordered list of running processes
+%    \item[\texttt{ps}]: Displays statistics on running processes
+%    \item[\texttt{scp}]: secure copy a file/directory between two machines
+%    {\tiny\item[$\vardiamond$] \texttt{scp username@host1:/path/to/file1 username@host2:/path/to/file2}}
+%    \item[\texttt{sftp}]: connect to another machine using secure ftp
+%    \item[\texttt{export}]: export variables to your \texttt{PATH} (\texttt{sh,ksh \& bash} only)
+%    {\tiny\item[$\vardiamond$] \texttt{export PATH=/home/apacheco/bin:\$\{PATH\}}}
+%    \item[\texttt{setenv}]: equivalent of \texttt{export} for \texttt{csh \& tcsh}
+%    {\tiny\item[$\vardiamond$] \texttt{setenv LD\_LIBRARY\_PATH /home/apacheco/lib:\$\{LD\_LIBRARY\_PATH\}}}
+%    \framebreak
+%    \item[\texttt{alias}]: enables replacement of a word by another string
+%    {\tiny\item[$\vardiamond$] \texttt{sh/ksh/bash: alias ll="ls -l"}}
+%    {\tiny\item[$\vardiamond$] \texttt{csh/tcsh: alias rm "rm -i"}}
+%    \item[\texttt{set}]: manipulate environment variables
+%    {\tiny\item[$\vardiamond$] \texttt{set -o emacs}}
+%    \item[\texttt{echo}]: print to screen or standard output
+%    {\tiny\item[$\vardiamond$] \texttt{echo \$LD\_INCLUDE\_PATH}}
+%    \item[\texttt{date}]: display or set date and time
+%    \item[\texttt{\&}]: run a job in background
+%    \item[\texttt{CNTRL-Z}]: suspend a running job
+%    \item[{\texttt{CNTRL-C}}]: Kill a running job
+%    \item[{\texttt{jobs}}]: Show list of background jobs
+%    \item[{\texttt{fg}}]: run a suspended job in foreground
+%    \item[{\texttt{bg}}]: run a suspended job in background
+%    \item[{\texttt{wait}}]: wait until all backgrounded jobs have completed
+%    \item[\texttt{kill}]: kill a running job, need to provide process id
+%    }
+%  \end{itemize}
+%  To learn more about these commands, type \texttt{man \textit{command}} on the command prompt
+%\end{frame}
 
+\subsection{File Editing}
 \begin{frame}
   \frametitle{\small File Editing}
-  \fontsize{8}{10}\selectfont{
   \begin{itemize}
     \item The two most commonly used editors on Linux/Unix systems are:
     \begin{enumerate}
@@ -352,8 +354,8 @@ Job control & \xmark & \cmark & \cmark & \cmark & \cmark \\
       \item \texttt{nano}: {\scriptsize GNU.org clone of }\texttt{pico}
       \item \texttt{kwrite}: {\scriptsize editor by KDE.}
     \end{enumerate}
+    \item {\color{red}You are required to know how to create and edit files for this tutorial.}
   \end{itemize}
-  }
 \end{frame}
 
 \begin{frame}[allowframebreaks]
@@ -592,19 +594,271 @@ Job control & \xmark & \cmark & \cmark & \cmark & \cmark \\
   \end{itemize}
 \end{frame}
 
+\subsection{Variables}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small Variables}
+  \begin{itemize}
+    \item *nix also permits the use of variables, similar to any programming language such as C, C++, Fortran etc
+    \item A variable is a named object that contains data used by one or more applications. 
+    \item There are two types of variables, Environment and User Defined and can contain  a number, character or a string of characters.
+    \item Environment Variables provides a simple way to share configuration settings between multiple applications and processes in Linux.
+    \item By Convention, enviromental variables are often named using all uppercase letters
+    \item[e.g.] \texttt{PATH, LD\_LIBRARY\_PATH, LD\_INCLUDE\_PATH, TEXINPUTS, etc}
+    \item To reference a variable (environment or user defined) prepend \$ to the name of the variable
+    \item[e.g.] \$PATH, \$LD\_LIBRARY\_PATH
+%    \framebreak
+%    \item The command \textbf{printenv} list the current environmental variables.
+%    \item[$\bigstar$] \texttt{Type \textbf{printenv} on your command prompt to list all environment variables in your current session.}
+%    \item The command \textbf{env} is used to either print a list of environment variables or run another utility in an altered environment without having to modify the currently existing environment.
+%    \item[$\bigstar$] \texttt{Type \textbf{env SHELL=/bin/tcsh xterm} to start an xterm session in tcsh}
+%    \item[$\vardiamond$] \texttt{To execute the above command successfully, you need to be in GUI mode on the virtual OS or logged into a remote systems with X-Forwarding enabled.}
+  \end{itemize}
+%  \framebreak
+%  \begin{description}
+%    \item[PATH:] A list of directory paths.
+%    \item[HOME:] indicate where a user's home directory is located in the file system.
+%    \item[PWD:] contains path to current working directory.
+%    \item[OLDPWD:] contains path to previous working directory.
+%    \item[TERM:] specifies the type of computer terminal or terminal emulator being used
+%    \item[SHELL:] contains name of the running, interactive shell.
+%    \item[PS1:] default command prompt
+%    \item[PS2:] secondary command prompt
+%    \item[LD\_LIBRARY\_PATH:] colon-separated set of directories where libraries should be searched for first
+%    \item[HOSTNAME:] The systems host name
+%    \item[USER:] Current logged in user's name
+%    \item[DISPLAY:] Network name of the X11 display to connect to, if available.
+%    \item[LD\_INCLUDE\_PATH:] 
+%  \end{description}
+  \framebreak
+  \begin{itemize}
+    \item You can edit the environment variables.
+    \item Command to do this depends on the shell
+    \item[$\bigstar$] \texttt{To add your bin directory to the PATH variable}
+    \item[] \texttt{sh/ksh/bash}: \textbf{export PATH=\$\{HOME\}/bin:\$\{PATH\}}
+    \item[] \texttt{csh/tcsh}: \textbf{setenv PATH\,\,\$\{HOME\}/bin:\$\{PATH\}}
+    \item[$\bigstar$] \texttt{Note the syntax for the above commands}
+    \item[$\bigstar$] \textbf{sh/ksh/bash:} \texttt{no spaces except between export and PATH}
+    \item[$\bigstar$] \textbf{csh,tcsh:} \texttt{no = sign, just a space between PATH and the absolute path}
+    \item[$\bigstar$] \textbf{all shells:} \texttt{colon(:) to separate different paths and the variable that is appended to}
+    \item \textbf{Yes, the order matters.} If you have a customized version of a software say perl in your home directory, if you append the perl path to \$PATH at the end, your program will use the system wide perl not your locally installed version.
+    \item Rules for Variable Names
+    \begin{enumerate}
+      \fontsize{7}{10}\selectfont{
+        \item Variable names must start with a letter or underscore
+        \item Number can be used anywhere else
+        \item DO NOT USE special characters such as \texttt{@, \#, \%, \$}
+        \item Case sensitive
+        \item Examples
+        \begin{itemize}
+          \fontsize{7}{10}\selectfont{
+          \item Allowed: VARIABLE, VAR1234able, var\_name, \_VAR
+          \item Not Allowed: 1VARIABLE, \%NAME, \$myvar, VAR@NAME 
+          }
+        \end{itemize}
+      }
+    \end{enumerate}
+    \item Assigning value to a variable
+    \begin{center}
+      \begin{tikzpicture}
+        \node (tbl) {
+          \begin{tabularx}{0.8\textwidth}{ccc}
+            \arrayrulecolor{tigersgold}
+            \textcolor{white}{\textbf{Type} }& \textcolor{white}{\textbf{sh,ksh,bash}} &\textcolor{white}{\textbf {csh,tcsh}}\\
+            Shell \rule{0pt}{3.5ex} & name=value & set name = value \\
+            Environment & export name=value & setenv name value \\
+            [1.0ex]
+        \end{tabularx}};
+        \begin{pgfonlayer}{background}
+          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
+            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          rectangle ($(tbl.north east)-(0.13,0.9)$);
+          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          ($(tbl.north east)-(0.13,0.6)$)
+          rectangle ($(tbl.south west)+(0.13,0.2)$);
+        \end{pgfonlayer}
+      \end{tikzpicture}
+    \end{center}
+    \item \textbf{sh,ksh,bash} THERE IS NO SPACE ON EITHER SIDE OF =
+    \item \textbf{csh,tcsh} space on either side of = is allowed for the \texttt{set} command
+    \item \textbf{csh,tcsh} There is no = in the \texttt{setenv} command
+  \end{itemize}
+\end{frame}
+
+\subsection{File Permissions}
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{\small File Permissions}
+  \begin{itemize}
+    \item In *NIX OS's, you have three types of file permissions
+    \begin{enumerate}
+      {\footnotesize
+        \item read (r)
+        \item write (w)
+        \item execute (x)
+      }
+    \end{enumerate}
+    \item for three types of users
+    \begin{enumerate}
+      {\footnotesize
+        \item user
+        \item group
+        \item world i.e. everyone else who has access to the system
+      }
+    \end{enumerate}
+    \begin{eblock}{}
+      \begin{tabular}{lllllllll}
+        drwxr-xr-x. & 2 & user & user & 4096 & Jan & 28 & 08:27 & Public\\
+        -rw-rw-r-\,-. & 1 & user & user & 3047 & Jan & 28 & 09:34 & README\\
+      \end{tabular}
+    \end{eblock}
+    \item The first character signifies the type of the file
+    \item[] \texttt{d} for directory
+    \item[] \texttt{l} for symbolic link
+    \item[] \texttt{-} for normal file
+    \item The next three characters of first triad signifies what the owner can do
+    \item The second triad signifies what group member can do
+    \item The third triad signifies what everyone else can do
+    \item Read carries a weight of 4
+    \item Write carries a weight of 2
+    \item Execute carries a weight of 1
+    \item The weights are added to give a value of 7 (rwx), 6(rw), 5(rx) or 3(wx) permissions. 
+    \item \textbf{chmod} is a *NIX command to change permissions on a file
+    \item To give user rwx, group rx and world x permission, the command is
+    \item[] \texttt{chmod 751 filename}
+    \framebreak
+    \item Instead of using numerical permissions you can also use symbolic mode
+    \item[u/g/o or a] user/group/world or all i.e. ugo
+    \item[+/-] Add/remove permission
+    \item[r/w/x] read/write/execute
+    \item Give everyone execute permission: 
+    \item[] \texttt{chmod a+x hello.sh }
+    \item[] \texttt{chmod ugo+x hello.sh}
+    \item Remove group and world read \& write permission: 
+    \item[] \texttt{chmod go-rw hello.sh}
+    \item Use the \texttt{-R} flag to change permissions recursively, all files and directories and their contents.
+    \item[] \texttt{chmod -R 755 \$\{HOME\}/*}
+    \item[] What is the permission on \$\{HOME\}?
+  \end{itemize}
+\end{frame}
+
+\subsection{Input and Output}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small Input/Output}
+  \begin{itemize}
+    \item The command \textbf{echo} is used for displaying output to screen 
+    \item For reading input from screen/keyboard/prompt
+    \item[\textbf{bash}] \textbf{read}
+    \item[\textbf{tcsh}] \textbf{\$<}
+    \item The \textbf{read} statement takes all characters typed until the \enter \,key is pressed and stores them into a variable.
+    \item[Syntax] \texttt{read <variable name>}
+    \item[Example] \texttt{read name\enter}
+    \item[] \textit{Alex Pacheco}
+    \item \textbf{\$<} can accept only one argument. If you have multiple arguments, enclose the \textbf{\$<} within quotes e.g. \textbf{"\$<"}
+    \item[Syntax:] \texttt{set <variable> = \$<}
+    \item[Example:] \texttt{set name = "\$<"\enter}
+    \item[] \textit{Alex Pacheco}
+    \item In the above examples, the name that you enter in stored in the variable \texttt{name}.
+    \item Use the \textbf{echo} command to print the variable \texttt{name} to the screen
+    \item[] \texttt{echo \$name\enter}
+    \item The \textbf{echo} statement can print multiple arguments. 
+    \item By default, \textbf{echo} eliminates redundant whitespace (multiple spaces and tabs) and replaces it with a single whitespace between arguments. 
+    \item To include redundant whitespace, enclose the arguments within double quotes
+    \item[Example:] \texttt{echo Welcome to HPC\quad\quad Training}\enter\, (more than one space between HPC and Training
+    \item[] \texttt{echo "Welcome to HPC\quad\quad Training"}\enter
+    \item[] \texttt{read name\enter} or \texttt{set name = "\$<"\enter}
+    \item[] \textit{Alex\quad\quad\quad Pacheco\enter}
+    \item[] \texttt{echo \$name\enter}
+    \item[] \texttt{echo "\$name"\enter}
+    \framebreak
+    \item You can also use the \textbf{printf} command to display output
+    \item[Usage:] \texttt{printf <format> <arguments>}
+    \item[Examples:] \texttt{printf "\$name"\enter}
+    \item[] \texttt{printf "\%s$\backslash$n" "\$name"\enter}
+    \item Format Descriptors
+    \begin{enumerate}
+      {\scriptsize
+        \item[\%s] print argument as a string
+        \item[\%d] print argument as an integer
+        \item[\%f] print argument as a floating point number
+        \item[$\backslash$n] print new line
+        \item[] you can add a width for the argument between the \% and \{s,d,f\} fields
+        \item[] \%4s, \%5d, \%7.4f
+      }
+    \end{enumerate}
+    \item The \textbf{printf} command is used in \textbf{awk} to print formatted data (more on this later) 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small I/O Redirection}
+  \begin{itemize}
+    \item There are three file descriptors for I/O streams
+    \begin{enumerate}
+      {\footnotesize
+        \item STDIN: Standard Input
+        \item STDOUT: Standard Output
+        \item STDERR: Standard Error
+      }
+    \end{enumerate}
+    \item 1 represents STDOUT and 2 represents STDOUT
+    \item I/O redirection allows users to connect applications
+    \begin{itemize}
+      {\footnotesize
+      \item[<]: connects a file to STDIN of an application
+      \item[>]: connects STDOUT of an application to a file
+      \item[> >]: connects STDOUT of an application by appending to a file
+      \item[|]: connects the STDOUT of an application to STDIN of another application.
+      }
+    \end{itemize}
+    \item Examples:
+    \begin{enumerate}
+      {\footnotesize
+      \item write STDOUT to file: \texttt{ls -l > ls-l.out }
+      \item write STDERR to file: \texttt{ls -l 2> ls-l.err }
+      \item write STDOUT to STDERR: \texttt{ls -l 1>\&2 }
+      \item write STDERR to STDOUT: \texttt{ls -l 2>\&1 }
+      \item send STDOUT as STDIN: \texttt{ls -l | wc -l}
+      }
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+%\begin{frame}{\small Exercise}
+%  \begin{eblock}{}
+%    \begin{itemize}
+%      \item Create two shell variables containing
+%      \begin{enumerate}
+%        {\footnotesize
+%          \item your name
+%          \item[e.g.] MYNAME=Alex
+%          \item a standard greeting
+%          \item[e.g.] Greet=Hello
+%          \item[] \texttt{echo \$MYNAME}\enter
+%          \item[] \texttt{echo \$Greet}\enter
+%          \item Combine and print your name and the greeting
+%          \item[] \texttt{echo \$Greet \$MYNAME}\enter
+%          \item What is the output of the following command?
+%          \item[] \texttt{echo \$Greet \$MYNAME, Welcome to HPC Training}\enter
+%        }
+%      \end{enumerate}
+%    \end{itemize}
+%  \end{eblock}
+%\end{frame}
+
+\section{Shell Scripting Basics}
+\subsection{Start Up Scripts}
 \begin{frame}
   \frametitle{\small Start Up Scripts}
   \begin{itemize}
     {\scriptsize
     \item When you login to a *NIX computer, shell scripts are automatically loaded depending on your default \texttt{shell}
-    \item \texttt{sh,ksh}
+    \item \textbf{sh,ksh}
     \begin{enumerate}
       {\scriptsize
         \item \texttt{/etc/profile}
         \item \texttt{\$HOME/.profile}
       }
     \end{enumerate}
-    \item \texttt{bash}
+    \item \textbf{bash}
     \begin{enumerate}
       {\scriptsize
         \item \texttt{/etc/profile, login terminal only}
@@ -613,7 +867,7 @@ Job control & \xmark & \cmark & \cmark & \cmark & \cmark \\
         \item \texttt{\$HOME/.bashrc}
       }
     \end{enumerate}
-    \item \texttt{csh,tcsh}
+    \item \textbf{csh,tcsh}
     \begin{enumerate}
       {\scriptsize
         \item \texttt{/etc/csh.cshrc}
@@ -677,11 +931,11 @@ setenv BIBINPUTS ".:/home/apacheco/TeX//:${BIBINPUTS}"
   }
 \end{frame}
 
-\section{What is a scripting Language?}
 \begin{frame}
-  \frametitle{\small }
-  \fontsize{7}{9}\selectfont{
-  \begin{eblock}{What is a Scripting Language?}
+  \frametitle{\small What is a scripting Language?}
+%  \vspace{-0.25cm}
+  \begin{eblock}{}%{What is a Scripting Language?}
+    {\scriptsize
     \begin{itemize}
       \item A \textbf{scripting language} or \textbf{script language} is a \emph{programming language} that supports the writing of \textbf{scripts}.
       \item \textbf{Scripting Languages} provide a higher level of abstraction than standard programming languages.
@@ -694,21 +948,20 @@ setenv BIBINPUTS ".:/home/apacheco/TeX//:${BIBINPUTS}"
         }
       \end{enumerate}
       \item They are also good for writing a program that is going to be used only once and then discarded.
-    \end{itemize}
-  \end{eblock}
-  \begin{eblock}{What is a script?}
-    \begin{itemize}
+%    \end{itemize}
+%  \end{eblock}
+%  \begin{eblock}{What is a script?}
+%    \begin{itemize}
       \item A \textbf{script} is a program written for a software environment that automate the execution of tasks which could alternatively be executed one-by-one by a human operator.
       \item The majority of script programs are ``quick and dirty'', where the main goal is to get the program written quickly.
     \end{itemize}
+    }
   \end{eblock}
-  }
 \end{frame}
 
-\section{Writing Scripts}
+\subsection{Getting Started with Writing Simple Scripts}
 \begin{frame}[fragile]
   \frametitle{\small Writing your first script}
-  \fontsize{7}{9}\selectfont{
   \begin{bblock}{Three things to do to write and execute a script}
     {\scriptsize
     \begin{enumerate}
@@ -729,21 +982,19 @@ echo "Hello World!"
       \item Set permissions
       {\tiny
       \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> chmod 755 hello.sh 
+~/Tutorials/BASH/scripts> chmod 755 hello.sh 
       \end{verbatim}
       }
-      \item[$\vardiamond$] Why did we do this? Wait a couple of slides.
       \item Execute the script
       {\tiny
       \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./hello.sh 
+~/Tutorials/BASH/scripts> ./hello.sh 
 Hello World!
       \end{verbatim}
       }
     \end{enumerate}
     }
   \end{bblock}
-  }
 \end{frame}
 
 \begin{frame}[fragile]
@@ -786,117 +1037,10 @@ echo "Hello World!"
     \item[\$?] exit status variable.
     \item[\$\$] process ID variable.
     \item[{[ ]}] test expression
-    \item[{[[ ]]}] test expression, more flexible than [ ]
-    \item[{\$[ ], (( ))}] integer expansion.
+    \item[{[[ ]]}] test expression, more flexible than [ ] 
+    \item[{\$[ ], (( ))}] integer expansion
     \item[||, \&\&, !] Logical OR, AND and NOT
   \end{description}
-  }
-\end{frame}
-
-\begin{frame}[fragile, allowframebreaks]
-  \frametitle{\small File Permissions}
-  \begin{itemize}
-  \fontsize{7}{10}\selectfont{
-    \item In *NIX OS's, you have three types of file permissions
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item read (r)
-        \item write (w)
-        \item execute (x)
-      }
-    \end{enumerate}
-    \item for three types of users
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item user
-        \item group
-        \item world i.e. everyone else who has access to the system
-      }
-    \end{enumerate}
-    \item Read carries a weight of 4
-    \item Write carries a weight of 2
-    \item Execute carries a weight of 1
-    \item \texttt{chmod} is a *NIX command to change permissions on a file
-    \item In the above example \texttt{chmod 755 hello.sh} implies
-    \begin{enumerate}
-      \fontsize{6}{8}\selectfont{
-      \item[$\vardiamond$] the user (you) have read, write and execute permission
-      \item[$\vardiamond$] members of your group have read and execute permission
-      \item[$\vardiamond$] everyone else aka world has read and write permission
-      }
-    \end{enumerate}
-    {\tiny
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> ls -l hello.sh
--rwxr-xr-x  1 apacheco  staff  52 Sep 17 10:52 hello.sh
-    \end{verbatim}
-    }
-    \item Instead of using numerical permissions you can also use symobolic mode
-    \item[u/g/o or a] user/group/world or all i.e. ugo
-    \item[+/-] Add/remove permission
-    \item[r/w/x] read/write/execute
-    \item Give everyone execute permission: 
-    \item[] \texttt{chmod a+x hello.sh }
-    \item[] \texttt{chmod ugo+x hello.sh}
-    \item Remove group and world read \& write permission: 
-    \item[] \texttt{chmod go-rw hello.sh}
-  }
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Input/Output}
-  \fontsize{7}{10}\selectfont{
-  \begin{itemize}
-    \item The basis I/O statements are \texttt{echo} for displaying output to screen and \texttt{read} for reading input from screen/keyboard/prompt
-%  \end{itemize}
-  {\tiny
-  \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat helloname.sh
-#!/bin/bash
-
-# My Second Script
-
-echo Please Enter your name:
-read name
-echo Hello $name
-apacheco@apacheco:~/Tutorials/BASH/scripts> chmod 755 helloname.sh
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./helloname.sh 
-Please Enter your name:
-Alex Pacheco
-Hello Alex Pacheco
-  \end{verbatim}
-  }
-%  \begin{itemize}
-    \item The \texttt{read} statement takes all characters typed until the \texttt{enter} key is pressed and stores them into a variable.
-    \item In the above example, the name that you enter in stored in the variable \texttt{name}.
-    \item The \texttt{echo} statement can print multiple arguments. By default, \texttt{echo} eliminates redundant whitespace (multiple spaces and tabs) and replaces it with a single whitespace between arguments. 
-    {\tiny
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./helloname.sh 
-Please Enter your name:
-Alex       Pacheco
-Hello Alex Pacheco
-    \end{verbatim}
-    }
-    \item To include redundant whitespace, enclose the arguments within double quotes
-    {\tiny
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat helloname.sh 
-#!/bin/bash
-
-# My Second Script
-
-echo Please Enter your name:
-read name
-echo "Hello $name"
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./helloname.sh 
-Please Enter your name:
-Alex     Pacheco
-Hello Alex     Pacheco
-    \end{verbatim}
-    }
-  \end{itemize}
   }
 \end{frame}
 
@@ -920,15 +1064,18 @@ Hello Alex     Pacheco
     \item Back Quotation \texttt{` `}
     \begin{itemize}
       {\scriptsize
+        \item Used for command substitution
         \item Enclosed string is executed as a command
         \item Example: \texttt{echo `pwd`} prints the output of the \texttt{pwd} command i.e. print working directory
+        \item In \textbf{bash}, you can also use \texttt{\$($\cdots$)} instead of \texttt{`$\cdots$`}
+        \item[] e.g. \texttt{\$(pwd)} and \texttt{`pwd`} are the same
       }
     \end{itemize}
   \end{itemize}
 %  \fontsize{9}{8}{
   \tiny{
   \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat quotes.sh 
+~/Tutorials/BASH/scripts> cat quotes.sh 
 #!/bin/bash
 
 HI=Hello
@@ -941,7 +1088,8 @@ echo '$HI'          # displays $HI
 echo "$HIAlex"      # displays nothing
 echo "${HI}Alex"    # displays HelloAlex
 echo `pwd`          # displays working directory
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./quotes.sh 
+echo $(pwd)         # displays working directory
+~/Tutorials/BASH/scripts> ./quotes.sh 
 HI
 Hello
 $HI
@@ -950,121 +1098,157 @@ $HI
 
 HelloAlex
 /home/apacheco/Tutorials/BASH/scripts
-apacheco@apacheco:~/Tutorials/BASH/scripts>
+/home/apacheco/Tutorials/BASH/scripts
+~/Tutorials/BASH/scripts>
   \end{verbatim}
   }
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small I/O Redirection}
+\begin{frame}{\small Exercises}
   \begin{itemize}
-    \item There are three file descriptors for I/O streams
+    \item Create shell scripts to do the following
     \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item STDIN: Standard Input
-        \item STDOUT: Standard Output
-        \item STDERR: Standard Error
-      }
-    \end{enumerate}
-    \item 1 represents STDOUT and 2 represents STDERR
-    \item I/O redirection allows users to connect applications
-    \begin{itemize}
-      \fontsize{7}{10}\selectfont{
-      \item[<]: connects a file to STDIN of an application
-      \item[>]: connects STDOUT of an application to a file
-      \item[> >]: connects STDOUT of an application by appending to a file
-      \item[|]: connects the STDOUT of an application to STDIN of another application.
-      }
-    \end{itemize}
-    \item Examples:
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-      \item write STDOUT to file: \texttt{ls -l > ls-l.out }
-      \item write STDERR to file: \texttt{ls -l 2> ls-l.err }
-      \item write STDOUT to STDERR: \texttt{ls -l 1>\&2 }
-      \item write STDERR to STDOUT: \texttt{ls -l 2>\&1 }
-      \item send STDOUT as STDIN: \texttt{ls -l | wc -l}
+      {\footnotesize
+        \item Write a simple hello world script
+        \item Modify the above script to use a variable
+        \item Modify the above script to prompt you for your name and then display your name with a greeting.
       }
     \end{enumerate}
   \end{itemize}
 \end{frame}
 
-\section{Variables}
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Variables}
-  \begin{itemize}
-    \item Similar to any programming language such C, C++, Fortran, You can use \texttt{variables} in shell scripting languages.
-    \item The only difference is that you do not have to declare the type of variables.
-    \item A variable in \textbf{bash} (or any scripting language such as \textbf{sh,ksh,csh} or \textbf{tcsh}) can contain a number, character or a string of characters.
-    \item You do not need to declare a variable, just assigning a value to its reference will create it.
-  {\tiny
-  \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat hellovariable.sh 
+\begin{frame}[fragile]{\small Solution}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      {\fontsize{4.5}{5.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat hellovariable.sh
 #!/bin/bash
 
 # Hello World script using a variable
 STR="Hello World!"
 echo $STR
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./hellovariable.sh 
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      {\fontsize{4.5}{5.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./hellovariable.sh 
 Hello World!
-  \end{verbatim}
-  }
+        \end{verbatim}
+      }
+    \end{eblock}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      {\fontsize{4.5}{5.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat helloname.sh
+#!/bin/bash
+
+# My Second Script
+
+echo Please Enter your name:
+read name1 name2
+Greet="Welcome to HPC Training"
+echo "Hello $name1 $name2, $Greet"
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      {\fontsize{4.5}{5.5}\selectfont
+        \begin{verbatim}
+apacheco@apacheco:~/Tutorials/BASH/scripts> ./helloname.sh 
+Please Enter your name:
+Alex Pacheco
+Hello Alex Pacheco, Welcome to HPC Training
+        \end{verbatim}
+      }
+    \end{eblock}
+  \end{columns}
+\end{frame}
+
+\section{Beyond Basic Shell Scripting}
+\subsection{Arithmetic Operations}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small Arithmetic Operations}
+  \begin{itemize}
+    \item You can carry out numeric operations on integer variables
 %  \end{itemize}
-  \framebreak
+  \begin{columns}
+    \column{0.6\textwidth}
+    \vspace{-0.8cm}
+    \begin{center}
+      \begin{tikzpicture}
+        \node (tbl) {
+          \begin{tabularx}{\textwidth}{ccl}
+            \arrayrulecolor{tigersgold}
+            \textcolor{white}{\textbf{Operation} }& \textcolor{white}{\textbf{Operator}} & \\
+            Addition\rule{0pt}{3.5ex} & + & \\
+            Subtraction & - & \\
+            Multiplication & * & \\
+            Division & / \\
+            Exponentiation & ** & (\textbf{bash} only)\\
+            Modulo & \% & \\ 
+            [1.0ex]
+        \end{tabularx}};
+        \begin{pgfonlayer}{background}
+          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
+            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          rectangle ($(tbl.north east)-(0.13,0.9)$);
+          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          ($(tbl.north east)-(0.13,0.6)$)
+          rectangle ($(tbl.south west)+(0.13,0.2)$);
+        \end{pgfonlayer}
+      \end{tikzpicture}
+    \end{center}
+  \end{columns}
 %  \begin{itemize}
-    \item By Convention, variables are often named using all uppercase letters
-    \item[$\vardiamond$] \texttt{PATH, LD\_LIBRARY\_PATH, LD\_INCLUDE\_PATH, TEXINPUTS, etc}
-    \item Rules for Variable Names
+    \item Arithmetic operations in \textbf{bash} can be done within the \texttt{\$(($\cdots$))} or \texttt{\$[$\cdots$]} commands
     \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item Variable names must start with a letter or underscore
-        \item Number can be used anywhere else
-        \item DO NOT USE special characters such as \texttt{@, \#, \%, \$}
-        \item Case sensitive
-        \item Examples
-        \begin{itemize}
-          \fontsize{7}{10}\selectfont{
-          \item Allowed: VARIABLE, VAR1234able, var\_name, \_VAR
-          \item Not Allowed: 1VARIABLE, \%NAME, \$myvar, VAR@NAME 
-          }
-        \end{itemize}
-      }
-    \end{enumerate}
-    \item Assigning value to a variable
-    \item \texttt{sh, ksh, bash}
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item shell variable: \texttt{variablename=value}
-        \item environmental variable: \texttt{export variablename=value}
-        \item NOTE: THERE IS NO SPACE ON EITHER SIDE OF =
-      }
-    \end{enumerate}
-    \framebreak
-    \item \texttt{csh, tcsh}
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-        \item shell variable: \texttt{set variablename = value}
-        \item environmental variable: \texttt{setenv variablename value}
-        \item NOTE: space on either side of = is allowed for the \texttt{set} command
-        \item NOTE: There is no = in the \texttt{setenv} command
-      }
-    \end{enumerate}
-    \item All variables are stored in memory as strings and converted to numbers when needed
-    \item You can carry out numeric operations on variables
-    %\framebreak
-    \item Arithmetic operations in \texttt{bash} can be done within the \texttt{\$(($\cdots$))} or \texttt{\$[$\cdots$]} commands
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
+      {\scriptsize
       \item[$\bigstar$] Add two numbers: \texttt{\$((1+2))}
       \item[$\bigstar$] Multiply two numbers: \texttt{\$[\$a*\$b]}
       \item[$\bigstar$] You can also use the \texttt{let} command: \texttt{let c=\$a-\$b}
+      \item[$\bigstar$] or use the \texttt{expr} command: \texttt{c=`expr \$a - \$b`}
       }
     \end{enumerate}
-    \item In \texttt{tcsh},
+    \framebreak
+    \item In \textbf{tcsh},
     \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
+      {\scriptsize
       \item[$\bigstar$] Add two numbers: \texttt{@ x = 1 + 2}
       \item[$\bigstar$] Divide two numbers: \texttt{@ x = \$a / \$b}
+      \item[$\bigstar$] You can also use the \texttt{expr} command: \texttt{set c = `expr \$a \% \$b`}
+      }
+    \end{enumerate}
+    \item Note the use of space
+    \item[\textbf{bash}] space required around operator in the \texttt{expr} command
+    \item[\textbf{tcsh}] space required between @ and variable, around = and numeric operators. 
+    \item You can also use C-style increment operators
+    \item[\textbf{bash}] \texttt{let c+=1} or \texttt{let c-{}-}
+    \item[\textbf{tcsh}] \texttt{@ x -= 1} or \texttt{@ x++}
+    \item[] \texttt{/=}, \texttt{*=} and \texttt{\%=} are also allowed.
+    \item[\textbf{bash}]
+    \item The above examples only work for integers.
+    \item What about floating point number?
+    \framebreak
+    \item Using floating point in \textbf{bash} or \textbf{tcsh} scripts requires an external calculator like GNU \texttt{bc}.
+    \begin{enumerate}
+      {\scriptsize
+        \item[$\bigstar$] Add two numbers:
+        \item[]\texttt{echo "3.8 + 4.2" | bc}
+        \item[$\bigstar$] Divide two numbers and print result with a precision of 5 digits:
+        \item[]\texttt{echo "scale=5; 2/5" | bc}
+        \item[$\bigstar$] Call \texttt{bc} directly:
+        \item[]\texttt{bc $<<<$ "scale=5; 2/5"}
+        \item[$\bigstar$] Use \texttt{bc -l} to see result in floating point at max scale:
+        \item[] \texttt{bc -l $<<<$ "2/5"}
       }
     \end{enumerate}
   \end{itemize}
@@ -1073,8 +1257,11 @@ Hello World!
   \end{bblock}
   \framebreak
   {\tiny
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat dosum.sh
+    \begin{columns}
+      \column{0.45\textwidth}
+      \begin{eblock}{}
+      \begin{verbatim}
+~/Tutorials/BASH/scripts> cat dosum.sh
 #!/bin/bash
 
 FIVE=5
@@ -1084,98 +1271,110 @@ echo "5 + 7 = " $(($FIVE + $SEVEN))
 let SUM=$FIVE+$SEVEN
 echo "sum of 5 & 7 is " $SUM
 exit
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./dosum.sh 
-5 + 7 = 5 + 7
-5 + 7 =  12
-sum of 5 & 7 is  12
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat dosum.csh
+      \end{verbatim}
+      \end{eblock}
+      \column{0.55\textwidth}
+      \vspace{-0.2cm}
+      \begin{block}{}
+      \begin{verbatim}
+~/Tutorials/BASH/scripts> cat doratio.csh
 #!/bin/tcsh
 
 set FIVE=5
 set SEVEN=7
-echo "5 + 7 = " $FIVE + $SEVEN
-@ SUM = $FIVE + $SEVEN
-echo "sum of 5 & 7 is " $SUM
+echo "5 / 7 = " $FIVE / $SEVEN
+@ RATIO = $FIVE / $SEVEN
+echo "ratio of 5 & 7 is " $RATIO
+set ratio=`echo "scale=5 ; $FIVE/$SEVEN" | bc`
+echo "ratio of 5 & 7 is " $ratio
 exit
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./dosum.csh 
-5 + 7 =  5 + 7
+      \end{verbatim}
+      \end{block}
+    \end{columns}
+    \begin{columns}
+      \column{0.45\textwidth}
+      \vspace{0.2cm}
+      \begin{eblock}{}
+      \begin{verbatim}
+~/Tutorials/BASH/scripts> ./dosum.sh 
+5 + 7 = 5 + 7
+5 + 7 =  12
 sum of 5 & 7 is  12
-    \end{verbatim}
+      \end{verbatim}
+      \end{eblock}
+      \column{0.55\textwidth}
+      \begin{block}{}
+      \begin{verbatim}
+~/Tutorials/BASH/scripts> ./doratio.csh 
+5 / 7 =  5 / 7
+ratio of 5 & 7 is  0
+ratio of 5 & 7 is  .71428
+      \end{verbatim}
+      \end{block}
+    \end{columns}
   }
-%  \framebreak
-%  \begin{itemize}
-%    \item Variables defined as above can be referenced only in the current shell
-%    \item If you want to access the variables across shells i.e. universally on the system, you need to \texttt{export}  it as an environmental variable
-%  \end{itemize}
+\end{frame}
+
+
+%\begin{frame}<0>[fragile]
+%  \frametitle{\small Example for doing backups}
 %  {\tiny
-%    \begin{verbatim}
-%apacheco@apacheco:~/Tutorials/BASH/scripts> FIVE=5
-%apacheco@apacheco:~/Tutorials/BASH/scripts> SEVEN=7
-%apacheco@apacheco:~/Tutorials/BASH/scripts> PROD=$[$FIVE * $SEVEN]
-%apacheco@apacheco:~/Tutorials/BASH/scripts> echo $PROD
-%35
-%apacheco@apacheco:~/Tutorials/BASH/scripts> bash #start new bash shell
-%apacheco@apacheco:~/Tutorials/BASH/scripts> echo $PROD
+%  \begin{verbatim}
+%~/Tutorials/BASH/scripts> cat backups.sh 
+%#!/bin/bash
 %
-%apacheco@apacheco:~/Tutorials/BASH/scripts> exit #exit current shell
-%exit
-%apacheco@apacheco:~/Tutorials/BASH/scripts> echo $PROD
-%35
-%apacheco@apacheco:~/Tutorials/BASH/scripts> export PROD
-%apacheco@apacheco:~/Tutorials/BASH/scripts> bash
-%apacheco@apacheco:~/Tutorials/BASH/scripts> echo $PROD
-%35
-%    \end{verbatim}
+%BACKUPDIR=$(pwd)
+%OF=$BACKUPDIR/$(date +%Y-%m-%d).tgz
+%tar -czf ${OF} ./*sh
+%~/Tutorials/BASH/scripts> ./backups.sh 
+%~/Tutorials/BASH/scripts> ls *gz
+%2012-09-18.tgz
+%  \end{verbatim}
 %  }
-\end{frame}
+%\end{frame}
 
-
-\begin{frame}[fragile]
-  \frametitle{\small Example for doing backups}
-  {\tiny
-  \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat backups.sh 
-#!/bin/bash
-
-BACKUPDIR=$(pwd)
-OF=$BACKUPDIR/$(date +%Y-%m-%d).tgz
-tar -czf ${OF} ./*sh
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./backups.sh 
-apacheco@apacheco:~/Tutorials/BASH/scripts> ls *gz
-2012-09-18.tgz
-  \end{verbatim}
-  }
-\end{frame}
-
-\section{Arrays}
+\subsection{Arrays}
 \begin{frame}[fragile,allowframebreaks]
   \frametitle{\small Arrays}
   \begin{itemize}
-    \item \texttt{bash} supports one-dimensional arrays.
+    \item \textbf{bash} and \textbf{tcsh} supports one-dimensional arrays.
     \item Array elements may be initialized with the \texttt{variable[xx]} notation
     \item[] \texttt{variable[xx]=1}
     \item Initialize an array during declaration
-    \item[] \texttt{name=(firstname 'last name')}
+    \item[\textbf{bash}] \texttt{name=(firstname 'last name')}
+    \item[\textbf{tcsh}] \texttt{set name = (firstname 'last name')}
     \item reference an element \texttt{i} of an array \texttt{name}
     \item[] \texttt{\$\{name[i]\}}
     \item print the whole array
-    \item[] \texttt{\$\{name[@]\}}
+    \item[\textbf{bash}] \texttt{\$\{name[@]\}}
+    \item[\textbf{tcsh}] \texttt{\$\{name\}}
     \item print length of array
-    \item[] \texttt{\$\{\#name[@]\}}
+    \item[\textbf{bash}] \texttt{\$\{\#name[@]\}}
+    \item[\textbf{tcsh}] \texttt{\$\{\#name\}}
     \item print length of element \texttt{i} of array \texttt{name}
     \item[] \texttt{\$\{\#name[i]\}}
-    \item[] Note: \texttt{\$\{\#name\}} prints the length of the first element of the array
+    \item[] Note: In \textbf{bash} \texttt{\$\{\#name\}} prints the length of the first element of the array
     \item Add an element to an existing array
-    \item[] \texttt{name=("title" "\$\{name[@]\}")}
+    \item[\textbf{bash}] \texttt{name=(title \$\{name[@]\})}
+    \item[\textbf{tcsh}] \texttt{set name = ( title  "\$\{name\}")}
+    \item In \textbf{tcsh} everything within "..." is one variable.
+    \item In the above \textbf{tcsh} example, \texttt{title} is first element of new array while the second element is the old array \texttt{name}
     \item copy an array \texttt{name} to an array \texttt{user}
-    \item[] \texttt{user=("\$\{name[@]\}")}
+    \item[\textbf{bash}] \texttt{user=(\$\{name[@]\})}
+    \item[\textbf{tcsh}] \texttt{set user = ( \$\{name\} )}
+    \framebreak
     \item concatenate two arrays
-    \item[] \texttt{nameuser=("\$\{name[@]\}" "\$\{user[@]\}")}
+    \item[\textbf{bash}] \texttt{nameuser=(\$\{name[@]\} \$\{user[@]\})}
+    \item[\textbf{tcsh}] \texttt{set nameuser=( \$\{name\} \$\{user\} )}
     \item delete an entire array
     \item[] \texttt{unset name}
     \item remove an element \texttt{i} from an array
-    \item[] \texttt{unset name[i]}
-    \item Similar to C/C++, the first array index is zero (0)
+    \item[\textbf{bash}] \texttt{unset name[i]}
+    \item[\textbf{tcsh}] \texttt{ @ j = \$i - 1}
+    \item[ ] \texttt{ @ k =\$i + 1 }
+    \item[ ] \texttt{ set name = ( \$\{name[1-\$j]\} \$\{name[\$k-]\})}
+    \item[\textbf{bash}] the first array index is zero (0)
+    \item[\textbf{tcsh}] the first array index is one (1)
   \end{itemize}
   \framebreak
   \begin{bblock}{Exercise}
@@ -1187,9 +1386,13 @@ apacheco@apacheco:~/Tutorials/BASH/scripts> ls *gz
     \end{enumerate}
   \end{bblock}
   \framebreak
-  \fontsize{5}{6}\selectfont{
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat name.sh
+  \fontsize{5}{5.5}\selectfont{
+    \begin{columns}
+      \column{0.5\textwidth}
+      \vspace{-0.5cm}
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat name.sh
 #!/bin/bash
 
 echo "Print your first and last name"
@@ -1210,101 +1413,88 @@ echo "Hello " ${name[@]}
 
 unset name[2]
 echo "Hello " ${name[@]}
+        \end{verbatim}
+      \end{eblock}
+    \column{0.5\textwidth}
+      \vspace{-0.5cm}
+      \begin{bblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat name.csh
+#!/bin/tcsh
 
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./name.sh 
+echo "Print your first name"
+set firstname = $<
+echo "Print your last name"
+set lastname = $<
+
+set name = ( $firstname $lastname)
+echo "Hello " ${name}
+
+echo "Enter your salutation"
+set title = $<
+
+echo "Enter your suffix"
+set suffix = "$<"
+
+set name = ($title $name $suffix )
+echo "Hello " ${name}
+
+@ i = $#name
+set name = ( $name[1-2] $name[4-$i] )
+echo "Hello " ${name}
+        \end{verbatim}
+      \end{bblock}
+    \end{columns}
+    \begin{columns}
+      \column{0.5\textwidth}
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./name.sh 
 Print your first and last name
 Alex Pacheco
 Hello  Alex Pacheco
 Enter your salutation
 Dr.
 Enter your suffix
-(the one and only)
-Hello  Dr. Alex Pacheco (the one and only)
-Hello  Dr. Alex (the one and only)
-    \end{verbatim}
+the first
+Hello  Dr. Alex Pacheco the first
+Hello  Dr. Alex the first
+        \end{verbatim}
+      \end{eblock}
+      \column{0.5\textwidth}
+      \begin{bblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./name.csh 
+Print your first name
+Alex
+Print your last name
+Pacheco
+Hello  Alex Pacheco
+Enter your salutation
+Dr.
+Enter your suffix
+the first
+Hello  Dr. Alex Pacheco the first
+Hello  Dr. Alex the first
+        \end{verbatim}
+      \end{bblock}
+    \end{columns}
   }
 \end{frame}
 
-\section{Command Line Arguments}
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Command Line Arguments}
-  \vspace{-0.5cm}
-  \begin{columns}
-    \column{12cm}
-  \begin{itemize}
-    \item Similar to programming languages, \texttt{bash} (and other shell scripting languages) can also take command line arguments
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-      \item[$\vardiamond$] \texttt{./scriptname arg1 arg2 arg3 arg4 ...}
-      \item[$\vardiamond$] \texttt{\$0,\$1,\$2,\$3, etc}: positional parameters corresponding to \texttt{./scriptname,arg1,arg2,arg3,arg4,...} respectively  
-      \item[$\vardiamond$] \texttt{\$\#}: number of command line arguments
-      \item[$\vardiamond$] \texttt{\$*}: all of the positional parameters, seen as a single word
-      \item[$\vardiamond$] \texttt{\$@}: same as \texttt{\$*} but each parameter is a quoted string.
-      \item[$\vardiamond$] \texttt{shift N}: shift positional parameters from \texttt{N+1} to \texttt{\$\#} are renamed to variable names from \texttt{\$1} to \texttt{\$\# - N + 1}
-      }
-    \end{enumerate}
-    \item In \texttt{csh,tcsh}
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-      \item[$\bigstar$] an array \texttt{argv} contains the list of arguments with \texttt{argv[0]} set to name of script.
-      \item[$\bigstar$] \texttt{\#argv} is the number of arguments i.e. length of \texttt{argv} array.
-      }
-    \end{enumerate}
-  \end{itemize}
-  \end{columns}
-  \framebreak
-  \fontsize{5}{5.5}\selectfont{
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat shift.sh
-#!/bin/bash
-
-USAGE="USAGE: $0 arg1 arg2 arg3 arg4"
-
-if [[ "$#" -ne 4 ]]; then
-   echo $USAGE
-   exit
-fi
-
-echo "Number of Arguments: " $#
-echo "List of Arguments: " $@
-echo "Name of script that you are running: " $0
-echo "Command You Entered:" $0 $*
-
-while [ "$#"  -gt 0 ]; do
-  echo "Argument List is: " $@
-  echo "Number of Arguments: " $#
-  shift 
-done
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./shift.sh arg1 arg2 arg3 arg4
-Number of Arguments:  4
-List of Arguments:  arg1 arg2 arg3 arg4
-Name of script that you are running:  ./shift.sh
-Command You Entered: ./shift.sh arg1 arg2 arg3 arg4
-Argument List is:  arg1 arg2 arg3 arg4
-Number of Arguments:  4
-Argument List is:  arg2 arg3 arg4
-Number of Arguments:  3
-Argument List is:  arg3 arg4
-Number of Arguments:  2
-Argument List is:  arg4
-Number of Arguments:  1
-    \end{verbatim}
-  }
-\end{frame}
-
-\section{Flow Control}
+\subsection{Flow Control}
 \begin{frame}
   \frametitle{\small Flow Control}
   \begin{itemize}
     \item Shell Scripting Languages execute commands in sequence similar to programming languages such as C, Fortran, etc.
     \item Control constructs can change the sequential order of commands.
-    \item Control constructs available in \texttt{bash} and \texttt{tcsh} are
+    \item Control constructs available in \textbf{bash} and \textbf{tcsh} are
     \begin{enumerate}
-      {\scriptsize
+%      {\scriptsize
         \item Conditionals: \texttt{if}
         \item Loops: \texttt{for, while, until}
-        \item Switches: \texttt{case}
-      }
+        \item Switches: \texttt{case, switch}
+%      }
     \end{enumerate}
   \end{itemize}
 \end{frame}
@@ -1315,7 +1505,7 @@ Number of Arguments:  1
     \item An \texttt{if/then} construct tests whether the exit status of a list of commands is 0, and if so, executes one or more commands.
     \begin{columns}
       \column{5cm}
-      \begin{eblock}{\texttt{bash: if} construct}
+      \begin{eblock}{bash}
         \begin{tabbing}
           \texttt{if} \=\textit{[ condition1 ]; } \texttt{then}\\
           \> \textit{some commands}\\
@@ -1327,7 +1517,7 @@ Number of Arguments:  1
         \end{tabbing}
       \end{eblock}
       \column{5cm}
-      \begin{eblock}{\texttt{tcsh: if} construct}
+      \begin{bblock}{tcsh}
         \begin{tabbing}
           \texttt{if} \=\textit{( condition1 ) } \texttt{then}\\
           \> \textit{some commands}\\
@@ -1337,38 +1527,32 @@ Number of Arguments:  1
           \> \textit{some commands}\\
           \texttt{endif}
         \end{tabbing}
-      \end{eblock}
+      \end{bblock}
     \end{columns}
   \item Note the space between \textit{condition} and "["\quad"]"
-  \item \texttt{bash} is very strict about spaces.
-  \item \texttt{tcsh} commands are not so strict about spaces.
-  \item \texttt{tcsh} uses the \texttt{if-then-else if-else-endif} similar to Fortran.   
+  \item \textbf{bash} is very strict about spaces.
+  \item \textbf{tcsh} commands are not so strict about spaces.
+  \item \textbf{tcsh} uses the \texttt{if-then-else if-else-endif} similar to Fortran.   
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{\small File Test \& Logical Operators}
-  \vspace{-0.5cm}
   \begin{columns}
-    \column{11.5cm}
+    \column{1.1\textwidth}
     \begin{eblock}{File Test Operators}
-      \vspace{-0.2cm}
-      \begin{columns}
-        \column{4cm}
-        \begin{itemize}
-          \item[-e]: file exists
-          \item[-f]: file is a regular file
-          \item[-d]: file is a directory
-          \item[-s]: file is not zero size
-        \end{itemize}
-        \column{7cm}
-        \begin{itemize}
-          \item[] \texttt{if [ -e .bashrc ]}
-          \item[] \texttt{if [ -f .bashrc ]}
-          \item[] \texttt{if [ -d /home ] }
-          \item[] \texttt{if [ -s .bashrc ]}
-        \end{itemize}
-      \end{columns}
+      \begin{tabular}{lll}
+        Operation & \textbf{bash} & \textbf{tcsh} \\
+        \hline
+        file exists & \texttt{if [ -e .bashrc ]} & \texttt{if ( -e .tcshrc )}\\
+        file is a regular file & \texttt{if [ -f .bashrc ]} &  \\
+        file is a directory & \texttt{if [ -d /home ]} & \texttt{if ( -d /home )} \\
+        file is not zero size & \texttt{if [ -s .bashrc ]} & \texttt{if ( ! -z .tcshrc)} \\
+        file has read permission & \texttt{ if [ -r .bashrc ]} & \texttt{ if ( -r .tcshrc)} \\
+        file has write permission & \texttt{ if [ -w .bashrc ]} & \texttt{ if ( -w .tcshrc)} \\
+        file has execute permission & \texttt{ if [ -x .bashrc ]} & \texttt{ if ( -x .tcshrc)} \\
+        \hline
+      \end{tabular}
     \end{eblock}
     \begin{eblock}{Logical Operators}
       \vspace{-0.2cm}
@@ -1381,9 +1565,10 @@ Number of Arguments:  1
         \end{itemize}
         \column{9cm}
         \begin{itemize}
-          \item[] \texttt{if [ !-e .bashrc ]}
-          \item[] \texttt{if [ -f .bashrc ] \&\& [ -s .bashrc]}
-          \item[] \texttt{if [ -f .bashrc ] || [ -f .bash\_profile] }
+          \item[] \texttt{if [ ! -e .bashrc ]}
+          \item[] \texttt{if [ -f .bashrc ] \&\& [ -s .bashrc ]}
+          \item[] \texttt{if [[ -f .bashrc || -f .bash\_profile ]] }
+          \item[] \texttt{if ( -e ~/.tcshrc  \&\&  ! -z ~/.tcshrc )}
         \end{itemize}
       \end{columns}
     \end{eblock}
@@ -1392,101 +1577,118 @@ Number of Arguments:  1
 
 \begin{frame}
   \frametitle{\small Integer \& String Comparison Operators}
-  \vspace{-0.5cm}
   \begin{columns}
-    \column{11.5cm}
+    \column{\textwidth}
+    \vspace{-0.5cm}
     \begin{eblock}{Integer Comparison}
-      \begin{columns}
-        \column{6cm}
-        \begin{itemize}
-          \item[-eq]: equal to
-          \item[-ne]: not equal to
-          \item[-gt]: greater than
-          \item[-ge]: greater than or equal to
-          \item[-lt]: less than
-          \item[-le]: less than or equal to
-        \end{itemize}
-        \column{5cm}
-        \begin{itemize}
-          \item[] \texttt{[ 1 -eq 2 ]}
-          \item[] \texttt{[ "\$a" -ne "\$b" ]}
-          \item[] \texttt{[ "\$a" -gt "\$b" ]}
-          \item[] \texttt{[ 1 -ge "\$b" ]}
-          \item[] \texttt{[ "\$a" -lt 2 ]}
-          \item[] \texttt{[ "\$a" -le "\$b" ]}
-        \end{itemize}
-      \end{columns}
+      \begin{tabular}{lll}
+        Operation & \textbf{bash} & \textbf{tcsh} \\
+        \hline
+        equal to & \texttt{if [ 1 -eq 2 ]} & \texttt{if (1 == 2)} \\
+        not equal to & \texttt{if [ \$a -ne \$b ]} & \texttt{if (\$a != \$b)}\\
+        greater than & \texttt{if [ \$a -gt \$b ]} & \texttt{if (\$a > \$b)}\\
+        greater than or equal to & \texttt{if [ 1 -ge \$b ]} & \texttt{if (1 >= \$b)}\\
+        less than & \texttt{if [ \$a -lt 2 ]} & \texttt{if (\$a < 2)}\\
+        less than or equal to & \texttt{if [[ \$a -le \$b ]]} & \texttt{if (\$a <= \$b)} \\
+        \hline
+      \end{tabular}
     \end{eblock}
     \begin{eblock}{String Comparison}
-      \begin{columns}
-        \column{6cm}
-        \begin{itemize}
-          \item[==]: equal to
-          \item[!=]: not equal to
-          \item[-z]: string is null
-          \item[-n]: string in not null
-        \end{itemize}
-        \column{5cm}
-        \begin{itemize}
-          \item[] \texttt{[ "\$a" == "\$b" ]}
-          \item[] \texttt{[ "\$a" != "\$b" ]}
-          \item[] \texttt{[ -z "\$a" ]}
-          \item[] \texttt{[ -n "\$b" ]}
-        \end{itemize}
-      \end{columns}
+      \begin{tabular}{lll}
+        Operation & \textbf{bash} & \textbf{tcsh} \\
+        \hline
+        equal to & \texttt{if [ \$a == \$b ]} & \texttt{if (\$a == \$b)}\\
+        not equal to & \texttt{if [ \$a != \$b ]} & \texttt{if (\$a != \$b)}\\
+        zero length or null & \texttt{if [ -z \$a ] } & \texttt{if (\$\%a == 0)}\\
+        non zero length & \texttt{if [ -n \$a ] } & \texttt{if (\$\%a > 0)}\\
+        \hline
+      \end{tabular}
     \end{eblock}
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Examples \& More}
-  {\tiny
-  \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> cat backups2.sh
-#!/bin/bash
+%\begin{frame}<0>[fragile]
+%  \frametitle{\small Examples \& More}
+%  {\tiny
+%  \begin{verbatim}
+%~/Tutorials/BASH/scripts> cat backups2.sh
+%#!/bin/bash
+%
+%OF=$(date +%Y-%m-%d).tgz
+%
+%if [ -e "$OF" ]; then
+%  echo "You have already created a backup today"
+%  echo `ls -ltr $OF`
+%else
+%  tar -czf ${OF} ./*sh
+%fi
+%~/Tutorials/BASH/scripts> ls
+%2012-09-18.tgz  backups.csh  dosum.sh      hello.sh          name.sh    shift.sh
+%backups2.sh     backups.sh   helloname.sh  hellovariable.sh  quotes.sh  tmp
+%~/Tutorials/BASH/scripts> ./backups2.sh 
+%~/Tutorials/BASH/scripts> ./backups2.sh 
+%You have already created a backup today
+%-rw-r--r-- 1 apacheco users 1168 Sep 24 13:16 2012-09-24.tgz
+%~/Tutorials/BASH/scripts>
+%  \end{verbatim}
+%  }
+%\end{frame}
 
-OF=$(date +%Y-%m-%d).tgz
-
-if [ -e "$OF" ]; then
-  echo "You have already created a backup today"
-  echo `ls -ltr $OF`
-else
-  tar -czf ${OF} ./*sh
-fi
-apacheco@apacheco:~/Tutorials/BASH/scripts> ls
-2012-09-18.tgz  backups.csh  dosum.sh      hello.sh          name.sh    shift.sh
-backups2.sh     backups.sh   helloname.sh  hellovariable.sh  quotes.sh  tmp
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./backups2.sh 
-apacheco@apacheco:~/Tutorials/BASH/scripts> ./backups2.sh 
-You have already created a backup today
--rw-r--r-- 1 apacheco users 1168 Sep 24 13:16 2012-09-24.tgz
-apacheco@apacheco:~/Tutorials/BASH/scripts>
-  \end{verbatim}
-  }
-  \framebreak
+\begin{frame}[fragile]{\small Examples}
   \begin{itemize}
     \item Condition tests using the \texttt{if/then} may be nested
-    {\tiny
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{columns}
+        \column{0.55\textwidth}
+        \begin{eblock}{}
       \begin{verbatim}
-a=3
+read a
 if [ "$a" -gt 0 ]; then
   if [ "$a" -lt 5 ]; then
     echo "The value of \"a\" lies somewhere between 0 and 5"
   fi
 fi
       \end{verbatim}
+        \end{eblock}
+        \column{0.5\textwidth}
+        \begin{bblock}{}
+      \begin{verbatim}
+set a = $<
+if ( $a > 0 ) then
+  if ( $a < 5 ) then
+    echo "The value of $a lies somewhere between 0 and 5"
+  endif
+endif
+      \end{verbatim}
+        \end{bblock}
+      \end{columns}
     }
     \item This is same as 
-    {\tiny
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{columns}
+        \column{0.55\textwidth}
+        \begin{eblock}{}
       \begin{verbatim}
+read a
 if [[ "$a" -gt 0 &&  "$a" -lt 5 ]]; then
-  echo "The value of \"a\" lies somewhere between 0 and 5"
+  echo "The value of $a lies somewhere between 0 and 5"
 fi
 OR
 if [ "$a" -gt 0 ] && [ "$a" -lt 5 ]; then
-  echo "The value of \"a\" lies somewhere between 0 and 5"
+  echo "The value of $a lies somewhere between 0 and 5"
 fi
       \end{verbatim}
+        \end{eblock}
+        \column{0.5\textwidth}
+        \begin{bblock}{}
+      \begin{verbatim}
+set a = $<
+if ( "$a" > 0  &&  "$a" < 5 ) then
+  echo "The value of $a lies somewhere between 0 and 5"
+endif
+      \end{verbatim}
+        \end{bblock}
+      \end{columns}
     }
   \end{itemize}
 \end{frame}
@@ -1494,16 +1696,18 @@ fi
 \begin{frame}[fragile,allowframebreaks]
   \frametitle{\small Loop Constructs}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
+%    \fontsize{7}{9}\selectfont{
     \item A \textit{loop} is a block of code that iterates a list of commands as long as the \textit{loop control condition} is true.
-    \item Loop constructs available in \texttt{bash}: \texttt{for, while} and \texttt{until}
-    \item Loop constructs available in \texttt{tcsh}: \texttt{foreach} and \texttt{while}
-    }
+    \item Loop constructs available in 
+    \item[\textbf{bash}:] \texttt{for, while} and \texttt{until}
+    \item[\textbf{tcsh}:] \texttt{foreach} and \texttt{while}
+%    }
   \end{itemize}
-  \begin{eblock}{\texttt{for/foreach} loop}
-    \fontsize{7}{6}\selectfont{
+  \framebreak
+  \begin{eblock}{bash}
+%    \fontsize{5}{6}\selectfont{
     \begin{itemize}
-      \item The \texttt{for} loop is the basic looping construct in \texttt{bash}
+      \item The \texttt{for} loop is the basic looping construct in \textbf{bash}
         \begin{tabbing}
           \texttt{for} \=\textit{arg} in \textit{list}\\
           \texttt{do}\\
@@ -1511,26 +1715,81 @@ fi
           \texttt{done}
         \end{tabbing}
       \item the \texttt{for} and \texttt{do} lines can be written on the same line: \texttt{for} \textit{arg} in \textit{list}; \texttt{do}
-      \item \texttt{bash} \texttt{for} loops can also use C style syntax
+      \item \texttt{for} loops can also use C style syntax
       \begin{tabbing}
         \texttt{for} \=((\textit{EXP1; EXP2; EXP3} )); do\\
         \>\textit{some commands}\\
         \texttt{done}
       \end{tabbing}
-      \item The \texttt{foreach} loop is the basic looping construct in \texttt{tcsh}
+    \end{itemize}
+%    }
+  \end{eblock}
+  \begin{columns}
+    \column{0.3\textwidth}
+    \begin{eblock}{}
+      \fontsize{7}{6}\selectfont{
+        \begin{verbatim}
+for i in $(seq 1 10)
+do
+  touch file${i}.dat
+done
+        \end{verbatim}
+    }
+    \end{eblock}
+    \column{0.35\textwidth}
+    \begin{eblock}{}
+      \fontsize{7}{6}\selectfont{
+        \begin{verbatim}
+for i in $(seq 1 10); do
+  touch file${i}.dat
+done
+        \end{verbatim}
+    }
+    \end{eblock}
+    \column{0.3\textwidth}
+    \begin{eblock}{}
+      \fontsize{7}{6}\selectfont{
+        \begin{verbatim}
+for ((i=1;i<=10;i++))
+do
+  touch file${i}.dat
+done
+        \end{verbatim}
+    }
+    \end{eblock}
+  \end{columns}
+
+  \begin{bblock}{tcsh}
+%    \fontsize{7}{6}\selectfont{
+    \begin{itemize}
+      \item The \texttt{foreach} loop is the basic looping construct in \textbf{tcsh}
         \begin{tabbing}
           \texttt{foreach} \=\textit{arg} \textit{(list)} \\
           \>\textit{some commands}\\
           \texttt{end}
         \end{tabbing}
     \end{itemize}
-    }
-  \end{eblock}
+%    }
+  \end{bblock}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \begin{bblock}{}
+      \fontsize{7}{6}\selectfont{
+        \begin{verbatim}
+foreach i (`seq 1 10`)
+  touch file$i.dat
+end
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
   \begin{eblock}{\texttt{while} loop}
     \begin{itemize}
-      \fontsize{7}{9}\selectfont{
+%      \fontsize{7}{9}\selectfont{
       \item The \texttt{while} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is true (returns a 0 exit status). 
       \item In contrast to a \texttt{for} loop, a \texttt{while} loop finds use in situations where the number of loop repetitions is not known beforehand.
+      \begin{columns}
+        \column{0.35\textwidth}
       \item \texttt{bash}
         \begin{tabbing}
           \texttt{while} \=[ \textit{condition} ]\\
@@ -1538,18 +1797,57 @@ fi
           \>\textit{some commands}\\
           \texttt{done}
         \end{tabbing}
+        \column{0.35\textwidth}
       \item \texttt{tcsh}
         \begin{tabbing}
           \texttt{while} \=( \textit{condition} ) \\
           \>\textit{some commands}\\
           \texttt{end}
         \end{tabbing}
-      }
+      \end{columns}
+%      }
      \end{itemize}
   \end{eblock}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \vspace{-0.2cm}
+    \begin{eblock}{}
+      \fontsize{4.5}{5.5}\selectfont{
+        \begin{verbatim}
+#!/bin/bash
+
+read counter
+factorial=1
+while [ $counter -gt 0 ]
+do
+   factorial=$(( $factorial * $counter ))
+   counter=$(( $counter - 1 ))
+done
+echo $factorial
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.4\textwidth}
+    \vspace{-0.2cm}
+    \begin{bblock}{}
+      \fontsize{4.5}{5.5}\selectfont{
+        \begin{verbatim}
+#!/bin/tcsh
+
+set counter=$<
+set factorial=1
+while ( $counter > 0 )
+   @ factorial = $factorial * $counter
+   @ counter -= 1
+end
+echo $factorial
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
   \begin{eblock}{\texttt{until} loop}
     \begin{itemize}
-      \fontsize{7}{9}\selectfont{
+%      \fontsize{7}{9}\selectfont{
       \item The \texttt{until} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is false (opposite of \texttt{while} loop).
         \begin{tabbing}
           \texttt{until} \=[ \textit{condition is true} ]\\
@@ -1557,18 +1855,43 @@ fi
           \>\textit{some commands}\\
           \texttt{done}
         \end{tabbing}
-      }
+%      }
     \end{itemize}
   \end{eblock}
+  \vspace{-0.2cm}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \begin{eblock}{}
+      \fontsize{5}{6}\selectfont{
+        \begin{verbatim}
+#!/bin/bash
+
+read counter
+factorial=1
+until [ $counter -le 1 ]; do                                                                                                                                         
+  factorial=$[ $factorial * $counter ]
+  if [ $counter -eq 2 ]; then 
+    break
+  else
+    let counter-=2
+  fi                                                                                                                                        
+done                                                                                                                                                            
+echo $factorial
+        \end{verbatim}
+      }
+    \end{eblock}
+  \end{columns}
+  \framebreak
   \begin{itemize}
     \item \texttt{for, while \& until} loops can nested. To exit from the loop use the \texttt{break} command
   \end{itemize}
-  \framebreak
   \fontsize{5}{5}\selectfont{
     \begin{columns}
-      \column{6cm}
-      \begin{verbatim}
-apacheco:~/Tutorials/BASH/scripts> cat nestedloops.sh
+      \column{0.45\textwidth}
+      \vspace{-0.2cm}
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat nestedloops.sh
 #!/bin/bash
 
 ## Example of Nested loops
@@ -1604,10 +1927,58 @@ for ((a=1;a<=5;a++)); do
   done
 done
 echo "========================"
-      \end{verbatim}
-      \column{5cm}
-      \begin{verbatim}
-apacheco:~/Tutorials/BASH/scripts> ./nestedloops.sh 
+        \end{verbatim}
+      \end{eblock}
+      \column{0.45\textwidth}
+      \vspace{-0.2cm}
+      \begin{bblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat nestedloops.csh
+#!/bin/tcsh
+
+## Example of Nested loops
+
+echo "Nested for loops"
+foreach a (`seq 1 5`)
+  echo "Value of a in outer loop:" $a
+  foreach b (`seq 1 2 5`)
+    @ c = $a * $b
+    if ( $c <  10 ) then
+      echo "a * b = $a * $b = $c"
+    else
+      echo "$a * $b > 10"
+      break
+    endif
+  end
+end
+echo "========================"
+echo
+echo "Nested for and while loops"
+foreach a (`seq 1 5`)
+  echo "Value of a in outer loop:" $a
+  set b = 1
+  while ( $b <= 5 )
+    @ c = $a * $b
+    if ( $c < 5 ) then
+      echo "a * b = $a * $b = $c"
+    else
+      echo "$a * $b > 5"
+      break
+    endif
+    @ b = $b + 2
+  end
+end
+echo "========================"
+          \end{verbatim}
+      \end{bblock}
+    \end{columns}
+    \framebreak
+    \begin{columns}
+      \column{0.45\textwidth}
+      \vspace{-0.2cm}
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./nestedloops.sh 
 Nested for loops
 Value of a in outer loop: 1
 a * b = 1 * 1 = 1
@@ -1646,15 +2017,61 @@ a * b = 4 * 1 = 4
 Value of a in outer loop: 5
 5 * 1 > 5
 ========================
-      \end{verbatim}
+        \end{verbatim}
+      \end{eblock}
+      \column{0.45\textwidth}
+      \vspace{-0.2cm}
+      \begin{bblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./nestedloops.csh 
+Nested for loops
+Value of a in outer loop: 1
+a * b = 1 * 1 = 1
+a * b = 1 * 3 = 3
+a * b = 1 * 5 = 5
+Value of a in outer loop: 2
+a * b = 2 * 1 = 2
+a * b = 2 * 3 = 6
+2 * 5 > 10
+Value of a in outer loop: 3
+a * b = 3 * 1 = 3
+a * b = 3 * 3 = 9
+3 * 5 > 10
+Value of a in outer loop: 4
+a * b = 4 * 1 = 4
+4 * 3 > 10
+Value of a in outer loop: 5
+a * b = 5 * 1 = 5
+5 * 3 > 10
+========================
+
+Nested for and while loops
+Value of a in outer loop: 1
+a * b = 1 * 1 = 1
+a * b = 1 * 3 = 3
+1 * 5 > 5
+Value of a in outer loop: 2
+a * b = 2 * 1 = 2
+2 * 3 > 5
+Value of a in outer loop: 3
+a * b = 3 * 1 = 3
+3 * 3 > 5
+Value of a in outer loop: 4
+a * b = 4 * 1 = 4
+4 * 3 > 5
+Value of a in outer loop: 5
+5 * 1 > 5
+========================
+        \end{verbatim}
+      \end{bblock}
     \end{columns}
   }
 \end{frame}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}[fragile,allowframebreaks]
   \frametitle{\small Switching or Branching Constructs}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
+%    \fontsize{7}{9}\selectfont{
     \item The \texttt{case} and \texttt{select} constructs are technically not loops, since they do not iterate the execution of a code block. 
     \item Like loops, however, they direct program flow according to conditions at the top or bottom of the block.
     \begin{columns}
@@ -1696,8 +2113,276 @@ Value of a in outer loop: 5
         \end{tabbing}
       \end{eblock}
     \end{columns}
-    }
+%    }
   \end{itemize}
+  \framebreak
+  \begin{columns}
+    \column{0.4\textwidth}
+    \vspace{-0.5cm}
+    \begin{eblock}{}
+      {\fontsize{4}{5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat dooper.sh
+#!/bin/bash
+
+echo "Print two numbers"
+read num1 num2
+echo "What operation do you want to do?"
+echo "Enter +, -, *, /, **, % or all"
+read oper
+
+case $oper in
+  "+")
+     echo "$num1 + $num2 =" $[$num1 + $num2]
+     ;;
+  "-")
+     echo "$num1 - $num2 =" $[$num1 - $num2]
+     ;;
+  "*")
+     echo "$num1 * $num2 =" $[$num1 * $num2]
+     ;;
+  "**")
+     echo "$num1 ** $num2 =" $[$num1 ** $num2]
+     ;;
+  "/")
+     echo "$num1 / $num2 =" $[$num1 / $num2]
+     ;;
+  "%")
+     echo "$num1 % $num2 =" $[$num1 % $num2]
+     ;;
+  "all")
+     echo "$num1 + $num2 =" $[$num1 + $num2]
+     echo "$num1 - $num2 =" $[$num1 - $num2]
+     echo "$num1 * $num2 =" $[$num1 * $num2]
+     echo "$num1 ** $num2 =" $[$num1 ** $num2]
+     echo "$num1 / $num2 =" $[$num1 / $num2]
+     echo "$num1 % $num2 =" $[$num1 % $num2]
+     ;;
+   *)
+     echo ``What do you want to do again?''
+     ;;
+esac
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.4\textwidth}
+    \vspace{-0.5cm}
+    \begin{bblock}{}
+      {\fontsize{4}{4.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat dooper.csh
+#!/bin/tcsh
+
+
+echo "Print two numbers one at a time"
+set num1 = $<
+set num2 = $<
+echo "What operation do you want to do?"
+echo "Enter +, -, x, /, % or all"
+set oper = $<
+
+switch ( $oper )
+  case "x"
+     @ prod = $num1 * $num2
+     echo "$num1 * $num2 = $prod"
+     breaksw
+  case "all"
+     @ sum = $num1 + $num2
+     echo "$num1 + $num2 = $sum"
+     @ diff = $num1 - $num2
+     echo "$num1 - $num2 = $diff"
+     @ prod = $num1 * $num2
+     echo "$num1 * $num2 = $prod"
+     @ ratio = $num1 / $num2
+     echo "$num1 / $num2 = $ratio"
+     @ remain = $num1 % $num2
+     echo "$num1 % $num2 = $remain"
+     breaksw
+  case "*"
+     @ result = $num1 $oper $num2
+     echo "$num1 $oper $num2 = $result"
+     breaksw
+endsw
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
+  \framebreak
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      {\fontsize{4}{5.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./dooper.sh 
+Print two numbers
+1 4
+What operation do you want to do?
+Enter +, -, *, /, **, % or all
+all
+1 + 4 = 5
+1 - 4 = -3
+1 * 4 = 4
+1 ** 4 = 1
+1 / 4 = 0
+1 % 4 = 1
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.4\textwidth}
+    \begin{bblock}{}
+      {\fontsize{4}{5.5}\selectfont
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./dooper.csh 
+Print two numbers one at a time
+1
+5
+What operation do you want to do?
+Enter +, -, x, /, % or all
+all
+1 + 5 = 6
+1 - 5 = -4
+1 * 5 = 5
+1 / 5 = 0
+1 % 5 = 1
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
+\end{frame}
+
+
+\subsection{Command Line Arguments}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small Command Line Arguments}
+  \vspace{-0.5cm}
+  \begin{columns}
+    \column{12cm}
+  \begin{itemize}
+    \item Similar to programming languages, \texttt{bash} (and other shell scripting languages) can also take command line arguments
+    \begin{enumerate}
+      \fontsize{7}{10}\selectfont{
+      \item[$\vardiamond$] \texttt{./scriptname arg1 arg2 arg3 arg4 ...}
+      \item[$\vardiamond$] \texttt{\$0,\$1,\$2,\$3, etc}: positional parameters corresponding to \texttt{./scriptname,arg1,arg2,arg3,arg4,...} respectively  
+      \item[$\vardiamond$] \texttt{\$\#}: number of command line arguments
+      \item[$\vardiamond$] \texttt{\$*}: all of the positional parameters, seen as a single word
+      \item[$\vardiamond$] \texttt{\$@}: same as \texttt{\$*} but each parameter is a quoted string.
+      \item[$\vardiamond$] \texttt{shift N}: shift positional parameters from \texttt{N+1} to \texttt{\$\#} are renamed to variable names from \texttt{\$1} to \texttt{\$\# - N + 1}
+      }
+    \end{enumerate}
+    \item In \texttt{csh,tcsh}
+    \begin{enumerate}
+      \fontsize{7}{10}\selectfont{
+      \item[$\bigstar$] an array \texttt{argv} contains the list of arguments with \texttt{argv[0]} set to name of script.
+      \item[$\bigstar$] \texttt{\#argv} is the number of arguments i.e. length of \texttt{argv} array.
+      }
+    \end{enumerate}
+  \end{itemize}
+  \end{columns}
+  \framebreak
+  \begin{columns}
+    \column{0.5\textwidth}
+    \vspace{-0.5cm}
+    \begin{eblock}{}
+      \fontsize{4}{5.5}\selectfont{
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat shift.sh
+#!/bin/bash
+
+USAGE="USAGE: $0 <at least 1 argument>
+
+if [[ "$#" -lt 1 ]]; then
+   echo $USAGE
+   exit
+fi
+
+echo "Number of Arguments: " $#
+echo "List of Arguments: " $@
+echo "Name of script that you are running: " $0
+echo "Command You Entered:" $0 $*
+
+while [ "$#"  -gt 0 ]; do
+  echo "Argument List is: " $@
+  echo "Number of Arguments: " $#
+  shift 
+done
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.5\textwidth}
+    \vspace{-0.5cm}
+    \begin{bblock}{}
+      \fontsize{4}{5.5}\selectfont{
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat shift.csh
+#!/bin/tcsh
+
+set USAGE="USAGE: $0 <at least 1 argument>"
+
+if ( "$#argv" < 1 ) then
+   echo $USAGE
+   exit
+endif
+
+echo "Number of Arguments: " $#argv
+echo "List of Arguments: " $*
+echo "Name of script that you are running: " $0
+echo "Command You Entered:" $0 $*
+
+while ( "$#argv"  > 0 )
+  echo "Argument List is: " $*
+  echo "Number of Arguments: " $#argv
+  shift 
+end
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{eblock}{}
+      \fontsize{4}{5.5}\selectfont{
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./shift.sh $(seq 1 5)
+Number of Arguments:  5
+List of Arguments:  1 2 3 4 5
+Name of script that you are running:  ./shift.sh
+Command You Entered: ./shift.sh 1 2 3 4 5
+Argument List is:  1 2 3 4 5
+Number of Arguments:  5
+Argument List is:  2 3 4 5
+Number of Arguments:  4
+Argument List is:  3 4 5
+Number of Arguments:  3
+Argument List is:  4 5
+Number of Arguments:  2
+Argument List is:  5
+Number of Arguments:  1
+        \end{verbatim}
+      }
+    \end{eblock}
+    \column{0.5\textwidth}
+    \begin{bblock}{}
+      \fontsize{4}{5.5}\selectfont{
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./shift.csh $(seq 1 5)
+Number of Arguments:  5
+List of Arguments:  1 2 3 4 5
+Name of script that you are running:  ./shift.csh
+Command You Entered: ./shift.csh 1 2 3 4 5
+Argument List is:  1 2 3 4 5
+Number of Arguments:  5
+Argument List is:  2 3 4 5
+Number of Arguments:  4
+Argument List is:  3 4 5
+Number of Arguments:  3
+Argument List is:  4 5
+Number of Arguments:  2
+Argument List is:  5
+Number of Arguments:  1
+        \end{verbatim}
+      }
+    \end{bblock}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile,allowframebreaks]
@@ -1843,16 +2528,219 @@ Account String:  loni_loniadmin1
 Node:            eric010
 Process id:      4101
 ------------------------------------------------------
-[apacheco@eric2 traininglab]$ cat nodetest.err
     \end{verbatim}
   }
 \end{frame}
 
-\section{Advanced Shell Scripting}
+\section{Advanced Topics}
+\begin{frame}[fragile]{\small Declare command}
+  \begin{itemize}
+    \item Use the \textbf{declare} command to set variable and functions attributes.
+    \item Create a constant variable i.e. read only variable
+    \item[Syntax:] \texttt{declare -r var}
+    \item[] \texttt{declare -r varName=value}
+    \item Create an integer variable
+    \item[Syntax:] \texttt{declare -i var}
+    \item[] \texttt{declare -i varName=value}
+    \item You can carry out arithmetic operations on variables declared as integers
+  \end{itemize}
+  \begin{columns}
+    \column{5cm}
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH> j=10/5 ; echo $j
+10/5
+~/Tutorials/BASH> declare -i j; j=10/5 ; echo $j
+2
+        \end{verbatim}
+      \end{eblock}
+    }
+  \end{columns}
+\end{frame}
+\subsection{Functions}
+\begin{frame}[fragile,allowframebreaks]{\small Functions}
+  \begin{itemize}
+    \item Like "real" programming languages, \textbf{bash} has functions.
+    \item A function is a subroutine, a code block that implements a set of operations, a "black box" that performs a specified task. 
+    \item Wherever there is repetitive code, when a task repeats with only slight variations in procedure, then consider using a function.
+  \end{itemize}
+  \begin{columns}
+    \column{5cm}
+    {\scriptsize
+      \begin{eblock}{}
+        \begin{tabbing}
+          \textbf{fu}\=\textbf{nction} \texttt{function\_name} \{\\
+          \>\textit{command}\\
+          \}\\
+          OR\\
+          \texttt{function\_name} () \{\\
+          \>\textit{command}\\
+          \}
+        \end{tabbing}
+      \end{eblock}
+    }
+  \end{columns}
+  \framebreak
+  \begin{columns}
+    \column{0.47\textwidth}
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat shift10.sh
+#!/bin/bash
+
+usage () {
+        echo "USAGE: $0 [atleast 11 arguments]"
+  exit
+}
+
+[[ "$#" -lt 11 ]] && usage
+
+echo "Number of Arguments: " $#
+echo "List of Arguments: " $@
+echo "Name of script that you are running: " $0
+echo "Command You Entered:" $0 $*
+echo "First Argument" $1
+echo "Tenth and Eleventh argument" $10 $11 ${10} ${11}
+
+echo "Argument List is: " $@
+echo "Number of Arguments: " $#
+shift 9
+echo "Argument List is: " $@
+echo "Number of Arguments: " $#
+        \end{verbatim}
+      \end{eblock}
+    }
+    \column{0.53\textwidth}
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> ./shift10.sh `seq 1 2 22`
+Number of Arguments:  11
+List of Arguments:  1 3 5 7 9 11 13 15 17 19 21
+Name of script that you are running:  ./shift10.sh
+Command You Entered: ./shift10.sh 1 3 5 7 9 11 13 15 17 19 21
+First Argument 1
+Tenth and Eleventh argument 10 11 19 21
+Argument List is:  1 3 5 7 9 11 13 15 17 19 21
+Number of Arguments:  11
+Argument List is:  19 21
+Number of Arguments:  2
+        \end{verbatim}
+      \end{eblock}
+    }
+  \end{columns}
+  \framebreak
+  \begin{itemize}
+    \item You can also pass arguments to a function.
+    \item All function parameters or arguments can be accessed via \$1, \$2, \$3,..., \$N.
+    \item \$0 always point to the shell script name.
+    \item \$* or \$@ holds all parameters or arguments passed to the function.
+    \item \$\# holds the number of positional parameters passed to the function.
+    \item Array variable called \texttt{FUNCNAME} contains the names of all shell functions currently in the execution call stack.
+    \item By default all variables are global.
+    \item Modifying a variable in a function changes it in the whole script.
+    \item You can create a local variables using the \textbf{local} command
+    \item[Syntax:] \texttt{local var=value}
+    \item[] \texttt{local varName}
+  \end{itemize}
+  \framebreak
+%  \begin{columns}
+%    \column{0.8\textwidth}
+%    {\fontsize{4.5}{5.5}\selectfont
+%      \begin{eblock}{Backup Script using Functions and Command line arguments}
+%        \begin{verbatim}
+%~/Tutorials/BASH/scripts> cat backups.sh
+%#!/bin/bash
+%
+%backup () {
+%        local d="$1"
+%        [[ -z $d ]] && { echo "${FUNCNAME}(): directory name not specified"; exit 1; }
+%        echo "Starting backup ..."
+%        tar -cvzf $2 $d
+%        echo "backup written to $2"
+%}
+%
+%backup $1 $2
+%        \end{verbatim}
+%      \end{eblock}
+%    }
+%  \end{columns}
+  \begin{itemize}
+    \item A function may recursively call itself even without use of local variables.
+  \end{itemize}
+  \begin{columns}
+    \column{0.5\textwidth}
+    {\fontsize{4.5}{5.5}\selectfont
+      \vspace{-0.35cm}
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts> cat factorial3.sh
+#!/bin/bash
+
+usage () {
+  echo "USAGE: $0 <integer>"
+  exit
+}
+
+factorial() {
+  local i=$1
+  local f
+
+  declare -i i
+  declare -i f
+
+  if [[ "$i" -le 2 ]]; then
+    echo $i
+  else
+    f=$(( $i - 1 ))
+    f=$( factorial $f )
+    f=$(( $f * $i ))
+    echo $f
+  fi
+}
+
+if [[ "$#" -eq 0 ]]; then
+  usage
+else
+  j=1
+  while [ $j -le $# ]; do
+    x=$( factorial $j )
+    echo "Factorial of $j is $x"
+    let j++
+  done
+fi
+        \end{verbatim}
+      \end{eblock}
+    }
+    \column{0.5\textwidth}
+      \vspace{-0.35cm}
+    {\fontsize{4.5}{5.5}\selectfont
+      \begin{eblock}{}
+        \begin{verbatim}
+~/Tutorials/BASH/scripts>./factorial3.sh $(seq 1 10)
+Factorial of 1 is 1
+Factorial of 2 is 2
+Factorial of 3 is 6
+Factorial of 4 is 24
+Factorial of 5 is 120
+Factorial of 6 is 720
+Factorial of 7 is 5040
+Factorial of 8 is 40320
+Factorial of 9 is 362880
+Factorial of 10 is 3628800
+        \end{verbatim}
+      \end{eblock}
+    }
+  \end{columns}
+\end{frame}
+
+\subsection{Regular Expressions}
 \begin{frame}[allowframebreaks]
   \frametitle{\small Regular Expressions}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
+%    \fontsize{7}{9}\selectfont{
     \item A regular expression (regex) is a method of representing a string matching pattern. 
     \item Regular expressions enable strings that match a particular pattern within textual data records to be located and modified and they are often used within utility programs and programming languages that manipulate textual data. 
     \item Regular expressions are extremely powerful.
@@ -1864,11 +2752,11 @@ Process id:      4101
         \item Languages: awk, perl, python, php, ruby, tcl, java, javascript, .NET
       }
     \end{enumerate}
-    }
+%    }
   \end{itemize}
   \begin{eblock}{Shell regex}
     \begin{itemize}
-      \fontsize{7}{9}\selectfont{
+%      \fontsize{7}{9}\selectfont{
       \item[?]: match any single character.
       \item[*]: match zero or more characters.
       \item[{[ ]}]: match list of characters in the list specified
@@ -1876,22 +2764,23 @@ Process id:      4101
       \item[\^{}]: match at begining of line
       \item[\$]: match at end of line
       \item[{[\^{} ]}]: match characters not in the list specified
-      }
+%      }
     \end{itemize}
   \end{eblock}
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]
+\subsection{grep}
+\begin{frame}
   \frametitle{\small grep \& egrep}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
+%    \fontsize{7}{9}\selectfont{
     \item \texttt{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
     \item \texttt{egrep} is extended grep, same as \texttt{grep -E}
     \item Use \texttt{zgrep} for compressed files.
     \item Usage: \texttt{grep <options> <search pattern> <files>} 
     \item Commonly used options
     \begin{itemize}
-      \fontsize{7}{8}\selectfont{
+      {\scriptsize
       \item[-i]: ignore case during search
       \item[-r]: search recursively
       \item[-v]: invert match i.e. match everything except pattern
@@ -1900,31 +2789,11 @@ Process id:      4101
       \item[-n]: prefix each line of output with the line number within its input file.
       }
     \end{itemize}
-    }
+%    }
   \end{itemize}
-  \framebreak
-  \fontsize{5}{6}\selectfont{
-    \begin{verbatim}
-apacheco@apacheco:~/Tutorials/BASH/scripts> egrep -i sum *
-dosum.csh:@ SUM = $FIVE + $SEVEN   
-dosum.csh:echo "sum of 5 & 7 is " $SUM
-dosum.sh:let SUM=$FIVE+$SEVEN
-dosum.sh:echo "sum of 5 & 7 is " $SUM
-apacheco@apacheco:~/Tutorials/BASH/scripts> egrep -il sum *
-dosum.csh
-dosum.sh
-apacheco@apacheco:~/Tutorials/BASH/scripts> cd ../
-apacheco@apacheco:~/Tutorials/BASH> egrep -inR 'backupdir' *
-Bash-Scripting-Fall-2012.tex:1084:BACKUPDIR=$(pwd)
-Bash-Scripting-Fall-2012.tex:1085:OF=$BACKUPDIR/$(date +%Y-%m-%d).tgz
-scripts/backups.sh:3:BACKUPDIR=${HOME}
-scripts/backups.sh:4:OF=$BACKUPDIR/$(date +%Y-%m-%d).tgz
-scripts/backups.csh:3:set BACKUPDIR=`pwd`
-scripts/backups.csh:4:set OF = $BACKUPDIR/`date +%Y-%m-%d`.tgz
-    \end{verbatim}
-  }
 \end{frame}
 
+\subsection{awk primer}
 \begin{frame}
   \frametitle{\small awk}
   \begin{itemize}
@@ -1968,6 +2837,7 @@ scripts/backups.csh:4:set OF = $BACKUPDIR/`date +%Y-%m-%d`.tgz
   \end{itemize}
 \end{frame}
 
+\subsection{sed primer}
 \begin{frame}
   \frametitle{\small sed}
   \begin{itemize}
@@ -1995,6 +2865,7 @@ scripts/backups.csh:4:set OF = $BACKUPDIR/`date +%Y-%m-%d`.tgz
   \end{itemize}
 \end{frame}
 
+\section{Wrap Up}
 \begin{frame}
   \frametitle{\small References \& Further Reading}
   \begin{itemize}
@@ -2012,31 +2883,52 @@ scripts/backups.csh:4:set OF = $BACKUPDIR/`date +%Y-%m-%d`.tgz
     }
   \end{itemize}
 \end{frame}
-\section{HPC Help}
+
 \begin{frame}
-\frametitle{\small Additional Help}
-\begin{itemize}
-\item User's Guide
-\begin{enumerate}
-{\scriptsize
-\item[$\vardiamond$]HPC: \url{http://www.hpc.lsu.edu/help}
-\item[$\vardiamond$]LONI: \url{https://docs.loni.org}
-}
-\end{enumerate}
-\item Contact us
-\begin{enumerate}
-  {\scriptsize
-  \item[$\vardiamond$]Email ticket system: sys-help@loni.org
-  \item[$\vardiamond$]Telephone Help Desk: 225-578-0900
-  \item[$\vardiamond$]Instant Messenger (AIM, Yahoo Messenger, Google Talk)
-  \begin{enumerate}
-    {\scriptsize
-    \item[$\bigstar$]Add "lsuhpchelp"
-    }
-  \end{enumerate}
-  }
-\end{enumerate}
-\end{itemize}
+  \frametitle{\small Additional Help}
+  \begin{itemize}
+    \item User Guides
+    \begin{enumerate}
+      {\scriptsize
+        \item[$\vardiamond$]LSU HPC: \url{http://www.hpc.lsu.edu/docs/guides.php\#hpc}
+        \item[$\vardiamond$]LONI: \url{http://www.hpc.lsu.edu/docs/guides.php\#loni}
+      }
+    \end{enumerate}
+    \item Documentation: \url{https://docs.loni.org}
+    \item Online Courses: \url{https://docs.loni.org/moodle}
+    \item Contact us
+    \begin{enumerate}
+      {\scriptsize
+        \item[$\vardiamond$]Email ticket system: sys-help@loni.org
+        \item[$\vardiamond$]Telephone Help Desk: 225-578-0900
+        \item[$\vardiamond$]Instant Messenger (AIM, Yahoo Messenger, Google Talk)
+        \begin{enumerate}
+          {\scriptsize
+            \item[$\bigstar$]Add "lsuhpchelp"
+          }
+        \end{enumerate}
+      }
+    \end{enumerate}
+  \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{}
+  \color{DarkBlue}{
+  \begin{center}
+    {\fontsize{40}{60}\selectfont The End}\\
+    \vspace{1cm}
+    {\fontsize{20}{30}\selectfont Any Questions?}\\
+    \vspace{0.5cm}
+    {\fontsize{15}{30}\selectfont
+      \color{red!80!black}{Next Week}\\      
+      \color{red!80!black}{Introduction to Perl}\\
+    }
+    \vspace{0.5cm}
+    {\fontsize{15}{20}\selectfont Survey: \color{red!90!white}{\url{http://www.hpc.lsu.edu/survey}}}
+  \end{center}
+  }
+\end{frame}
+
 \end{document}
 
