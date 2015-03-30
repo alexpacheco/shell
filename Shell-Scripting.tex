@@ -1,27 +1,59 @@
-\documentclass[slidestop,mathserif,compress,xcolor=svgnames]{beamer} 
-\mode<presentation>
-{  
-  \setbeamertemplate{background canvas}[vertical shading][bottom=blue!5,top=blue!5]
-  \setbeamertemplate{navigation symbols}{}%{\insertsectionnavigationsymbol}
-  \usetheme{LSU}
-}
+\documentclass[10pt,t]{beamer}
+\usepackage{graphicx}
+\setbeamersize{text margin left=10pt,text margin right=10pt}
+%get rid of junk
+\usetheme{default}
+\beamertemplatenavigationsymbolsempty
 
+% add packages to use
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{trees,matrix,shapes,arrows}
+\usetikzlibrary{calc}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
 \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
 \usepackage{amsmath,amssymb,amsfonts,subfigure,pifont}
 \usepackage{multirow}
-\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{colortbl}
+\usepackage{keystroke}
 \usepackage{etex}
-\usepackage{fancyvrb,listings}
 
+
+% named colors
+%\definecolor{foreground}{RGB}{0,0,0}
+\definecolor{background}{RGB}{241,231,200}
+\definecolor{title}{RGB}{107,174,214}
+\definecolor{gray}{RGB}{75,75,75}
+%\definecolor{subtitle}{RGB}{102,255,204}
+%\definecolor{hilight}{RGB}{102,255,204}
+%\definecolor{vhilight}{RGB}{255,111,207}
+%\definecolor{lolight}{RGB}{155,155,155}
+\definecolor{lubrown}{RGB}{102,55,0}
+\definecolor{lucream}{RGB}{241,231,200}
+\definecolor{lugreen}{RGB}{195,207,33}
+\definecolor{luyellow}{RGB}{255,196,35}
+\definecolor{brown}{HTML}{502D0F}
+\definecolor{lupurple}{RGB}{125,129,190}
+\definecolor{lulime}{RGB}{217,226,219}
+\definecolor{lublue}{RGB}{0,164,228}
+\definecolor{lubg}{RGB}{241,231,200} % background color is lucream
+%\definecolor{lubg}{RGB}{255,255,255} % background color is white
+
+% The following color are for listing environment 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82} 
+%\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
 \lstset{%
 language=bash,                % the language of the code
-%basicstyle=\footnotesize,           % the size of the fonts that are used for the code
-basicstyle=\fontsize{4.5}{5.5}\selectfont\ttfamily,
+basicstyle=\tiny\ttfamily,           % the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
@@ -36,15 +68,14 @@ breakatwhitespace=false,        % sets if automatic breaks should only happen at
 keywordstyle=\color{blue},          % keyword style
 commentstyle=\color{dkgreen},       % comment style
 stringstyle=\color{mauve},         % string literal style
-escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+escapeinside={!}{!},            % if you want to add LaTeX within your code
 morekeywords={*,\dots,elif},              % if you want to add more keywords to the set
 deletekeywords={\dots},              % if you want to delete keywords from the given language
 %morecomment=[l]{//}
 }
 \lstset{%
 language=csh,                % the language of the code
-%basicstyle=\footnotesize,           % the size of the fonts that are used for the code
-basicstyle=\fontsize{4.5}{5.5}\selectfont\ttfamily,
+basicstyle=\tiny\ttfamily,           % the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
@@ -64,58 +95,30 @@ morekeywords={*,\dots,elif},              % if you want to add more keywords to 
 deletekeywords={\dots},              % if you want to delete keywords from the given language
 %morecomment=[l]{//}
 }
+
 \lstdefinestyle{LINUX}
 {
-%    backgroundcolor=\color{black},
-%    basicstyle=\tiny\ttfamily,
-%    keywordsstyle=\color{blue},
-%    morekeywords={Tutorials,BASH,scripts},
-%    literate={>}{{\textcolor{blue}{>}}}1
-%         {/}{{\textcolor{blue}{/}}}1
-%         {./}{{\textcolor{black}{./ }}}1
-%         {~}{{\textcolor{blue}{\textasciitilde}}}1,
+    backgroundcolor=\color{white},
+    basicstyle=\tiny\ttfamily,
+    keywordstyle=\color{blue},
+    morekeywords={apacheco,Tutorials,BASH,scripts,day1,examples},
+    literate={>}{{\textcolor{blue}{>}}}1
+         {/}{{\textcolor{blue}{/}}}1
+         {./}{{\textcolor{black}{./ }}}1
+         {~}{{\textcolor{blue}{\textasciitilde}}}1,
 }
-\usepackage{tikz}
-\usetikzlibrary{shapes,arrows}
-\usetikzlibrary{calc}
-\pgfdeclarelayer{background}
-\pgfdeclarelayer{foreground}
-\pgfsetlayers{background,main,foreground}
-\usepackage[latin1]{inputenc}
-\usepackage[english]{babel}
-\usepackage{hyperref}
-\usepackage[normalem]{ulem}
-% \usepackage{movie15} 
-
-\hypersetup{
-  pdftitle={Shell Scripting}
-  pdfauthor={Alexander B. Pacheco, User Services Consultant, Louisiana State University}
-}                                                         
-\usepackage{times}
-
-\setbeamercovered{dynamic}
-\beamersetaveragebackground{DarkBlue!2}
-\beamertemplateballitem
-
-\usepackage{times}
-\usepackage[T1]{fontenc}
-\usepackage{graphicx}
 
 
-
-\definecolor{DarkGreen}{rgb}{0.0,0.3,0.0}
-\definecolor{Blue}{rgb}{0.0,0.0,0.8} 
-\definecolor{dodgerblue}{rgb}{0.1,0.1,1.0}
-\definecolor{indigo}{rgb}{0.41,0.1,0.0}
-\definecolor{seagreen}{rgb}{0.1,1.0,0.1}
 \DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
 %\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
 \newcommand{\cmark}{\ding{51}}
 \newcommand{\xmark}{\ding{55}}
 \newcommand{\smark}{\ding{77}}
-\newcommand*\vardiamond{\textcolor{tigerspurple}{%
+\newcommand*\vardiamond{\textcolor{lubrown}{%
   \ensuremath{\blacklozenge}}}
-\newcommand*\up{\textcolor{green}{%
+\newcommand*\mybigstar{\textcolor{lubrown!90!yellow}{%
+  \ensuremath{\bigstar}}}
+\newcommand*\up{\textcolor{green!80!black}{%
   \ensuremath{\blacktriangle}}}
 \newcommand*\down{\textcolor{red}{%
   \ensuremath{\blacktriangledown}}}
@@ -123,188 +126,305 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
   {\textbf{--}}}
 \newcommand*\enter{\tikz[baseline=-0.5ex] \draw[<-] (0,0) -| (0.5,0.1);}
 
+\newcommand{\Verblubrown}[1]{\Verb[formatcom=\color{lubrown},fontseries=b,commandchars=\\\{\}]|#1|}
+\newcommand{\Verblue}[1]{\Verb[formatcom=\color{lublue},fontseries=b,commandchars=\\\{\}]!#1!}
+\newcommand{\Verbblue}[2][b]{\Verb[formatcom=\color{lublue},fontshape=#1,commandchars=\\\{\}]|#2|}
+\newcommand{\Verblubrownp}[1]{\Verb[formatcom=\color{lubrown},fontseries=b,commandchars=\\\{\}]!#1!}
 
-\setbeamercolor{uppercol}{fg=white,bg=red!30!black}%
-\setbeamercolor{lowercol}{fg=black,bg=red!15!white}%
-\setbeamercolor{uppercol1}{fg=white,bg=blue!30!black}%
-\setbeamercolor{lowercol1}{fg=black,bg=blue!15!white}%%
-\setbeamercolor{uppercol2}{fg=white,bg=green!30!black}%
-\setbeamercolor{lowercol2}{fg=black,bg=green!15!white}%
-\newenvironment{colorblock}[4]
-{
-\setbeamercolor{upperblock}{fg=#1,bg=#2}
-\setbeamercolor{lowerblock}{fg=#3,bg=#4}
-\begin{beamerboxesrounded}[upper=upperblock,lower=lowerblock,shadow=true]}
-{\end{beamerboxesrounded}}
-\newenvironment{ablock}[0]
-{
-\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]}
-{\end{beamerboxesrounded}}
-\newenvironment{bblock}[0]
-{
-\begin{beamerboxesrounded}[upper=uppercol1,lower=lowercol1,shadow=true]}
-{\end{beamerboxesrounded}}
-\newenvironment{eblock}[0]
-{
-\begin{beamerboxesrounded}[upper=uppercol2,lower=lowercol2,shadow=true]}
-{\end{beamerboxesrounded}}
 
+% use those colors
+\setbeamercolor{titlelike}{fg=white,bg=lubrown}
+\setbeamercolor{subtitle}{fg=lucream}
+\setbeamercolor{author}{fg=lucream}
+\setbeamercolor{institute}{fg=gray}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{item}{fg=lubrown} % color of bullets
+\setbeamercolor{subitem}{fg=gray}
+\setbeamercolor{itemize/enumerate subbody}{fg=gray}
+\setbeamertemplate{itemize subitem}{{\textendash}}
+\setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
+\setbeamerfont{itemize/enumerate subitem}{size=\footnotesize}
+\setbeamercolor{footline}{bg=lubrown}
+
+\setbeamercolor*{palette primary}{fg=lubrown,bg=white}
+\setbeamercolor*{palette secondary}{bg=brown,fg=white} % footer
+\setbeamercolor*{palette tertiary}{fg=lubrown,bg=white} % footer
+
+% progressbar
+\definecolor{lusteelgray}{HTML}{91A1AA}
+\definecolor{luwarmgray}{HTML}{7D6A55}% background color for the progress bar
+
+\makeatletter
+\def\progressbar@progressbar{} % the progress bar
+\newcount\progressbar@tmpcounta% auxiliary counter
+\newcount\progressbar@tmpcountb% auxiliary counter
+\newdimen\progressbar@pbht %progressbar height
+\newdimen\progressbar@pbwd %progressbar width
+\newdimen\progressbar@tmpdim % auxiliary dimension
+\progressbar@pbwd=0.729\linewidth
+\progressbar@pbht=1.87ex
+%\progressbar@pbht=1.725ex
+% the progress bar
+\def\progressbar@progressbar{%
+    \progressbar@tmpcounta= \insertframenumber % max = ?
+    \progressbar@tmpcountb=\inserttotalframenumber      
+    \progressbar@tmpdim=.5\progressbar@pbwd
+    \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+    \divide\progressbar@tmpdim by \progressbar@tmpcountb
+    \progressbar@tmpdim=2\progressbar@tmpdim
+  \begin{tikzpicture}[rounded corners=0pt,very thin]
+    \shade[top color=lubg,bottom color=lubg,middle color=lubg]
+       (0pt, 0pt) rectangle ++ (\progressbar@pbwd, \progressbar@pbht);
+%      \shade[draw=lusteelgray,top color=lusteelgray!50,bottom color=lusteelgray!50,middle color=lusteelgray] %
+      \shade[draw=brown,top color=brown,bottom color=brown,middle color=brown] %
+        (0pt, 0pt) rectangle ++ (\progressbar@tmpdim, \progressbar@pbht);
+%    \draw[color=lubg]%normal text.fg!50]
+%      (0pt, 0pt) rectangle (\progressbar@pbwd, \progressbar@pbht)
+%        node[pos=0.5,color=normal text.fg] {\textnormal{%
+%        }%
+%    };
+  \end{tikzpicture}%
+}
+
+% page number
+%\setbeamertemplate{footline}{%
+%    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{lubrown}
+%          \scriptsize\insertframenumber}}}\hspace*{5pt}}
+\defbeamertemplate*{footline}{my footline}
+{
+    \ifnum \insertpagenumber=1
+      \leavevmode%
+      \hbox{%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=4.25ex,dp=1ex,center]{}%
+        % empty environment to raise height
+      \end{beamercolorbox}}%
+      \vskip0pt%
+    \else
+      \leavevmode%
+      \hbox{%
+      \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.0ex,dp=1ex,left]{date in head/foot}%
+        %\usebeamerfont{date in head/foot}\raisebox{-1.5ex}{\includegraphics[width=0.3\paperwidth]{./LehighUniversityOnelineLogo}}\hfill
+        \usebeamerfont{date in head/foot}\raisebox{-0.85ex}{\includegraphics[width=0.3\paperwidth]{./lulogo}}\hfill
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.61\paperwidth,ht=2.8ex,dp=0ex,center]{white}\raisebox{-1.1ex}{\progressbar@progressbar}%{date in head/foot}%
+      \end{beamercolorbox}
+      %\begin{beamercolorbox}[wd=.09\paperwidth,ht=2.8ex,dp=1ex,right]{date in head/foot}%
+      \begin{beamercolorbox}[wd=.09\paperwidth,ht=2.75ex,dp=1ex,right]{date in head/foot}%
+        \usebeamerfont{date in head/foot} \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+      \end{beamercolorbox}
+      }%
+      \vskip0pt%
+    \fi
+}
+
+\defbeamertemplate*{footline}{myfootline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=4.25ex,dp=1ex,center]{}%
+      % empty environment to raise height
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\setbeamertemplate{footline}[my footline]
+%\setbeamersize{text margin left=10pt,text margin right=10pt}
+%\setbeamersize{sidebar width left=5pt}
+%\setbeamertemplate{sidebar canvas left}{\color{brown}\rule{5pt}{\paperheight}}
+%\setbeamersize{sidebar width right=5pt}
+%\setbeamertemplate{sidebar canvas right}{\color{brown}\rule{5pt}{\paperheight}}
+
+
+\DeclareOptionBeamer{shadow}[true]{\def\beamer@themerounded@shadow{#1}}
+\ExecuteOptionsBeamer{shadow=false}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+\setbeamertemplate{blocks}[rounded][shadow=\beamer@themerounded@shadow]
+%\setbeamertemplate{items}[ball]
+\setbeamertemplate{sections/subsections in toc}[ball]
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor{block title alerted}{use=alerted text,fg=white,bg=alerted text.fg!75!black}
+\setbeamercolor{block title example}{use=example text,fg=white,bg=example text.fg!75!black}
+
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!10!bg}
+\setbeamercolor{block body alerted}{parent=normal text,use=block title alerted,bg=block title alerted.bg!10!bg}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,bg=block title example.bg!10!bg}
+
+\mode<all>
+
+\defbeamertemplate*{title page}{customized}[1][]
+{ 
+%%  \begin{flushright}
+%%    \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par
+%%    \bigskip\vspace{0.4\paperheight}
+%%    \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
+%%    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+%%    \bigskip
+%%    \usebeamerfont{author}\insertauthor\par
+%%    \usebeamerfont{institute}\insertinstitute\par
+%%    \usebeamerfont{date}\insertdate\par
+%%  \end{flushright}
+%  \vfill
+%  \hbox{
+    \begin{flushright}
+      \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,right,#1]{title}
+        \ifx\inserttitlegraphic\@empty
+        \else
+%        \vskip0.25em
+               {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic}\hspace*{0.5cm}
+               \fi
+      \end{beamercolorbox}
+      \vspace*{0.25\paperheight}
+      \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,right,#1]{title}
+        \usebeamerfont{title}\inserttitle\hspace*{1cm}
+        \ifx\insertsubtitle\@empty
+        \else
+        \vskip0.1pt
+               {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\hspace*{1cm}}
+               \fi
+      \end{beamercolorbox}
+      \vspace*{0.15\paperheight}
+      \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,right,#1]{author}
+        \usebeamerfont{author}\insertauthor\hspace*{1cm}\par
+        \usebeamerfont{institute}\insertinstitute\hspace*{1cm}\par
+        \usebeamerfont{date}\insertdate\hspace*{1cm}
+      \end{beamercolorbox}
+%      \vspace*{0pt}
+%      \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,right,#1]{institute}
+%        \usebeamerfont{institute}\insertinstitute\hspace*{1cm}
+%      \end{beamercolorbox}
+%      \vspace*{0pt}
+%      \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,right,#1]{date}
+%        \usebeamerfont{date}\insertdate\hspace*{1cm}
+%      \end{beamercolorbox}  
+    \end{flushright}
+%  }
+  \vskip0pt
+}
+
+% title page template
+\setbeamertemplate{background canvas}{%
+    \ifnum\c@framenumber=1%
+        \color{lubrown}\rule{\paperwidth}{\paperheight}
+    \else%
+        \color{lubg}\rule{\paperwidth}{\paperheight}
+    \fi%
+}
+
+% section page template
+\defbeamertemplate*{section page}{mysection}[1][]
+{
+  \begin{centering} 
+    \usebeamercolor[fg]{section title} 
+    \usebeamerfont{section title} 
+    \insertsection
+    \par 
+  \end{centering}   
+}
 
 \title{Shell Scripting}
-
-
-\author[Alex Pacheco]{\large{Alexander~B.~Pacheco}}
-       
-%\institute[High Performance Computing @ Louisiana State University - http://www.hpc.lsu.edu] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
-\institute[HPC Training: Fall 2013] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
-
-\date[\hfill{Sep 25 \& Oct 2, 2013\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{HPC Training Spring 2013\\Louisiana State University\\Baton Rouge\\September 25 \& October 2, 2013}}
-     
-\subject{Talks}
-\keywords{LONI \& LSU HPC Computing Resources, Bash Shell Scripting}
-% This is only inserted into the PDF information catalog. Can be left
-% out. 
-
-
-
-
-% If you have a file called "university-logo-filename.xxx", where xxx
-% is a graphic format that can be processed by latex or pdflatex,
-% resp., then you can add a logo as follows:
-
-% Main Logo on bottom left
-\pgfdeclareimage[height=0.55cm]{its-logo}{LONI.jpg}
-\logo{\pgfuseimage{its-logo}}
-% University Logo on top left
-\pgfdeclareimage[height=0.55cm]{university-logo}{LSUGeauxPurp.jpg}
-\tllogo{\pgfuseimage{university-logo}}
-% Logo at top right
-\pgfdeclareimage[height=0.5cm]{institute-logo}{its-logo.jpg}
-\trlogo{\pgfuseimage{institute-logo}}
-% Logo at bottom right
-\pgfdeclareimage[height=0.5cm]{hpc-logo}{cct-logo.jpg}
-\brlogo{\pgfuseimage{hpc-logo}}
-
-% for the list of parts
-\makeatletter
-\AtBeginPart{%
-    \addtocontents{parttoc}{\protect\beamer@partintoc{\the\c@part}{\beamer@partnameshort}{\the\c@page}}%
-    \frame{\partpage}%
-}
-\newcommand{\parttableofcontents}{\@starttoc{parttoc}}
-\newcommand{\beamer@partintoc}[3]{#2\par}
-\makeatother
-
+\subtitle{Basic Commands \& Environment}
+\author{Alexander B. Pacheco}
+\institute{\href{http://researchcomputing.lehigh.edu}{LTS Research Computing}}%\\[2pt] \href{http://www.lehigh.edu}{Lehigh University}}
+\date{March 19 \& 26, 2015}%\today}
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
- \AtBeginSection[]
- {
-   \begin{frame}<beamer>
-    \frametitle{\small{Outline}}
-    \scriptsize
-    \tableofcontents[currentsection,currentsubsection]
-   \end{frame}
- }
+\AtBeginSection[]
+{
+  \begingroup
+  \setbeamertemplate{background canvas}[vertical shading][bottom=lubrown,top=lubrown]
+  \setbeamertemplate{footline}[myfootline] 
+  \setbeamertemplate{section page}[mysection]
+  \frame[c]{
+    \sectionpage
+  }
+  \endgroup
+}
 
+\titlegraphic{\includegraphics[scale=0.5]{lu}}
 \begin{document}
 
-\frame{\titlepage}
-
-\footnotesize
-%\begin{frame}[label=toc,squeeze,allowframebreaks]
-%  \scriptsize
-%  \frametitle{\small{Outline}}
-%  \tableofcontents
-%\end{frame}
-
-\begin{frame}[allowframebreaks]{\small Outline}
-  \begin{itemize}
-    \item Day 1
-      \tableofcontents[part=1,hideallsubsections]
-      \framebreak
-    \item Day 2
-      \tableofcontents[part=2,hideallsubsections]
-  \end{itemize}
+\begin{frame}
+  \titlepage
 \end{frame}
 
-\begin{frame}[c]{\small Tutorial Outline}
-  \begin{eblock}{Day 1: Basic Shell Scripting}
+\footnotesize
+\begin{frame}[allowframebreaks]{Outline Day}
+  \tableofcontents[part=1,hideallsubsections]
+  \framebreak
+  \tableofcontents[part=2,hideallsubsections]
+\end{frame}
+
+\begin{frame}[c]{Tutorial Outline}
+  \begin{exampleblock}{Day 1: Basic Shell Scripting}
     \begin{itemize}
       \item[] On the first day, we will cover simple topics such as creating and executing simple shell scripts, arithmetic operations, loops and conditionals, command line arguments and functions.
         \ref{day1}
     \end{itemize}
-  \end{eblock}
-  \begin{eblock}{Day 2: Advanced Shell Scripting}
+  \end{exampleblock}
+  \begin{exampleblock}{Day 2: Advanced Shell Scripting}
     \begin{itemize}
       \item[] On the second day, we will cover advanced topics such as creating shell scripts for data analysis which make use of tools such as regular expressions, grep, sed and the awk programming language.
     \end{itemize}
-  \end{eblock}
+  \end{exampleblock}
 \end{frame}
 
 \part[Day 1]{Basic Shell Scripting}
 \section{Overview of Introduction to Linux}
 \begin{frame}[label=day1]
-  \frametitle{\small Overview: Introduction to Linux}
-  \begin{eblock}{What is a SHELL}
+  \frametitle{Introduction}
+  \begin{exampleblock}{What is a SHELL}
     \begin{itemize}
       \item The command line interface is the primary interface to Linux/Unix operating systems.
       \item Shells are how command-line interfaces are implemented in Linux/Unix.
       \item Each shell has varying capabilities and features and the user should choose the shell that best suits their needs.
       \item The shell is simply an application running on top of the kernel and provides a powerful interface to the system.
     \end{itemize}
-  \end{eblock}
+  \end{exampleblock}
 \end{frame}
 
 \subsection{Types of Shell} 
 \begin{frame}
-  \frametitle{\small Types of Shell}
-  {\scriptsize
-  \vspace{-0.25cm}
-    \begin{itemize}
-      \item[\texttt{sh}]: Bourne Shell
+  \frametitle{Types of Shell}
+  \begin{itemize}
+    \item[\texttt{sh}]: Bourne Shell
       \begin{enumerate}
-        {\scriptsize
-          \item[$\vardiamond$] Developed by Stephen Bourne at AT\&T Bell Labs
-        }
+      \item[$\vardiamond$] Developed by Stephen Bourne at AT\&T Bell Labs
       \end{enumerate}
-      \item[\texttt{csh}]: C Shell
+    \item[\texttt{csh}]: C Shell
       \begin{enumerate}
-        {\scriptsize
-          \item[$\vardiamond$] Developed by Bill Joy at University of California, Berkeley
-        }
+      \item[$\vardiamond$] Developed by Bill Joy at University of California, Berkeley
       \end{enumerate}
-      \item[\texttt{ksh}]: Korn Shell
+    \item[\texttt{ksh}]: Korn Shell
       \begin{enumerate}
-        {\scriptsize
-          \item[$\vardiamond$] Developed by David Korn at AT\&T Bell Labs
-          \item[$\vardiamond$] backward-compatible with the Bourne shell and includes many features of the C shell
-        }
+      \item[$\vardiamond$] Developed by David Korn at AT\&T Bell Labs
+      \item[$\vardiamond$] backward-compatible with the Bourne shell and includes many features of the C shell
       \end{enumerate}
-      \item[\texttt{bash}]: Bourne Again Shell
+    \item[\texttt{bash}]: Bourne Again Shell
       \begin{enumerate}
-        {\scriptsize
-          \item[$\vardiamond$] Developed by Brian Fox for the GNU Project as a free software replacement for the Bourne shell (sh).
-          \item[$\vardiamond$] Default Shell on Linux and Mac OSX
-          \item[$\vardiamond$] The name is also descriptive of what it did, bashing together the features of sh, csh and ksh
-        }
+      \item[$\vardiamond$] Developed by Brian Fox for the GNU Project as a free software replacement for the Bourne shell (sh).
+      \item[$\vardiamond$] Default Shell on Linux and Mac OSX
+      \item[$\vardiamond$] The name is also descriptive of what it did, bashing together the features of sh, csh and ksh
       \end{enumerate}
-      \item[\texttt{tcsh}]: TENEX C Shell
+    \item[\texttt{tcsh}]: TENEX C Shell
       \begin{enumerate}
-        {\scriptsize
-          \item[$\vardiamond$] Developed by Ken Greer at Carnegie Mellon University 
-          \item[$\vardiamond$] It is essentially the C shell with programmable command line completion, command-line editing, and a few other features.
-        }
+      \item[$\vardiamond$] Developed by Ken Greer at Carnegie Mellon University 
+      \item[$\vardiamond$] It is essentially the C shell with programmable command line completion, command-line editing, and a few other features.
       \end{enumerate}
-    \end{itemize}
-  }
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Shell Comparison}
+  \frametitle{Shell Comparison}
   \begin{center}
     \begin{columns}
-      \column{0.8\textwidth}
+      \column{0.65\textwidth}
       \begin{tikzpicture}
         \node (tbl) {
           \begin{tabularx}{\textwidth}{cccccc}
@@ -320,13 +440,10 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
             [1.0ex]
         \end{tabularx}};
         \begin{pgfonlayer}{background}
-          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+            draw=lubrown!30] ($(tbl.north west)+(0.14,0)$)
           rectangle ($(tbl.north east)-(0.13,0.9)$);
-          %\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
-          %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
-          %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
-          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
           ($(tbl.north east)-(0.13,0.6)$)
           rectangle ($(tbl.south west)+(0.13,0.2)$);
         \end{pgfonlayer}
@@ -335,426 +452,51 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
       \item[\cmark]: Yes
       \item[\xmark]: No
       \item[\smark]: Yes, not set by default
-      \item[Ref]: {\tiny\url{http://www.cis.rit.edu/class/simg211/unixintro/Shell.html}}
+      \item[] {\fontsize{6}{7}\selectfont\url{http://www.cis.rit.edu/class/simg211/unixintro/Shell.html}}
       \end{itemize}
     \end{columns}
   \end{center}
 \end{frame}
 
-%\begin{frame}<0>[allowframebreaks]
-%  \frametitle{\small Frequently used commands}
-%  \begin{itemize}
-%    {\scriptsize
-%    \item[\texttt{cat}]: Show contents of a file
-%    {\tiny \item[$\vardiamond$] \texttt{cat filename}}
-%    \item[\texttt{cd}]: Change Directory
-%    {\tiny \item[$\vardiamond$] \texttt{cd Tutorials}}
-%    \item[\texttt{cp}]: Copy a file
-%    {\tiny \item[$\vardiamond$] \texttt{cp file1 file2}}
-%    \item[\texttt{mv}]: Move or rename a file
-%    {\tiny\item[$\vardiamond$] \texttt{mv file1 file2}}
-%    \item[\texttt{ls}]: List files in a directory
-%    {\tiny
-%    \item[$\vardiamond$] {\tiny\texttt{ls Tutorials}}
-%    \item[$\vardiamond$] Options to \texttt{ls}
-%    \begin{enumerate}
-%      \fontsize{6}{8}\selectfont{
-%        \item[-l] show long listing format
-%        \item[-a] show hidden files
-%        \item[-r] reverse order while sorting
-%        \item[-t] show modification times
-%      }
-%    \end{enumerate}
-%    }
-%    \item[\texttt{mkdir}]: Create a directory
-%    {\tiny\item[$\vardiamond$] \texttt{mkdir dir1}}
-%    \framebreak
-%    \item[\texttt{rm}]: Remove a file
-%    {\tiny
-%    \item[$\vardiamond$] \texttt{rm file1 file2}
-%    \item[$\vardiamond$] Options to \texttt{rm}
-%    \begin{enumerate}
-%      \fontsize{6}{8}\selectfont{
-%      \item[-i] interactive
-%      \item[-r] remove files recursively used to delete directories and its contents
-%      \item[-f] force, ignore nonexistent files
-%      }
-%    \end{enumerate}
-%    }
-%    \item[\texttt{rmdir}]: Remove a directory
-%    {\tiny\item[$\vardiamond$] \texttt{rmdir dir1}}
-%    \item[\texttt{file}]: Determine file type
-%    \item[\texttt{more}]: Display a file one page at a time
-%    \item[\texttt{less}]: Same as \texttt{more} but allow scrolling
-%    \item[\texttt{man}]: Access Manual for given application
-%    \item[\texttt{vi}]: Edit a file using VI/VIM
-%    \item[\texttt{emacs}]: Edit a file using Emacs
-%    \item[\texttt{wc}]: Count words, lines and characters in a file
-%    \item[\texttt{awk}]: File processing and report generating
-%    {\tiny\item[$\vardiamond$] \texttt{awk '\{print \$1\}' file1}}
-%    \framebreak
-%    \item[\texttt{grep}]: Find lines in a file
-%    {\tiny\item[$\vardiamond$] \texttt{grep alias .bashrc}}
-%    \item[\texttt{sed}]: Stream Editor
-%    {\tiny\item[$\vardiamond$] \texttt{sed 's/home/HOME/g' .bashrc}}
-%    \item[\texttt{find}]: Find a file
-%    \item[\texttt{ln}]: Link a file to another file
-%    {\tiny\item[$\vardiamond$] \texttt{ln -s file1 file2}}
-%    \item[\texttt{top}]: Produces an ordered list of running processes
-%    \item[\texttt{ps}]: Displays statistics on running processes
-%    \item[\texttt{scp}]: secure copy a file/directory between two machines
-%    {\tiny\item[$\vardiamond$] \texttt{scp username@host1:/path/to/file1 username@host2:/path/to/file2}}
-%    \item[\texttt{sftp}]: connect to another machine using secure ftp
-%    \item[\texttt{export}]: export variables to your \texttt{PATH} (\texttt{sh,ksh \& bash} only)
-%    {\tiny\item[$\vardiamond$] \texttt{export PATH=/home/apacheco/bin:\$\{PATH\}}}
-%    \item[\texttt{setenv}]: equivalent of \texttt{export} for \texttt{csh \& tcsh}
-%    {\tiny\item[$\vardiamond$] \texttt{setenv LD\_LIBRARY\_PATH /home/apacheco/lib:\$\{LD\_LIBRARY\_PATH\}}}
-%    \framebreak
-%    \item[\texttt{alias}]: enables replacement of a word by another string
-%    {\tiny\item[$\vardiamond$] \texttt{sh/ksh/bash: alias ll="ls -l"}}
-%    {\tiny\item[$\vardiamond$] \texttt{csh/tcsh: alias rm "rm -i"}}
-%    \item[\texttt{set}]: manipulate environment variables
-%    {\tiny\item[$\vardiamond$] \texttt{set -o emacs}}
-%    \item[\texttt{echo}]: print to screen or standard output
-%    {\tiny\item[$\vardiamond$] \texttt{echo \$LD\_INCLUDE\_PATH}}
-%    \item[\texttt{date}]: display or set date and time
-%    \item[\texttt{\&}]: run a job in background
-%    \item[\texttt{CNTRL-Z}]: suspend a running job
-%    \item[{\texttt{CNTRL-C}}]: Kill a running job
-%    \item[{\texttt{jobs}}]: Show list of background jobs
-%    \item[{\texttt{fg}}]: run a suspended job in foreground
-%    \item[{\texttt{bg}}]: run a suspended job in background
-%    \item[{\texttt{wait}}]: wait until all backgrounded jobs have completed
-%    \item[\texttt{kill}]: kill a running job, need to provide process id
-%    }
-%  \end{itemize}
-%  To learn more about these commands, type \texttt{man \textit{command}} on the command prompt
-%\end{frame}
-
-\subsection{File Editing}
-\begin{frame}
-  \frametitle{\small File Editing}
-  \begin{itemize}
-    \item The two most commonly used editors on Linux/Unix systems are:
-    \begin{enumerate}
-      \item \texttt{vi}
-      \item \texttt{emacs}
-    \end{enumerate}
-    \item \texttt{vi} is installed by default on Linux/Unix systems and has only a command line interface (CLI).
-    \item \texttt{emacs} has both a CLI and a graphical user interface (GUI).
-    \item[$\vardiamond$] If \texttt{emacs} GUI is installed then use \texttt{emacs -nw} to open file in console.
-    \item Other editors that you may come across on *nix systems
-    \begin{enumerate}
-      \item \texttt{kate}: {\scriptsize default editor for KDE.}
-      \item \texttt{gedit}: {\scriptsize default text editor for GNOME desktop environment.}
-      \item \texttt{gvim}: {\scriptsize GUI version of }\texttt{vim}
-      \item \texttt{pico}: {\scriptsize console based plain text editor }
-      \item \texttt{nano}: {\scriptsize GNU.org clone of }\texttt{pico}
-      \item \texttt{kwrite}: {\scriptsize editor by KDE.}
-    \end{enumerate}
-    \item {\color{red}You are required to know how to create and edit files for this tutorial.}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-  \frametitle{\small Editor Cheatsheets}
-% Page 1
-  \vspace{-0.6cm}
-  {\scriptsize
-  \begin{columns}
-    \column{0.4\textwidth}
-    \begin{eblock}{Cursor Movement}
-    \begin{itemize}
-      \item move left 
-      \item move down
-      \item move up
-      \item move right
-      \item jump to beginning of line
-      \item jump to end of line
-      \item goto line \texttt{n}
-      \item goto top of file
-      \item goto end of file
-      \item move one page up
-      \item move one page down
-    \end{itemize}
-    \end{eblock}
-    \column{0.2\textwidth}
-    \begin{eblock}{vi}
-    \begin{itemize}
-      \item \texttt{h}
-      \item \texttt{j}
-      \item \texttt{k}
-      \item \texttt{l}
-      \item \texttt{\^}
-      \item \texttt{\$}
-      \item \texttt{nG}
-      \item \texttt{1G}
-      \item \texttt{G}
-      \item \texttt{C-u}
-      \item \texttt{C-d}
-    \end{itemize}
-    \end{eblock}
-    \column{0.4\textwidth}
-    \begin{eblock}{emacs}
-    \begin{itemize}
-      \item \texttt{C-b}
-      \item \texttt{C-n}
-      \item \texttt{C-p}
-      \item \texttt{C-f}
-      \item \texttt{C-a}
-      \item \texttt{C-e}
-      \item \texttt{M-x goto-line [RET] n}
-      \item \texttt{M-<}
-      \item \texttt{M->}
-      \item \texttt{M-v}
-      \item \texttt{C-v}
-    \end{itemize}
-    \end{eblock}
-  \end{columns}
-  }
-  \vspace{-0.1cm}
-% Page 2
-  \begin{columns}
-    \column{0.6\textwidth}
-    \begin{itemize}
-      {\scriptsize
-      \item[C]: Control Key
-      \item[M]: Meta or ESCAPE (ESC) Key
-      \item[{[RET]}]: Enter Key
-      }
-    \end{itemize}
-  \end{columns}
-  \framebreak
-  {\scriptsize
-  \begin{columns}
-    \column{0.6\textwidth}
-    \vspace{-0.5cm}
-    \begin{eblock}{Insert/Appending Text}
-    \begin{itemize}
-      \item insert at cursor 
-      \item insert at beginning of line
-      \item append after cursor
-      \item append at end of line
-      \item newline after cursor in insert mode
-      \item newline before cursor in insert mode
-      \item append at end of line
-      \item exit insert mode
-    \end{itemize}
-    \end{eblock}
-    \column{0.2\textwidth}
-    \vspace{-0.5cm}
-    \begin{eblock}{vi}
-    \begin{itemize}
-      \item \texttt{i}
-      \item \texttt{I}
-      \item \texttt{a}
-      \item \texttt{A}
-      \item \texttt{o}
-      \item \texttt{O}
-      \item \texttt{ea}
-      \item \texttt{ESC}
-    \end{itemize}
-    \end{eblock}
-  \end{columns}
-  }
-  \begin{itemize}
-    \item {\scriptsize \texttt{emacs} has only one mode unlike \texttt{vi} which has insert and command mode}
-  \end{itemize}
-  \framebreak
-  {\scriptsize
-   \begin{columns}
-    \column{0.5\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{File Editing}
-    \begin{itemize}
-      \item save file
-      \item save file and exit
-      \item quit
-      \item quit without saving
-      \item delete a line
-      \item delete \texttt{\textit{n}} lines
-      \item paste deleted line after cursor
-      \item paste before cursor
-      \item undo edit
-      \item delete from cursor to end of line
-      \item search forward for \textit{patt}
-      \item search backward for \textit{patt}
-      \item search again forward (backward)
-    \end{itemize}
-    \end{eblock}
-    \column{0.25\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{vi}
-    \begin{itemize}
-      \item \texttt{:w}
-      \item \texttt{:wq, ZZ}
-      \item \texttt{:q}
-      \item \texttt{:q!}
-      \item \texttt{dd}
-      \item \texttt{\textit{n}dd}
-      \item \texttt{p}
-      \item \texttt{P}
-      \item \texttt{u}
-      \item \texttt{D}
-      \item \texttt{$\backslash$\textit{patt}}
-      \item \texttt{?\textit{patt}}
-      \item \texttt{n}
-    \end{itemize}
-    \end{eblock}
-    \column{0.3\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{emacs}
-    \begin{itemize}
-      \item \texttt{C-x C-s}
-      \item \texttt{}
-      \item \texttt{C-x C-c}
-      \item \texttt{}
-      \item \texttt{C-a C-k}
-      \item \texttt{C-a M-\textit{n} C-k}
-      \item \texttt{C-y}
-      \item
-      \item \texttt{C-\_}
-      \item \texttt{C-k}
-      \item \texttt{C-s \textit{patt}}
-      \item \texttt{C-r \textit{patt}}
-      \item \texttt{C-s(r)}
-    \end{itemize}
-    \end{eblock}
-  \end{columns}
-  }
-  \framebreak
-  {\scriptsize
-  \begin{columns}
-    \column{0.4\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{File Editing (contd)}
-    \begin{itemize}
-      \item replace a character
-      \item join next line to current
-      \item change a line
-      \item change a word
-      \item change to end of line
-      \item delete a character
-      \item delete a word
-      \item edit/open file \textit{file}
-      \item insert file \textit{file}
-      \item split window horizontally
-      \item split window vertically
-      \item switch windows
-    \end{itemize}
-    \end{eblock}
-    \column{0.35\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{vi}
-    \begin{itemize}
-      \item \texttt{r}
-      \item \texttt{J}
-      \item \texttt{cc}
-      \item \texttt{cw}
-      \item \texttt{c\$}
-      \item \texttt{x}
-      \item \texttt{dw}
-      \item \texttt{:e \texttt{file}}
-      \item \texttt{:r \texttt{file}}
-      \item \texttt{:split or C-ws}
-      \item \texttt{:vsplit or C-wv}
-      \item \texttt{C-ww}
-    \end{itemize}
-    \end{eblock}
-    \column{0.3\textwidth}
-     \vspace{-0.5cm}
-    \begin{eblock}{emacs}
-    \begin{itemize}
-      \item 
-      \item 
-      \item 
-      \item
-      \item
-      \item \texttt{C-d}
-      \item \texttt{M-d}
-      \item \texttt{C-x C-f \textit{file}}
-      \item \texttt{C-x i \textit{file}}
-      \item \texttt{C-x 2}
-      \item \texttt{C-x 3}
-      \item \texttt{C-x o}
-    \end{itemize}
-    \end{eblock}
-  \end{columns}
-  }
-  \begin{itemize}
-    \item {\tiny To change a line or word in \texttt{emacs}, use \texttt{C-\textit{spacebar}} and navigate to end of word or line to select text and then delete using \texttt{C-w}}
-  \end{itemize}
-  \framebreak
-  \begin{itemize}
-    \item Do a google search for more detailed cheatsheets
-    \item[\texttt{vi}] \url{https://www.google.com/search?q=vi+cheatsheet}
-    \item[\texttt{emacs}] \url{https://www.google.com/search?q=emacs+cheatsheet}
-  \end{itemize}
-\end{frame}
-
 \subsection{Variables}
 \begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Variables}
+  \frametitle{Variables}
   \begin{itemize}
-    \item *nix also permits the use of variables, similar to any programming language such as C, C++, Fortran etc
     \item A variable is a named object that contains data used by one or more applications. 
     \item There are two types of variables, Environment and User Defined and can contain  a number, character or a string of characters.
     \item Environment Variables provides a simple way to share configuration settings between multiple applications and processes in Linux.
-    \item By Convention, enviromental variables are often named using all uppercase letters
-    \item[e.g.] \texttt{PATH, LD\_LIBRARY\_PATH, LD\_INCLUDE\_PATH, TEXINPUTS, etc}
-    \item To reference a variable (environment or user defined) prepend \$ to the name of the variable
-    \item[e.g.] \$PATH, \$LD\_LIBRARY\_PATH
-%    \framebreak
-%    \item The command \textbf{printenv} list the current environmental variables.
-%    \item[$\bigstar$] \texttt{Type \textbf{printenv} on your command prompt to list all environment variables in your current session.}
-%    \item The command \textbf{env} is used to either print a list of environment variables or run another utility in an altered environment without having to modify the currently existing environment.
-%    \item[$\bigstar$] \texttt{Type \textbf{env SHELL=/bin/tcsh xterm} to start an xterm session in tcsh}
-%    \item[$\vardiamond$] \texttt{To execute the above command successfully, you need to be in GUI mode on the virtual OS or logged into a remote systems with X-Forwarding enabled.}
-  \end{itemize}
-%  \framebreak
-%  \begin{description}
-%    \item[PATH:] A list of directory paths.
-%    \item[HOME:] indicate where a user's home directory is located in the file system.
-%    \item[PWD:] contains path to current working directory.
-%    \item[OLDPWD:] contains path to previous working directory.
-%    \item[TERM:] specifies the type of computer terminal or terminal emulator being used
-%    \item[SHELL:] contains name of the running, interactive shell.
-%    \item[PS1:] default command prompt
-%    \item[PS2:] secondary command prompt
-%    \item[LD\_LIBRARY\_PATH:] colon-separated set of directories where libraries should be searched for first
-%    \item[HOSTNAME:] The systems host name
-%    \item[USER:] Current logged in user's name
-%    \item[DISPLAY:] Network name of the X11 display to connect to, if available.
-%    \item[LD\_INCLUDE\_PATH:] 
-%  \end{description}
-  \framebreak
-  \begin{itemize}
-    \item You can edit the environment variables.
-    \item Command to do this depends on the shell
-    \item[$\bigstar$] \texttt{To add your bin directory to the PATH variable}
-    \item[] \texttt{sh/ksh/bash}: \textbf{export PATH=\$\{HOME\}/bin:\$\{PATH\}}
-    \item[] \texttt{csh/tcsh}: \textbf{setenv PATH\,\,\$\{HOME\}/bin:\$\{PATH\}}
-    \item[$\bigstar$] \texttt{Note the syntax for the above commands}
-    \item[$\bigstar$] \textbf{sh/ksh/bash:} \texttt{no spaces except between export and PATH}
-    \item[$\bigstar$] \textbf{csh,tcsh:} \texttt{no = sign, just a space between PATH and the absolute path}
-    \item[$\bigstar$] \textbf{all shells:} \texttt{colon(:) to separate different paths and the variable that is appended to}
-    \item \textbf{Yes, the order matters.} If you have a customized version of a software say perl in your home directory, if you append the perl path to \$PATH at the end, your program will use the system wide perl not your locally installed version.
+%    \item By Convention, enviromental variables are often named using all uppercase letters
+%    \item[e.g.] \texttt{PATH, LD\_LIBRARY\_PATH, LD\_INCLUDE\_PATH, TEXINPUTS, etc}
+%    \item To reference a variable (environment or user defined) prepend \$ to the name of the variable
+%    \item[e.g.] \texttt{\$PATH, \$LD\_LIBRARY\_PATH}
+%    \item You can edit the environment variables.
+%    \item Command to do this depends on the shell
+%    \item[$\bigstar$] \texttt{To add your bin directory to the PATH variable}
+%    \item[] \texttt{sh/ksh/bash}: \textbf{export PATH=\$\{HOME\}/bin:\$\{PATH\}}
+%    \item[] \texttt{csh/tcsh}: \textbf{setenv PATH\,\,\$\{HOME\}/bin:\$\{PATH\}}
+%    \item[$\bigstar$] \texttt{Note the syntax for the above commands}
+%    \item[$\bigstar$] \textbf{sh/ksh/bash:} \texttt{no spaces except between export and PATH}
+%    \item[$\bigstar$] \textbf{csh,tcsh:} \texttt{no = sign, just a space between PATH and the absolute path}
+%    \item[$\bigstar$] \textbf{all shells:} \texttt{colon(:) to separate different paths and the variable that is appended to}
+    \item As in programming languages like C, C++ and Fortran, defining your own variables makes the program or script extensible by you or a third party
     \item Rules for Variable Names
     \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
+%      \fontsize{7}{10}\selectfont{
         \item Variable names must start with a letter or underscore
         \item Number can be used anywhere else
         \item DO NOT USE special characters such as \texttt{@, \#, \%, \$}
         \item Case sensitive
         \item Examples
         \begin{itemize}
-          \fontsize{7}{10}\selectfont{
+%          \fontsize{7}{10}\selectfont{
           \item Allowed: VARIABLE, VAR1234able, var\_name, \_VAR
           \item Not Allowed: 1VARIABLE, \%NAME, \$myvar, VAR@NAME 
-          }
+%          }
         \end{itemize}
-      }
+%      }
     \end{enumerate}
+    \item To reference a variable, environment or user defined, you need to prepend the variable name with "\$" as in \$VARIABLE, \$PATH, etc.
+    \item Its a good practice to protect your variable name within \{\dots\} such as \$\{PATH\} when referencing it. (We'll see an example in a few slides)
     \item Assigning value to a variable
     \begin{center}
       \begin{tikzpicture}
@@ -767,10 +509,10 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
             [1.0ex]
         \end{tabularx}};
         \begin{pgfonlayer}{background}
-          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+            draw=lubrown!30] ($(tbl.north west)+(0.14,0)$)
           rectangle ($(tbl.north east)-(0.13,0.9)$);
-          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
           ($(tbl.north east)-(0.13,0.6)$)
           rectangle ($(tbl.south west)+(0.13,0.2)$);
         \end{pgfonlayer}
@@ -784,83 +526,85 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
 
 \subsection{File Permissions}
 \begin{frame}[fragile, allowframebreaks]
-  \frametitle{\small File Permissions}
+  \frametitle{File Permissions}
   \begin{itemize}
     \item In *NIX OS's, you have three types of file permissions
     \begin{enumerate}
-      {\footnotesize
         \item read (r)
         \item write (w)
         \item execute (x)
-      }
     \end{enumerate}
     \item for three types of users
     \begin{enumerate}
-      {\footnotesize
         \item user
         \item group
         \item world i.e. everyone else who has access to the system
-      }
     \end{enumerate}
-    \begin{eblock}{}
+    \begin{exampleblock}{}
       \begin{tabular}{lllllllll}
         drwxr-xr-x. & 2 & user & user & 4096 & Jan & 28 & 08:27 & Public\\
         -rw-rw-r-\,-. & 1 & user & user & 3047 & Jan & 28 & 09:34 & README\\
       \end{tabular}
-    \end{eblock}
+    \end{exampleblock}
     \item The first character signifies the type of the file
-    \item[] \texttt{d} for directory
-    \item[] \texttt{l} for symbolic link
-    \item[] \texttt{-} for normal file
+    \item[] \Verblubrown{d} for directory
+    \item[] \Verblubrown{l} for symbolic link
+    \item[] \Verblubrown{-} for normal file
     \item The next three characters of first triad signifies what the owner can do
     \item The second triad signifies what group member can do
     \item The third triad signifies what everyone else can do
+      \begin{gather*}
+        d\underbrace{rwx}_{u}\overbrace{r-x}^g\underbrace{r-x}_o
+      \end{gather*}
     \item Read carries a weight of 4
     \item Write carries a weight of 2
     \item Execute carries a weight of 1
     \item The weights are added to give a value of 7 (rwx), 6(rw), 5(rx) or 3(wx) permissions. 
-    \item \textbf{chmod} is a *NIX command to change permissions on a file
+    \item \Verblubrown{chmod} is a *NIX command to change permissions on a file
     \item To give user rwx, group rx and world x permission, the command is
-    \item[] \texttt{chmod 751 filename}
-    \framebreak
+    \item[] \Verblubrown{chmod 751 filename}
     \item Instead of using numerical permissions you can also use symbolic mode
+  \end{itemize}
+  \begin{description}
     \item[u/g/o or a] user/group/world or all i.e. ugo
     \item[+/-] Add/remove permission
     \item[r/w/x] read/write/execute
+  \end{description}
+  \begin{itemize}
     \item Give everyone execute permission: 
-    \item[] \texttt{chmod a+x hello.sh }
-    \item[] \texttt{chmod ugo+x hello.sh}
+    \item[] \Verblubrown{chmod a+x hello.sh }
+    \item[] \Verblubrown{chmod ugo+x hello.sh}
     \item Remove group and world read \& write permission: 
-    \item[] \texttt{chmod go-rw hello.sh}
-    \item Use the \texttt{-R} flag to change permissions recursively, all files and directories and their contents.
-    \item[] \texttt{chmod -R 755 \$\{HOME\}/*}
+    \item[] \Verblubrown{chmod go-rw hello.sh}
+    \item Use the \Verblubrown{-R} flag to change permissions recursively, all files and directories and their contents.
+    \item[] \Verblubrown{chmod -R 755 \$\{HOME\}/*}
     \item[] What is the permission on \$\{HOME\}?
   \end{itemize}
 \end{frame}
 
 \subsection{Input and Output}
 \begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Input/Output}
+  \frametitle{Input/Output}
   \begin{itemize}
-    \item The command \textbf{echo} is used for displaying output to screen 
+    \item The command \Verblubrown{echo} is used for displaying output to screen 
     \item For reading input from screen/keyboard/prompt
-    \item[\textbf{bash}] \textbf{read}
-    \item[\textbf{tcsh}] \textbf{\$<}
-    \item The \textbf{read} statement takes all characters typed until the \enter \,key is pressed and stores them into a variable.
-    \item[Syntax] \texttt{read <variable name>}
-    \item[Example] \texttt{read name\enter}
-    \item[] \textit{Alex Pacheco}
-    \item \textbf{\$<} can accept only one argument. If you have multiple arguments, enclose the \textbf{\$<} within quotes e.g. \textbf{"\$<"}
-    \item[Syntax:] \texttt{set <variable> = \$<}
-    \item[Example:] \texttt{set name = "\$<"\enter}
-    \item[] \textit{Alex Pacheco}
+    \item[]\textbf{bash} \Verblubrown{read}
+    \item[]\textbf{tcsh} \Verblubrown{\$<}
+    \item The \Verblubrown{read} statement takes all characters typed until the \Enter \,key is pressed and stores them into a variable.
+    \item[]Syntax \Verbblue{read <variable name>}
+    \item[]Example \Verbblue{read name\Enter}
+    \item[] \Verbblue{\textit{Alex Pacheco}}
+    \item \Verblubrown{\$<} can accept only one argument. If you have multiple arguments, enclose the \Verblubrown{\$<} within quotes e.g. \Verblubrown{"\$<"}
+    \item[]Syntax: \Verbblue{set <variable> = \$<}
+    \item[]Example: \Verbblue{set name = "\$<"\Enter}
+    \item[] \Verbblue{\textit{Alex Pacheco}}
     \item In the above examples, the name that you enter in stored in the variable \texttt{name}.
-    \item Use the \textbf{echo} command to print the variable \texttt{name} to the screen
-    \item[] \texttt{echo \$name\enter}
-    \item The \textbf{echo} statement can print multiple arguments. 
-    \item By default, \textbf{echo} eliminates redundant whitespace (multiple spaces and tabs) and replaces it with a single whitespace between arguments. 
+    \item Use the \Verblubrown{echo} command to print the variable \texttt{name} to the screen
+    \item[] \Verbblue{echo \$name\Enter}
+    \item The \Verblubrown{echo} statement can print multiple arguments. 
+    \item By default, \Verblubrown{echo} eliminates redundant whitespace (multiple spaces and tabs) and replaces it with a single whitespace between arguments. 
     \item To include redundant whitespace, enclose the arguments within double quotes
-    \item[Example:] \texttt{echo Welcome to HPC\quad\quad Training}\enter\, (more than one space between HPC and Training
+    \item[] \texttt{echo Welcome to HPC\quad\quad Training}\enter\, (more than one space between HPC and Training)
     \item[] \texttt{echo "Welcome to HPC\quad\quad Training"}\enter
     \item[] \texttt{read name\enter} or \texttt{set name = "\$<"\enter}
     \item[] \textit{Alex\quad\quad\quad Pacheco\enter}
@@ -868,44 +612,38 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
     \item[] \texttt{echo "\$name"\enter}
     \framebreak
     \item You can also use the \textbf{printf} command to display output
-    \item[Usage:] \texttt{printf <format> <arguments>}
-    \item[Examples:] \texttt{printf "\$name"\enter}
+    \item[]Syntax: \texttt{printf <format> <arguments>}
+    \item[]Example: \texttt{printf "\$name"\enter}
     \item[] \texttt{printf "\%s$\backslash$n" "\$name"\enter}
     \item Format Descriptors
     \begin{enumerate}
-      {\scriptsize
         \item[\%s] print argument as a string
         \item[\%d] print argument as an integer
         \item[\%f] print argument as a floating point number
         \item[$\backslash$n] print new line
         \item[] you can add a width for the argument between the \% and \{s,d,f\} fields
         \item[] \%4s, \%5d, \%7.4f
-      }
     \end{enumerate}
     \item The \textbf{printf} command is used in \textbf{awk} to print formatted data (more on this later) 
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small I/O Redirection}
+  \frametitle{I/O Redirection}
   \begin{itemize}
     \item There are three file descriptors for I/O streams
     \begin{enumerate}
-      {\footnotesize
         \item STDIN: Standard Input
         \item STDOUT: Standard Output
         \item STDERR: Standard Error
-      }
     \end{enumerate}
     \item 1 represents STDOUT and 2 represents STDOUT
     \item I/O redirection allows users to connect applications
     \begin{itemize}
-      {\footnotesize
-      \item[<]: connects a file to STDIN of an application
-      \item[>]: connects STDOUT of an application to a file
-      \item[> >]: connects STDOUT of an application by appending to a file
-      \item[|]: connects the STDOUT of an application to STDIN of another application.
-      }
+      \item[$<$]: connects a file to STDIN of an application
+      \item[$>$]: connects STDOUT of an application to a file
+      \item[$> >$]: connects STDOUT of an application by appending to a file
+      \item[$|$]: connects the STDOUT of an application to STDIN of another application.
     \end{itemize}
     \item Examples:
     \begin{enumerate}
@@ -920,8 +658,8 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
   \end{itemize}
 \end{frame}
 
-%\begin{frame}{\small Exercise}
-%  \begin{eblock}{}
+%\begin{frame}{Exercise}
+%  \begin{exampleblock}{}
 %    \begin{itemize}
 %      \item Create two shell variables containing
 %      \begin{enumerate}
@@ -939,49 +677,40 @@ deletekeywords={\dots},              % if you want to delete keywords from the g
 %        }
 %      \end{enumerate}
 %    \end{itemize}
-%  \end{eblock}
+%  \end{exampleblock}
 %\end{frame}
 
 \section{Shell Scripting Basics}
 \subsection{Start Up Scripts}
 \begin{frame}
-  \frametitle{\small Start Up Scripts}
+  \frametitle{Start Up Scripts}
   \begin{itemize}
-    {\scriptsize
     \item When you login to a *NIX computer, shell scripts are automatically loaded depending on your default \texttt{shell}
     \item \textbf{sh,ksh}
     \begin{enumerate}
-      {\scriptsize
         \item \texttt{/etc/profile}
         \item \texttt{\$HOME/.profile}
-      }
     \end{enumerate}
     \item \textbf{bash}
     \begin{enumerate}
-      {\scriptsize
         \item \texttt{/etc/profile, login terminal only}
         \item \texttt{/etc/bashrc or /etc/bash/bashrc}
         \item \texttt{\$HOME/.bash\_profile, login terminal only}
         \item \texttt{\$HOME/.bashrc}
-      }
     \end{enumerate}
     \item \textbf{csh,tcsh}
     \begin{enumerate}
-      {\scriptsize
         \item \texttt{/etc/csh.cshrc}
         \item \texttt{\$HOME/.tcshrc}
         \item \texttt{\$HOME/.cshrc if .tcshrc is not present}
-      }
     \end{enumerate}
     \item The \texttt{.bashrc, .tcshrc, .cshrc, .bash\_profile} are script files where users can define their own aliases, environment variables, modify paths etc.
     \item e.g. the \texttt{alias rm="rm -i"} command will modify all \texttt{rm} commands that you type as \texttt{rm -i} 
-    }
   \end{itemize}
 \end{frame}
 \begin{frame}[fragile, allowframebreaks]
-  \frametitle{\small Examples}
-  {\tiny
-    \begin{bblock}{.bashrc}
+  \frametitle{Examples}
+    \begin{block}{.bashrc}
       \begin{lstlisting}[language=bash]
 # .bashrc
 
@@ -1005,8 +734,8 @@ source $g09root/g09/bsd/g09.profile
 export TEXINPUTS=.:/usr/share/texmf//:/home/apacheco/LaTeX//:${TEXINPUTS}
 export BIBINPUTS=.:/home/apacheco/TeX//:${BIBINPUTS}
       \end{lstlisting}
-    \end{bblock}
-    \begin{bblock}{.tcshrc}
+    \end{block}
+    \begin{block}{.tcshrc}
       \begin{lstlisting}[language=csh]
 # .tcshrc
 
@@ -1025,79 +754,72 @@ source $g09root/g09/bsd/g09.login
 setenv TEXINPUTS ".:/usr/share/texmf//:/home/apacheco/LaTeX//:${TEXINPUTS}"
 setenv BIBINPUTS ".:/home/apacheco/TeX//:${BIBINPUTS}"
       \end{lstlisting}
-    \end{bblock}
-  }
+    \end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small What is a scripting Language?}
-%  \vspace{-0.25cm}
-  \begin{eblock}{}%{What is a Scripting Language?}
-    {\scriptsize
+  \frametitle{What is a scripting Language?}
+  \begin{exampleblock}{}%{What is a Scripting Language?}
     \begin{itemize}
       \item A \textbf{scripting language} or \textbf{script language} is a \emph{programming language} that supports the writing of \textbf{scripts}.
       \item \textbf{Scripting Languages} provide a higher level of abstraction than standard programming languages.
       \item Compared to programming languages, scripting languages do not distinguish between data types: integers, real values, strings, etc.
       \item Scripting Languages tend to be good for automating the execution of other programs.
       \begin{enumerate}
-        {\scriptsize
           \item[$\vardiamond$] analyzing data
           \item[$\vardiamond$] running daily backups
-        }
       \end{enumerate}
       \item They are also good for writing a program that is going to be used only once and then discarded.
 %    \end{itemize}
-%  \end{eblock}
-%  \begin{eblock}{What is a script?}
+%  \end{exampleblock}
+%  \begin{exampleblock}{What is a script?}
 %    \begin{itemize}
       \item A \textbf{script} is a program written for a software environment that automate the execution of tasks which could alternatively be executed one-by-one by a human operator.
       \item The majority of script programs are ``quick and dirty'', where the main goal is to get the program written quickly.
     \end{itemize}
-    }
-  \end{eblock}
+  \end{exampleblock}
 \end{frame}
 
 \subsection{Getting Started with Writing Simple Scripts}
 \begin{frame}[fragile]
-  \frametitle{\small Writing your first script}
-  \begin{bblock}{Three things to do to write and execute a script}
-    {\scriptsize
+  \frametitle{Writing your first script}
+  \vspace{-0.25cm}
+  \begin{block}{Three things to do to write and execute a script}
     \begin{enumerate}
       \item Write a script
       \begin{itemize}
-        {\scriptsize
         \item A shell script is a file that contains ASCII text. 
         \item Create a file, \texttt{hello.sh} with the following lines 
-        }
       \end{itemize}
-      {\tiny
       \begin{lstlisting}[language=bash]
 #!/bin/bash
 # My First Script
 echo "Hello World!"
       \end{lstlisting}
-      }
       \item Set permissions
-      {\tiny
       \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts> chmod 755 hello.sh 
       \end{lstlisting}
-      }
+      \item[] OR
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts> chmod a+x hello.sh 
+      \end{lstlisting}
       \item Execute the script
-      {\tiny
       \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts> ./hello.sh 
 Hello World!
       \end{lstlisting}
-      }
+      \item If you do not set execute permission for the script, then
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts> sh hello.sh
+Hello World!
+      \end{lstlisting}
     \end{enumerate}
-    }
-  \end{bblock}
+  \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{\small Description of the script}
-  \fontsize{7}{9}\selectfont{
+  \frametitle{Description of the script}
   \begin{itemize}
     \item My First Script
   \begin{lstlisting}[language=bash]
@@ -1108,71 +830,62 @@ echo "Hello World!"
     \item The first line is called the "ShaBang'' line. It tells the OS which interpreter to use. In the current example, bash
     \item Other options are:
     \begin{enumerate}
-      {\scriptsize
         \item[$\vardiamond$] \texttt{sh\quad\,:   \#!/bin/sh}
         \item[$\vardiamond$] \texttt{ksh :  \#!/bin/ksh}
         \item[$\vardiamond$] \texttt{csh :  \#!/bin/csh}
         \item[$\vardiamond$] \texttt{tcsh: \#!/bin/tcsh}
-      }
     \end{enumerate}
     \item The second line is a comment. All comments begin with "\#".
     \item The third line tells the OS to print "Hello World!" to the screen.
   \end{itemize}
-  }
 \end{frame}
 
-\begin{frame}[allowframebreaks]
-  \frametitle{\small Special Characters}
-  \fontsize{7}{9}\selectfont{
+\begin{frame}
+  \frametitle{Special Characters}
   \begin{description}
     \item[\#:] starts a comment.
     \item[\$:] indicates the name of a variable.
     \item[$\backslash$:] escape character to display next character literally.
-    \item[\{ \}:] used to enclose name of variable.
+    \item[\{\quad\}:] used to enclose name of variable.
     \item[;] Command separator [semicolon]. Permits putting two or more commands on the same line.
     \item[;;] Terminator in a case option [double semicolon].
     \item[.] "dot" command [period]. Equivalent to source. This is a bash builtin.
     \item[\$?] exit status variable.
     \item[\$\$] process ID variable.
-    \item[{[ ]}] test expression
-    \item[{[[ ]]}] test expression, more flexible than [ ] 
-    \item[{\$[ ], (( ))}] integer expansion
-    \item[||, \&\&, !] Logical OR, AND and NOT
+    \item[{[\quad]}] test expression
+    \item[{[[\quad]]}] test expression, more flexible than [ ] 
+    \item[{\$[\quad], ((\quad))}] integer expansion
+    \item[$||$, \&\&, !] Logical OR, AND and NOT
   \end{description}
-  }
+
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Quotation}
+\begin{frame}
+  \frametitle{Quotation}
   \begin{itemize}
     \item Double Quotation \texttt{" "}
     \begin{itemize}
-      {\scriptsize
         \item Enclosed string is expanded ("\$", "/" and "`")
         \item Example: \texttt{echo "\$myvar"} prints the value of \texttt{myvar}
-      }
     \end{itemize}
     \item Single Quotation \texttt{' '}
     \begin{itemize}
-      {\scriptsize
         \item Enclosed string is read literally
         \item Example: \texttt{echo '\$myvar'} prints \texttt{\$myvar}
-      }
     \end{itemize}
     \item Back Quotation \texttt{` `}
     \begin{itemize}
-      {\scriptsize
         \item Used for command substitution
         \item Enclosed string is executed as a command
         \item Example: \texttt{echo `pwd`} prints the output of the \texttt{pwd} command i.e. print working directory
         \item In \textbf{bash}, you can also use \texttt{\$($\cdots$)} instead of \texttt{`$\cdots$`}
         \item[] e.g. \texttt{\$(pwd)} and \texttt{`pwd`} are the same
-      }
     \end{itemize}
   \end{itemize}
-%  \fontsize{9}{8}{
-  \tiny{
-    \lstinputlisting[basicstyle=\tiny\ttfamily,language=bash]{./scripts/day1/examples/quotes.sh}
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+  \lstinputlisting[language=bash]{./scripts/day1/examples/quotes.sh}
   \begin{lstlisting}[basicstyle=\tiny\ttfamily,style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> ./quotes.sh 
 HI
@@ -1186,19 +899,17 @@ HelloAlex
 /home/apacheco/Tutorials/BASH/scripts/day1/examples
 ~/Tutorials/BASH/scripts/day1/examples>
   \end{lstlisting}
-  }
 \end{frame}
 
 \section{Beyond Basic Shell Scripting}
 \subsection{Arithmetic Operations}
 \begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Arithmetic Operations}
+  \frametitle{Arithmetic Operations}
   \begin{itemize}
     \item You can carry out numeric operations on integer variables
 %  \end{itemize}
   \begin{columns}
-    \column{0.6\textwidth}
-    \vspace{-0.8cm}
+    \column{0.5\textwidth}
     \begin{center}
       \begin{tikzpicture}
         \node (tbl) {
@@ -1214,10 +925,10 @@ HelloAlex
             [1.0ex]
         \end{tabularx}};
         \begin{pgfonlayer}{background}
-          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+            draw=lubrown!30] ($(tbl.north west)+(0.14,0)$)
           rectangle ($(tbl.north east)-(0.13,0.9)$);
-          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
           ($(tbl.north east)-(0.13,0.6)$)
           rectangle ($(tbl.south west)+(0.13,0.2)$);
         \end{pgfonlayer}
@@ -1227,21 +938,17 @@ HelloAlex
 %  \begin{itemize}
     \item Arithmetic operations in \textbf{bash} can be done within the \texttt{\$(($\cdots$))} or \texttt{\$[$\cdots$]} commands
     \begin{enumerate}
-      {\scriptsize
       \item[$\bigstar$] Add two numbers: \texttt{\$((1+2))}
       \item[$\bigstar$] Multiply two numbers: \texttt{\$[\$a*\$b]}
       \item[$\bigstar$] You can also use the \texttt{let} command: \texttt{let c=\$a-\$b}
       \item[$\bigstar$] or use the \texttt{expr} command: \texttt{c=`expr \$a - \$b`}
-      }
     \end{enumerate}
     \framebreak
     \item In \textbf{tcsh},
     \begin{enumerate}
-      {\scriptsize
       \item[$\bigstar$] Add two numbers: \texttt{@ x = 1 + 2}
       \item[$\bigstar$] Divide two numbers: \texttt{@ x = \$a / \$b}
       \item[$\bigstar$] You can also use the \texttt{expr} command: \texttt{set c = `expr \$a \% \$b`}
-      }
     \end{enumerate}
     \item Note the use of space
     \item[\textbf{bash}] space required around operator in the \texttt{expr} command
@@ -1256,7 +963,6 @@ HelloAlex
     \framebreak
     \item Using floating point in \textbf{bash} or \textbf{tcsh} scripts requires an external calculator like GNU \texttt{bc}.
     \begin{enumerate}
-      {\scriptsize
         \item[$\bigstar$] Add two numbers:
         \item[]\texttt{echo "3.8 + 4.2" | bc}
         \item[$\bigstar$] Divide two numbers and print result with a precision of 5 digits:
@@ -1265,15 +971,15 @@ HelloAlex
         \item[]\texttt{bc $<<<$ "scale=5; 2/5"}
         \item[$\bigstar$] Use \texttt{bc -l} to see result in floating point at max scale:
         \item[] \texttt{bc -l $<<<$ "2/5"}
-      }
     \end{enumerate}
+    \item You can also use \textbf{awk} for floating point arithmetic. 
   \end{itemize}
 \end{frame}
 
 
 \subsection{Arrays}
 \begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Arrays}
+  \frametitle{Arrays}
   \begin{itemize}
     \item \textbf{bash} and \textbf{tcsh} supports one-dimensional arrays.
     \item Array elements may be initialized with the \texttt{variable[xx]} notation
@@ -1289,6 +995,7 @@ HelloAlex
     \item print length of array
     \item[\textbf{bash}] \texttt{\$\{\#name[@]\}}
     \item[\textbf{tcsh}] \texttt{\$\{\#name\}}
+      \framebreak
     \item print length of element \texttt{i} of array \texttt{name}
     \item[] \texttt{\$\{\#name[i]\}}
     \item[] Note: In \textbf{bash} \texttt{\$\{\#name\}} prints the length of the first element of the array
@@ -1315,32 +1022,32 @@ HelloAlex
     \item[\textbf{tcsh}] the first array index is one (1)
   \end{itemize}
 %  \framebreak
-%  \begin{bblock}{Exercise}
+%  \begin{block}{Exercise}
 %    \begin{enumerate}
 %      \item Write a script to read your first and last name to an array.
 %      \item Add your salutation and suffix to the array.
 %      \item Drop either the salutation or suffix.
 %      \item Print the array after each of the three steps above.
 %    \end{enumerate}
-%  \end{bblock}
+%  \end{block}
   \framebreak
   \fontsize{5}{5.5}\selectfont{
     \begin{columns}
-      \column{0.5\textwidth}
+      \column{0.47\textwidth}
       \vspace{-0.5cm}
-      \begin{eblock}{name.sh}
+      \begin{exampleblock}{name.sh}
         \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.sh}
-      \end{eblock}
-    \column{0.5\textwidth}
+      \end{exampleblock}
+    \column{0.47\textwidth}
       \vspace{-0.5cm}
-      \begin{bblock}{name.csh}
+      \begin{block}{name.csh}
         \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.csh}
-      \end{bblock}
+      \end{block}
     \end{columns}
     \begin{columns}
-      \column{0.5\textwidth}
-      \begin{eblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+      \column{0.47\textwidth}
+%      \begin{exampleblock}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/examples> ./name.sh 
 Print your first and last name
 Alex Pacheco
@@ -1352,10 +1059,10 @@ the first
 Hello  Dr. Alex Pacheco the first
 Hello  Dr. Alex the first
         \end{lstlisting}
-      \end{eblock}
-      \column{0.5\textwidth}
-      \begin{bblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+%     \end{exampleblock}
+      \column{0.47\textwidth}
+%      \begin{block}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/examples> ./name.csh 
 Print your first name
 Alex
@@ -1369,14 +1076,14 @@ the first
 Hello  Dr. Alex Pacheco the first
 Hello  Dr. Alex the first
         \end{lstlisting}
-      \end{bblock}
+%      \end{block}
     \end{columns}
   }
 \end{frame}
 
 \subsection{Flow Control}
 \begin{frame}
-  \frametitle{\small Flow Control}
+  \frametitle{Flow Control}
   \begin{itemize}
     \item Shell Scripting Languages execute commands in sequence similar to programming languages such as C, Fortran, etc.
     \item Control constructs can change the sequential order of commands.
@@ -1392,12 +1099,12 @@ Hello  Dr. Alex the first
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{\small \texttt{if} statement}
+  \frametitle{\texttt{if} statement}
   \begin{itemize}
     \item An \texttt{if/then} construct tests whether the exit status of a list of commands is 0, and if so, executes one or more commands.
     \begin{columns}
       \column{5cm}
-      \begin{eblock}{bash}
+      \begin{exampleblock}{bash}
         \begin{lstlisting}[language=bash]
 if [ condition1 ]; then
   some commands
@@ -1407,9 +1114,9 @@ else
   some commands
 fi
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
       \column{5cm}
-      \begin{bblock}{tcsh}
+      \begin{block}{tcsh}
         \begin{lstlisting}[language=csh]
 if ( condition1 ) then
   some commands
@@ -1419,7 +1126,7 @@ else
   some commands
 endif
         \end{lstlisting}
-      \end{bblock}
+      \end{block}
     \end{columns}
   \item Note the space between \textit{condition} and "["\quad"]"
   \item \textbf{bash} is very strict about spaces.
@@ -1429,82 +1136,67 @@ endif
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small File Test \& Logical Operators}
-  \begin{columns}
-    \column{1.1\textwidth}
-    \begin{eblock}{File Test Operators}
-      \begin{tabular}{lll}
-        Operation & \textbf{bash} & \textbf{tcsh} \\
-        \hline
-        file exists & \texttt{if [ -e .bashrc ]} & \texttt{if ( -e .tcshrc )}\\
-        file is a regular file & \texttt{if [ -f .bashrc ]} &  \\
-        file is a directory & \texttt{if [ -d /home ]} & \texttt{if ( -d /home )} \\
-        file is not zero size & \texttt{if [ -s .bashrc ]} & \texttt{if ( ! -z .tcshrc)} \\
-        file has read permission & \texttt{ if [ -r .bashrc ]} & \texttt{ if ( -r .tcshrc)} \\
-        file has write permission & \texttt{ if [ -w .bashrc ]} & \texttt{ if ( -w .tcshrc)} \\
-        file has execute permission & \texttt{ if [ -x .bashrc ]} & \texttt{ if ( -x .tcshrc)} \\
-        \hline
-      \end{tabular}
-    \end{eblock}
-    \begin{eblock}{Logical Operators}
-      \vspace{-0.2cm}
-      \begin{columns}
-        \column{2cm}
-        \begin{itemize}
-          \item[!]: NOT
-          \item[\&\&]: AND
-          \item[||]: OR
-        \end{itemize}
-        \column{9cm}
-        \begin{itemize}
-          \item[] \texttt{if [ ! -e .bashrc ]}
-          \item[] \texttt{if [ -f .bashrc ] \&\& [ -s .bashrc ]}
-          \item[] \texttt{if [[ -f .bashrc || -f .bash\_profile ]] }
-          \item[] \texttt{if ( -e ~/.tcshrc  \&\&  ! -z ~/.tcshrc )}
-        \end{itemize}
-      \end{columns}
-    \end{eblock}
-  \end{columns}
+  \frametitle{Integer \& String Comparison Operators}
+  \begin{exampleblock}{Integer Comparison}
+    \begin{tabular}{lll}
+      Operation & \textbf{bash} & \textbf{tcsh} \\
+      \hline
+      equal to & \texttt{if [ 1 -eq 2 ]} & \texttt{if (1 == 2)} \\
+      not equal to & \texttt{if [ \$a -ne \$b ]} & \texttt{if (\$a != \$b)}\\
+      greater than & \texttt{if [ \$a -gt \$b ]} & \texttt{if (\$a > \$b)}\\
+      greater than or equal to & \texttt{if [ 1 -ge \$b ]} & \texttt{if (1 >= \$b)}\\
+      less than & \texttt{if [ \$a -lt 2 ]} & \texttt{if (\$a < 2)}\\
+      less than or equal to & \texttt{if [[ \$a -le \$b ]]} & \texttt{if (\$a <= \$b)} \\
+      \hline
+    \end{tabular}
+  \end{exampleblock}
+  \begin{exampleblock}{String Comparison}
+    \begin{tabular}{lll}
+      Operation & \textbf{bash} & \textbf{tcsh} \\
+      \hline
+      equal to & \texttt{if [ \$a == \$b ]} & \texttt{if (\$a == \$b)}\\
+      not equal to & \texttt{if [ \$a != \$b ]} & \texttt{if (\$a != \$b)}\\
+      zero length or null & \texttt{if [ -z \$a ] } & \texttt{if (\$\%a == 0)}\\
+      non zero length & \texttt{if [ -n \$a ] } & \texttt{if (\$\%a > 0)}\\
+      \hline
+    \end{tabular}
+  \end{exampleblock}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Integer \& String Comparison Operators}
-  \begin{columns}
-    \column{\textwidth}
-    \vspace{-0.5cm}
-    \begin{eblock}{Integer Comparison}
-      \begin{tabular}{lll}
-        Operation & \textbf{bash} & \textbf{tcsh} \\
-        \hline
-        equal to & \texttt{if [ 1 -eq 2 ]} & \texttt{if (1 == 2)} \\
-        not equal to & \texttt{if [ \$a -ne \$b ]} & \texttt{if (\$a != \$b)}\\
-        greater than & \texttt{if [ \$a -gt \$b ]} & \texttt{if (\$a > \$b)}\\
-        greater than or equal to & \texttt{if [ 1 -ge \$b ]} & \texttt{if (1 >= \$b)}\\
-        less than & \texttt{if [ \$a -lt 2 ]} & \texttt{if (\$a < 2)}\\
-        less than or equal to & \texttt{if [[ \$a -le \$b ]]} & \texttt{if (\$a <= \$b)} \\
-        \hline
-      \end{tabular}
-    \end{eblock}
-    \begin{eblock}{String Comparison}
-      \begin{tabular}{lll}
-        Operation & \textbf{bash} & \textbf{tcsh} \\
-        \hline
-        equal to & \texttt{if [ \$a == \$b ]} & \texttt{if (\$a == \$b)}\\
-        not equal to & \texttt{if [ \$a != \$b ]} & \texttt{if (\$a != \$b)}\\
-        zero length or null & \texttt{if [ -z \$a ] } & \texttt{if (\$\%a == 0)}\\
-        non zero length & \texttt{if [ -n \$a ] } & \texttt{if (\$\%a > 0)}\\
-        \hline
-      \end{tabular}
-    \end{eblock}
-  \end{columns}
+  \frametitle{File Test \& Logical Operators}
+  \begin{exampleblock}{File Test Operators}
+    \begin{tabular}{lll}
+      Operation & \textbf{bash} & \textbf{tcsh} \\
+      \hline
+      file exists & \texttt{if [ -e .bashrc ]} & \texttt{if ( -e .tcshrc )}\\
+      file is a regular file & \texttt{if [ -f .bashrc ]} &  \\
+      file is a directory & \texttt{if [ -d /home ]} & \texttt{if ( -d /home )} \\
+      file is not zero size & \texttt{if [ -s .bashrc ]} & \texttt{if ( ! -z .tcshrc)} \\
+      file has read permission & \texttt{ if [ -r .bashrc ]} & \texttt{ if ( -r .tcshrc)} \\
+      file has write permission & \texttt{ if [ -w .bashrc ]} & \texttt{ if ( -w .tcshrc)} \\
+      file has execute permission & \texttt{ if [ -x .bashrc ]} & \texttt{ if ( -x .tcshrc)} \\
+      \hline
+    \end{tabular}
+  \end{exampleblock}
+  \begin{exampleblock}{Logical Operators}
+    \begin{tabular}{lll}
+      Operation & \textbf{bash} & \textbf{tcsh} \\
+      \hline
+      NOT & \texttt{if [ ! -e .bashrc ]} & \texttt{if ( ! -z .tcshrc)} \\
+      AND & \texttt{if [ \$a -eq 2 ] \&\& [ \$x -gt \$y ]} & \texttt{if (\$a == 2 \&\& \$x $<=$ \$y )} \\ 
+      OR &  \texttt{if [[ \$a -eq 2 $||$  \$x -gt \$y ]]} & \texttt{if (\$a == 2 $||$ \$x $<=$ \$y )} \\
+      \hline
+    \end{tabular}
+  \end{exampleblock}
 \end{frame}
 
-\begin{frame}[fragile]{\small Examples}
+\begin{frame}[fragile]{Examples}
   \begin{itemize}
     \item Condition tests using the \texttt{if/then} may be nested
       \begin{columns}
-        \column{0.55\textwidth}
-        \begin{eblock}{}
+        \column{0.5\textwidth}
+        \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 read a
 if [ "$a" -gt 0 ]; then
@@ -1513,9 +1205,9 @@ if [ "$a" -gt 0 ]; then
   fi
 fi
       \end{lstlisting}
-        \end{eblock}
-        \column{0.5\textwidth}
-        \begin{bblock}{}
+        \end{exampleblock}
+        \column{0.45\textwidth}
+        \begin{block}{}
       \begin{lstlisting}[language=csh]
 set a = $<
 if ( $a > 0 ) then
@@ -1524,12 +1216,12 @@ if ( $a > 0 ) then
   endif
 endif
       \end{lstlisting}
-        \end{bblock}
+        \end{block}
       \end{columns}
     \item This is same as 
       \begin{columns}
-        \column{0.55\textwidth}
-        \begin{eblock}{}
+        \column{0.5\textwidth}
+        \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 read a
 if [[ "$a" -gt 0 &&  "$a" -lt 5 ]]; then
@@ -1540,33 +1232,32 @@ if [ "$a" -gt 0 ] && [ "$a" -lt 5 ]; then
   echo "The value of $a lies somewhere between 0 and 5"
 fi
       \end{lstlisting}
-        \end{eblock}
-        \column{0.5\textwidth}
-        \begin{bblock}{}
+        \end{exampleblock}
+        \column{0.45\textwidth}
+        \begin{block}{}
       \begin{lstlisting}[language=csh]
 set a = $<
 if ( "$a" > 0  &&  "$a" < 5 ) then
   echo "The value of $a lies somewhere between 0 and 5"
 endif
       \end{lstlisting}
-        \end{bblock}
+        \end{block}
       \end{columns}
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Loop Constructs}
+\begin{frame}
+  \frametitle{Loop Constructs}
   \begin{itemize}
-%    \fontsize{7}{9}\selectfont{
     \item A \textit{loop} is a block of code that iterates a list of commands as long as the \textit{loop control condition} is true.
     \item Loop constructs available in 
     \item[\textbf{bash}:] \texttt{for, while} and \texttt{until}
     \item[\textbf{tcsh}:] \texttt{foreach} and \texttt{while}
-%    }
   \end{itemize}
-  \framebreak
-  \begin{eblock}{bash}
-%    \fontsize{5}{6}\selectfont{
+\end{frame}
+
+\begin{frame}[fragile]{bash: for loops}
+  \begin{exampleblock}{}
     \begin{itemize}
       \item The \texttt{for} loop is the basic looping construct in \textbf{bash}
       \begin{lstlisting}[language=bash]
@@ -1583,39 +1274,39 @@ for (( EXP1; EXP2; EXP3 )); do
 done
       \end{lstlisting}
     \end{itemize}
-%    }
-  \end{eblock}
+  \end{exampleblock}
   \begin{columns}
     \column{0.3\textwidth}
-    \begin{eblock}{}
+    \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 for i in $(seq 1 10)
 do
   touch file${i}.dat
 done
       \end{lstlisting}
-    \end{eblock}
+    \end{exampleblock}
     \column{0.35\textwidth}
-    \begin{eblock}{}
+    \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 for i in $(seq 1 10); do
   touch file${i}.dat
 done
       \end{lstlisting}
-    \end{eblock}
+    \end{exampleblock}
     \column{0.3\textwidth}
-    \begin{eblock}{}
+    \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 for ((i=1;i<=10;i++))
 do
   touch file${i}.dat
 done
       \end{lstlisting}
-    \end{eblock}
+    \end{exampleblock}
   \end{columns}
+\end{frame}
 
-  \begin{bblock}{tcsh}
-%    \fontsize{7}{6}\selectfont{
+\begin{frame}[fragile]{tcsh: foreach loop}
+  \begin{block}{}
     \begin{itemize}
       \item The \texttt{foreach} loop is the basic looping construct in \textbf{tcsh}
       \begin{lstlisting}
@@ -1624,74 +1315,83 @@ foreach arg (list)
 end
       \end{lstlisting}
     \end{itemize}
-%    }
-  \end{bblock}
+  \end{block}
   \begin{columns}
     \column{0.4\textwidth}
-    \begin{bblock}{}
+    \begin{block}{}
       \begin{lstlisting}
 foreach i (`seq 1 10`)
   touch file$i.dat
 end
       \end{lstlisting}
-    \end{bblock}
+    \end{block}
   \end{columns}
-  \begin{eblock}{\texttt{while} loop}
-    \begin{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{while Construct}
+  \begin{itemize}
 %      \fontsize{7}{9}\selectfont{
-      \item The \texttt{while} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is true (returns a 0 exit status). 
-      \item In contrast to a \texttt{for} loop, a \texttt{while} loop finds use in situations where the number of loop repetitions is not known beforehand.
-      \begin{columns}
-        \column{0.35\textwidth}
-      \item \texttt{bash}
+  \item The \texttt{while} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is true (returns a 0 exit status). 
+  \item In contrast to a \texttt{for} loop, a \texttt{while} loop finds use in situations where the number of loop repetitions is not known beforehand.
+  \end{itemize}
+  \vspace{-0.5cm}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \begin{exampleblock}{bash}
       \begin{lstlisting}[language=bash]
 while [ condition ]
 do
   some commands
 done
       \end{lstlisting}
-        \column{0.35\textwidth}
-      \item \texttt{tcsh}
+    \end{exampleblock}
+    \column{0.4\textwidth}
+    \begin{block}{tcsh}
       \begin{lstlisting}[language=csh]
 while ( condition )
   some commands
 end
       \end{lstlisting}
-      \end{columns}
-%      }
-     \end{itemize}
-  \end{eblock}
+    \end{block}
+  \end{columns}
   \begin{columns}
     \column{0.4\textwidth}
     \vspace{-0.2cm}
-    \begin{eblock}{factorial.sh}
+    \begin{exampleblock}{factorial.sh}
       \lstinputlisting[language=bash]{./scripts/day1/examples/factorial.sh}
-    \end{eblock}
+    \end{exampleblock}
     \column{0.4\textwidth}
     \vspace{-0.2cm}
-    \begin{bblock}{factorial.csh}
+    \begin{block}{factorial.csh}
       \lstinputlisting[language=csh]{./scripts/day1/examples/factorial.csh}
-    \end{bblock}
+    \end{block}
   \end{columns}
-  \begin{eblock}{\texttt{until} loop}
-    \begin{itemize}
-      \item The \texttt{until} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is false (opposite of \texttt{while} loop).
+\end{frame}
+
+\begin{frame}[fragile]{until Contruct (bash only)}
+  \begin{itemize}
+  \item The \texttt{until} construct tests for a condition at the top of a loop, and keeps looping as long as that condition is false (opposite of \texttt{while} loop).
+  \end{itemize}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \begin{exampleblock}{}
       \begin{lstlisting}[language=bash]
 until [ condition is true ]
 do
   some commands
 done
       \end{lstlisting}
-    \end{itemize}
-  \end{eblock}
-  \vspace{-0.2cm}
+    \end{exampleblock}
+  \end{columns}
   \begin{columns}
     \column{0.4\textwidth}
-    \begin{eblock}{factorial2.sh}
+    \begin{exampleblock}{factorial2.sh}
       \lstinputlisting[language=bash]{./scripts/day1/examples/factorial2.sh}
-    \end{eblock}
+    \end{exampleblock}
   \end{columns}
-  \framebreak
+\end{frame}
+
+\begin{frame}[fragile]{Nested Loops}
   \begin{itemize}
     \item \texttt{for, while \& until} loops can nested. To exit from the loop use the \texttt{break} command
   \end{itemize}
@@ -1699,20 +1399,20 @@ done
     \begin{columns}
       \column{0.45\textwidth}
       \vspace{-0.2cm}
-      \begin{eblock}{nestedloops.sh}
+      \begin{exampleblock}{nestedloops.sh}
         \lstinputlisting[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/examples/nestedloops.sh}
-      \end{eblock}
+      \end{exampleblock}
       \column{0.45\textwidth}
       \vspace{-0.2cm}
-      \begin{bblock}{nestedloops.csh}
+      \begin{block}{nestedloops.csh}
         \lstinputlisting[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily,language=csh]{./scripts/day1/examples/nestedloops.csh}
-      \end{bblock}
+      \end{block}
     \end{columns}
     \framebreak
     \begin{columns}
       \column{0.45\textwidth}
       \vspace{-0.2cm}
-      \begin{eblock}{}
+      \begin{exampleblock}{}
         \begin{lstlisting}[basicstyle=\fontsize{4}{5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/examples> ./nestedloops.sh 
 Nested for loops
@@ -1754,10 +1454,10 @@ Value of a in outer loop: 5
 5 * 1 > 5
 ========================
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
       \column{0.45\textwidth}
       \vspace{-0.2cm}
-      \begin{bblock}{}
+      \begin{block}{}
         \begin{lstlisting}[basicstyle=\fontsize{4}{5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts> ./day1/examples/nestedloops.csh 
 Nested for loops
@@ -1799,20 +1499,20 @@ Value of a in outer loop: 5
 5 * 1 > 5
 ========================
         \end{lstlisting}
-      \end{bblock}
+      \end{block}
     \end{columns}
   }
 \end{frame}
 
 \begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Switching or Branching Constructs}
+  \frametitle{Switching or Branching Constructs}
   \begin{itemize}
     \fontsize{7}{9}\selectfont{
     \item The \texttt{case} and \texttt{select} constructs are technically not loops, since they do not iterate the execution of a code block. 
     \item Like loops, however, they direct program flow according to conditions at the top or bottom of the block.
     \begin{columns}
       \column{5cm}
-      \begin{eblock}{\texttt{case} construct}
+      \begin{exampleblock}{\texttt{case} construct}
         \begin{lstlisting}[language=bash]
 case variable in
   "condition1")
@@ -1823,9 +1523,9 @@ case variable in
     ;;
 esac          
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
       \column{5cm}
-      \begin{eblock}{\texttt{select} construct}
+      \begin{exampleblock}{\texttt{select} construct}
         \begin{lstlisting}[language=csh]
 select variable [ list ]
 do
@@ -1833,13 +1533,13 @@ do
   break
 done
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
     \end{columns}
     \framebreak
     \item \texttt{tcsh} has the \texttt{switch} construct
     \begin{columns}
       \column{5cm}
-      \begin{eblock}{\texttt{switch} construct}
+      \begin{exampleblock}{\texttt{switch} construct}
         \begin{lstlisting}[language=csh]
 switch (arg list)
   case "variable"
@@ -1847,30 +1547,32 @@ switch (arg list)
     breaksw
 endsw
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
     \end{columns}
     }
   \end{itemize}
-  \framebreak
-  \fontsize{7}{9}\selectfont{
-    \begin{columns}
-      \column{0.4\textwidth}
-      \vspace{-0.5cm}
-      \begin{eblock}{dooper.sh}
-        \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/examples/dooper.sh}
-      \end{eblock}
-      \column{0.4\textwidth}
-      \vspace{-0.5cm}
-      \begin{bblock}{dooper.csh}
-        \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=csh]{./scripts/day1/examples/dooper.csh}
-      \end{bblock}
-    \end{columns}
-  }
-  \framebreak
+\end{frame}
+
+\begin{frame}[fragile]
   \begin{columns}
     \column{0.5\textwidth}
-    \begin{eblock}{}
-      \begin{lstlisting}
+    \vspace{-0.5cm}
+    \begin{exampleblock}{dooper.sh}
+      \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/examples/dooper.sh}
+    \end{exampleblock}
+    \column{0.4\textwidth}
+    \vspace{-0.5cm}
+    \begin{block}{dooper.csh}
+      \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=csh]{./scripts/day1/examples/dooper.csh}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \column{0.48\textwidth}
+%    \begin{exampleblock}{}
+      \begin{lstlisting}[style=LINUX,basicstyle=\tiny\ttfamily]
 ~/Tutorials/BASH/scripts> ./day1/examples/dooper.sh
 Print two numbers
 1 4
@@ -1886,10 +1588,10 @@ What operation do you want to do?
 1 % 4 = 1
 #? 8
       \end{lstlisting}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{bblock}{}
-      \begin{lstlisting}
+%    \end{exampleblock}
+    \column{0.48\textwidth}
+%    \begin{block}{}
+      \begin{lstlisting}[style=LINUX,basicstyle=\tiny\ttfamily]
 ~/Tutorials/BASH/scripts> ./day1/examples/dooper.csh 
 Print two numbers one at a time
 1
@@ -1903,57 +1605,74 @@ all
 1 / 5 = 0
 1 % 5 = 1
         \end{lstlisting}
-    \end{bblock}
+%    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \column{0.48\textwidth}
+    \begin{exampleblock}{dooper1.sh}
+      \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/examples/dooper1.sh}
+    \end{exampleblock}
+    \column{0.48\textwidth}
+    \begin{lstlisting}[style=LINUX,basicstyle=\tiny\ttfamily]
+~/Tutorials/BASH/scripts> ./day1/examples/dooper1.sh
+Print two numbers
+2 5
+What operation do you want to do?
+Options are add, subtract, multiply, exponentiate, divide, modulo and all
+all
+2 + 5 = 7
+2 - 5 = -3
+2 * 5 = 10
+2 ** 5 = 32
+2 / 5 = 0
+2 % 5 = 2
+    \end{lstlisting}
   \end{columns}
 \end{frame}
 
 
 \subsection{Command Line Arguments}
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Command Line Arguments}
-  \vspace{-0.5cm}
-  \begin{columns}
-    \column{12cm}
+\begin{frame}
+  \frametitle{Command Line Arguments}
   \begin{itemize}
     \item Similar to programming languages, \texttt{bash} (and other shell scripting languages) can also take command line arguments
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-      \item[$\vardiamond$] \texttt{./scriptname arg1 arg2 arg3 arg4 ...}
-      \item[$\vardiamond$] \texttt{\$0,\$1,\$2,\$3, etc}: positional parameters corresponding to \texttt{./scriptname,arg1,arg2,arg3,arg4,...} respectively  
-      \item[$\vardiamond$] \texttt{\$\#}: number of command line arguments
-      \item[$\vardiamond$] \texttt{\$*}: all of the positional parameters, seen as a single word
-      \item[$\vardiamond$] \texttt{\$@}: same as \texttt{\$*} but each parameter is a quoted string.
-      \item[$\vardiamond$] \texttt{shift N}: shift positional parameters from \texttt{N+1} to \texttt{\$\#} are renamed to variable names from \texttt{\$1} to \texttt{\$\# - N + 1}
-      }
-    \end{enumerate}
+    \begin{itemize}
+      \item \texttt{./scriptname arg1 arg2 arg3 arg4 ...}
+      \item \texttt{\$0,\$1,\$2,\$3, etc}: positional parameters corresponding to \texttt{./scriptname,arg1,arg2,arg3,arg4,...} respectively  
+      \item \texttt{\$\#}: number of command line arguments
+      \item \texttt{\$*}: all of the positional parameters, seen as a single word
+      \item \texttt{\$@}: same as \texttt{\$*} but each parameter is a quoted string.
+      \item \texttt{shift N}: shift positional parameters from \texttt{N+1} to \texttt{\$\#} are renamed to variable names from \texttt{\$1} to \texttt{\$\# - N + 1}
+    \end{itemize}
     \item In \texttt{csh,tcsh}
-    \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
-      \item[$\bigstar$] an array \texttt{argv} contains the list of arguments with \texttt{argv[0]} set to name of script.
-      \item[$\bigstar$] \texttt{\#argv} is the number of arguments i.e. length of \texttt{argv} array.
-      }
-    \end{enumerate}
+    \begin{itemize}
+      \item an array \texttt{argv} contains the list of arguments with \texttt{argv[0]} set to name of script.
+      \item \texttt{\#argv} is the number of arguments i.e. length of \texttt{argv} array.
+    \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \column{0.48\textwidth}
+    \vspace{-0.5cm}
+    \begin{exampleblock}{shift.sh}
+      \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/shift.sh}
+    \end{exampleblock}
+    \column{0.48\textwidth}
+    \vspace{-0.5cm}
+    \begin{block}{shift.csh}
+      \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/shift.csh}
+    \end{block}
   \end{columns}
-  \framebreak
-  \fontsize{7}{9}\selectfont{
-    \begin{columns}
-      \column{0.5\textwidth}
-      \vspace{-0.5cm}
-      \begin{eblock}{shift.sh}
-        \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/shift.sh}
-      \end{eblock}
-      \column{0.5\textwidth}
-      \vspace{-0.5cm}
-      \begin{bblock}{shift.csh}
-        \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/shift.csh}
-      \end{bblock}
-    \end{columns}
-    \begin{columns}
-      \column{0.5\textwidth}
-      \begin{eblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples> ./shift.sh $(seq 1 5)
+  \begin{columns}
+    \column{0.48\textwidth}
+%    \begin{exampleblock}{}
+      \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+dyn100085:examples apacheco$ ./shift.sh $(seq 1 5)
 Number of Arguments:  5
 List of Arguments:  1 2 3 4 5
 Name of script that you are running:  ./shift.sh
@@ -1968,12 +1687,12 @@ Argument List is:  4 5
 Number of Arguments:  2
 Argument List is:  5
 Number of Arguments:  1
-        \end{lstlisting}
-      \end{eblock}
-      \column{0.5\textwidth}
-      \begin{bblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples> ./shift.csh $(seq 1 5)
+      \end{lstlisting}
+%    \end{exampleblock}
+    \column{0.48\textwidth}
+%    \begin{block}{}
+      \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+dyn100085:examples apacheco$ ./shift.csh $(seq 1 5)
 Number of Arguments:  5
 List of Arguments:  1 2 3 4 5
 Name of script that you are running:  ./shift.csh
@@ -1988,37 +1707,38 @@ Argument List is:  4 5
 Number of Arguments:  2
 Argument List is:  5
 Number of Arguments:  1
-        \end{lstlisting}
-      \end{bblock}
-    \end{columns}
-  }
+      \end{lstlisting}
+%    \end{block}
+  \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\small Declare command}
+\begin{frame}[fragile]{Declare command}
   \begin{itemize}
     \item Use the \textbf{declare} command to set variable and functions attributes.
     \item Create a constant variable i.e. read only variable
-    \item[Syntax:] \texttt{declare -r var}
-    \item[] \texttt{declare -r varName=value}
+    \item[] \Verblubrown{Syntax:}
+    \item[] \Verbblue{declare -r var}
+    \item[] \Verbblue{declare -r varName=value}
     \item Create an integer variable
-    \item[Syntax:] \texttt{declare -i var}
-    \item[] \texttt{declare -i varName=value}
+    \item[] \Verblubrown{Syntax:} 
+    \item[] \Verbblue{declare -i var}
+    \item[] \Verbblue{declare -i varName=value}
     \item You can carry out arithmetic operations on variables declared as integers
   \end{itemize}
   \begin{columns}
-    \column{5cm}
-    \begin{eblock}{}
-      \begin{lstlisting}
+    \column{8cm}
+%    \begin{exampleblock}{}
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH> j=10/5 ; echo $j
 10/5
 ~/Tutorials/BASH> declare -i j; j=10/5 ; echo $j
 2
       \end{lstlisting}
-    \end{eblock}
+%    \end{exampleblock}
   \end{columns}
 \end{frame}
 \subsection{Functions}
-\begin{frame}[fragile,allowframebreaks]{\small Functions}
+\begin{frame}[fragile,allowframebreaks]{Functions}
   \begin{itemize}
     \item Like "real" programming languages, \textbf{bash} has functions.
     \item A function is a subroutine, a code block that implements a set of operations, a "black box" that performs a specified task. 
@@ -2027,7 +1747,7 @@ Number of Arguments:  1
   \begin{columns}
     \column{5cm}
     {\scriptsize
-      \begin{eblock}{}
+      \begin{exampleblock}{}
         \begin{lstlisting}[language=bash]
 function function_name {
   command
@@ -2037,20 +1757,23 @@ function_name () {
   command
 }
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
     }
   \end{columns}
   \framebreak
-  \fontsize{7}{9}\selectfont{
     \begin{columns}
-      \column{0.47\textwidth}
-      \begin{eblock}{shift10.sh}
+      \column{0.45\textwidth}
+      \begin{exampleblock}{shift10.sh}
         \lstinputlisting[language=bash,basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/shift10.sh}
-      \end{eblock}
+      \end{exampleblock}
       \column{0.53\textwidth}
-      \begin{eblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples> ./shift10.sh `seq 1 2 22`
+%      \begin{exampleblock}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
+dyn100085:examples apacheco$ ./shift10.sh
+USAGE: ./shift10.sh [atleast 11 arguments]
+dyn100085:examples apacheco$ ./shift10.sh $(seq 1 10)
+USAGE: ./shift10.sh [atleast 11 arguments]
+dyn100085:examples apacheco$ ./shift10.sh `seq 1 2 22`
 Number of Arguments:  11
 List of Arguments:  1 3 5 7 9 11 13 15 17 19 21
 Name of script that you are running:  ./shift10.sh
@@ -2061,10 +1784,20 @@ Argument List is:  1 3 5 7 9 11 13 15 17 19 21
 Number of Arguments:  11
 Argument List is:  19 21
 Number of Arguments:  2
+dyn100085:examples apacheco$ ./shift10.sh $(seq 21 2 44)
+Number of Arguments:  12
+List of Arguments:  21 23 25 27 29 31 33 35 37 39 41 43
+Name of script that you are running:  ./shift10.sh
+Command You Entered: ./shift10.sh 21 23 25 27 29 31 33 35 37 39 41 43
+First Argument 21
+Tenth and Eleventh argument 210 211 39 41
+Argument List is:  21 23 25 27 29 31 33 35 37 39 41 43
+Number of Arguments:  12
+Argument List is:  39 41 43
+Number of Arguments:  3
         \end{lstlisting}
-      \end{eblock}
+%      \end{exampleblock}
     \end{columns}
-  }
   \framebreak
   \begin{itemize}
     \item You can also pass arguments to a function.
@@ -2076,8 +1809,9 @@ Number of Arguments:  2
     \item By default all variables are global.
     \item Modifying a variable in a function changes it in the whole script.
     \item You can create a local variables using the \textbf{local} command
-    \item[Syntax:] \texttt{local var=value}
-    \item[] \texttt{local varName}
+    \item[] \Verblubrown{Syntax:}
+    \item[] \Verbblue{local var=value}
+    \item[] \Verbblue{local varName}
   \end{itemize}
   \framebreak
   \begin{itemize}
@@ -2087,130 +1821,121 @@ Number of Arguments:  2
     \begin{columns}
       \column{0.45\textwidth}
       \vspace{-0.35cm}
-      \begin{eblock}{factorial3.sh}
+      \begin{exampleblock}{factorial3.sh}
         \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/examples/factorial3.sh}
-      \end{eblock}
-      \column{0.55\textwidth}
-      \vspace{-0.35cm}
-      \begin{eblock}{}
-        \begin{lstlisting}[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples>./factorial3.sh 1 3 5 7 9 15
+      \end{exampleblock}
+      \column{0.53\textwidth}
+%      \vspace{-0.35cm}
+%      \begin{exampleblock}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
+dyn100085:examples apacheco$ ./factorial3.sh $(seq 1 2 11)
 Factorial of 1 is 1
 Factorial of 3 is 6
 Factorial of 5 is 120
 Factorial of 7 is 5040
 Factorial of 9 is 362880
-Factorial of 15 is 1307674368000
+Factorial of 11 is 39916800
         \end{lstlisting}
-      \end{eblock}
+%      \end{exampleblock}
     \end{columns}
   }
 \end{frame}
 
-\section{Advanced Topics Preview}
-\begin{frame}
-  \frametitle{\small grep \& egrep}
-  \begin{itemize}
-%    \fontsize{7}{9}\selectfont{
-    \item \texttt{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
-    \item \texttt{egrep} is extended grep, same as \texttt{grep -E}
-    \item Use \texttt{zgrep} for compressed files.
-    \item Usage: \texttt{grep <options> <search pattern> <files>} 
-    \item Commonly used options
-    \begin{itemize}
-      {\scriptsize
-      \item[-i]: ignore case during search
-      \item[-r]: search recursively
-      \item[-v]: invert match i.e. match everything except pattern
-      \item[-l]: list files that match pattern
-      \item[-L]: list files that do not match pattern
-      \item[-n]: prefix each line of output with the line number within its input file.
-      }
-    \end{itemize}
-%    }
-  \end{itemize}
-\end{frame}
+%\section{Advanced Topics Preview}
+%\begin{frame}
+%  \frametitle{grep \& egrep}
+%  \begin{itemize}
+%    \item \texttt{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
+%    \item \texttt{egrep} is extended grep, same as \texttt{grep -E}
+%    \item Use \texttt{zgrep} for compressed files.
+%    \item Usage: \texttt{grep <options> <search pattern> <files>} 
+%    \item Commonly used options
+%    \begin{itemize}
+%      {\scriptsize
+%      \item[-i]: ignore case during search
+%      \item[-r]: search recursively
+%      \item[-v]: invert match i.e. match everything except pattern
+%      \item[-l]: list files that match pattern
+%      \item[-L]: list files that do not match pattern
+%      \item[-n]: prefix each line of output with the line number within its input file.
+%      }
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+
+%\begin{frame}
+%  \frametitle{sed}
+%  \begin{itemize}
+%    \item sed ("stream editor") is Unix utility for parsing and transforming text files.
+%    \item sed is line-oriented, it operates one line at a time and allows regular expression matching and substitution.
+%    \item The most commonly used feature of sed is the 's' (substitution command)
+%    \begin{enumerate}
+%      \item[$\vardiamond$] echo Auburn Tigers | sed 's/Auburn/LSU/g'
+%      \item[$\bigstar$] Add the \texttt{-e} to carry out multiple matches.
+%      \item[$\vardiamond$] echo LSU Tigers | sed -e 's/LSU/LaTech/g' -e 's/Tigers/Bulldogs/g'
+%      \item[$\bigstar$] insert a blank line above and below the lines that match regex: 
+%      \item[]\texttt{sed '/regex/\{x;p;x;G;\}'}
+%      \item[$\bigstar$] delete all blank lines in a file: \texttt{sed '/\^{}\$/d'}
+%      \item[$\bigstar$] delete lines n through m in file: \texttt{sed 'n,md'}
+%      \item[$\bigstar$] delete lines matching pattern regex: \texttt{sed '/regex/d'}
+%      \item[$\bigstar$]print only lines which match regular expression: \texttt{sed -n '/regex/p'}
+%      \item[$\bigstar$] print section of file between two regex: \texttt{sed -n '/regex1/,/regex2/p'}
+%      \item[$\bigstar$] print section of file from regex to enf of file: \texttt{sed -n '/regex1/,\$p'}
+%     \end{enumerate}
+%    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
+%   \end{itemize}
+%\end{frame}
+
+%\begin{frame}
+%  \frametitle{awk}
+%  \begin{itemize}
+%    \item The Awk text-processing language is useful for such tasks as:
+%    \begin{enumerate}
+%      \item[$\bigstar$] Tallying information from text files and creating reports from the results.
+%      \item[$\bigstar$]Adding additional functions to text editors like "vi".
+%      \item[$\bigstar$] Translating files from one format to another.
+%      \item[$\bigstar$] Creating small databases.
+%      \item[$\bigstar$]Performing mathematical operations on files of numeric data.
+%    \end{enumerate}
+%    \item Awk has two faces: 
+%    \begin{enumerate}
+%      \item[$\bigstar$] it is a utility for performing simple text-processing tasks, and 
+%      \item[$\bigstar$] it is a programming language for performing complex text-processing tasks.
+%    \end{enumerate}
+%    \item Simplest form of using awk
+%    \begin{enumerate}
+%      \item[$\vardiamond$]\textbf{awk} \textit{search pattern} \{\texttt{program actions}\}
+%      \item[$\vardiamond$] Most command action: \texttt{print}
+%      \item[$\vardiamond$] Print file dosum.sh: \texttt{awk '\{print \$0\}' dosum.sh}
+%      \item[$\vardiamond$] Print line matching bash in all files in current directory:
+%      \item[] \texttt{awk '/bash/\{print \$0\}' *.sh }
+%    \end{enumerate}
+%    \item \textbf{awk} supports the if conditional and for loops
+%    \item[] \texttt{awk '\{ if (NR > 0)\{print "File not empty"\}\}' hello.sh}
+%    \item[] \texttt{awk '\{for (i=1;i<=NF;i++)\{print \$i\}\}' name.sh}
+%    \item[] \texttt{ls *.sh | awk -F. '\{print \$1\}'}
+%    \item[] NR$\equiv$Number of records; NF$\equiv$Number of fields (or columns)
+%    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
+%  \end{itemize}
+%\end{frame}
 
 \begin{frame}
-  \frametitle{\small sed}
-  \begin{itemize}
-    \fontsize{7}{9}\selectfont{
-    \item sed ("stream editor") is Unix utility for parsing and transforming text files.
-    \item sed is line-oriented, it operates one line at a time and allows regular expression matching and substitution.
-    \item The most commonly used feature of sed is the 's' (substitution command)
-    \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
-      \item[$\vardiamond$] echo Auburn Tigers | sed 's/Auburn/LSU/g'
-      \item[$\bigstar$] Add the \texttt{-e} to carry out multiple matches.
-      \item[$\vardiamond$] echo LSU Tigers | sed -e 's/LSU/LaTech/g' -e 's/Tigers/Bulldogs/g'
-      \item[$\bigstar$] insert a blank line above and below the lines that match regex: 
-      \item[]\texttt{sed '/regex/\{x;p;x;G;\}'}
-      \item[$\bigstar$] delete all blank lines in a file: \texttt{sed '/\^{}\$/d'}
-      \item[$\bigstar$] delete lines n through m in file: \texttt{sed 'n,md'}
-      \item[$\bigstar$] delete lines matching pattern regex: \texttt{sed '/regex/d'}
-      \item[$\bigstar$]print only lines which match regular expression: \texttt{sed -n '/regex/p'}
-      \item[$\bigstar$] print section of file between two regex: \texttt{sed -n '/regex1/,/regex2/p'}
-      \item[$\bigstar$] print section of file from regex to enf of file: \texttt{sed -n '/regex1/,\$p'}
-      }
-    \end{enumerate}
-    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
-    }
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small awk}
-  \begin{itemize}
-    \fontsize{7}{9}\selectfont{
-    \item The Awk text-processing language is useful for such tasks as:
-    \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
-      \item[$\bigstar$] Tallying information from text files and creating reports from the results.
-      \item[$\bigstar$]Adding additional functions to text editors like "vi".
-      \item[$\bigstar$] Translating files from one format to another.
-      \item[$\bigstar$] Creating small databases.
-      \item[$\bigstar$]Performing mathematical operations on files of numeric data.
-      }
-    \end{enumerate}
-    \item Awk has two faces: 
-    \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
-      \item[$\bigstar$] it is a utility for performing simple text-processing tasks, and 
-      \item[$\bigstar$] it is a programming language for performing complex text-processing tasks.
-      }
-    \end{enumerate}
-    \item Simplest form of using awk
-    \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
-      \item[$\vardiamond$]\textbf{awk} \textit{search pattern} \{\texttt{program actions}\}
-      \item[$\vardiamond$] Most command action: \texttt{print}
-      \item[$\vardiamond$] Print file dosum.sh: \texttt{awk '\{print \$0\}' dosum.sh}
-      \item[$\vardiamond$] Print line matching bash in all files in current directory:
-      \item[] \texttt{awk '/bash/\{print \$0\}' *.sh }
-        }
-    \end{enumerate}
-    \item \textbf{awk} supports the if conditional and for loops
-    \fontsize{7}{9}\selectfont{
-    \item[] \texttt{awk '\{ if (NR > 0)\{print "File not empty"\}\}' hello.sh}
-    \item[] \texttt{awk '\{for (i=1;i<=NF;i++)\{print \$i\}\}' name.sh}
-    \item[] \texttt{ls *.sh | awk -F. '\{print \$1\}'}
-    \item[] NR$\equiv$Number of records; NF$\equiv$Number of fields (or columns)
-    }
-    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
-    }
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{\small Scripting for Job Submission}
-  \begin{bblock}{Problem Description}
+  \frametitle{Scripting for Job Submission}
+  \begin{block}{Problem Description}
     \begin{itemize}
       \item I have to run more than one serial job.
-      \item I don't want to submit multiple job using the serial queue
+        \begin{itemize}
+          \item Solution: Create a script that will submit and run multiple serial jobs.
+        \end{itemize}
+      \item I don't want to submit multiple jobs using the serial queue since
+        \begin{itemize}
+          \item Cluster Admins give lower priority to jobs that are not parallelized
+          \item The number of jobs that I want to run exceed the maximum number of jobs that I can run simultaneously
+        \end{itemize}
       \item How do I submit \emph{one} job which can run multiple serial jobs?
     \end{itemize}
-  \end{bblock}
-  \begin{eblock}{One Solution of many}
+  \end{block}
+  \begin{exampleblock}{One Solution of many}
     \begin{itemize}
       \item Write a script which will log into all unique nodes and run your serial jobs in background.
       \item Easy said than done
@@ -2223,38 +1948,43 @@ Factorial of 15 is 1307674368000
         }
       \end{enumerate}
     \end{itemize}
-  \end{eblock}
-  \framebreak
-  \begin{lstlisting}
-[apacheco@eric2 traininglab]$ cat checknodes.sh 
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{lstlisting}[language=bash]
+[alp514@corona1 ~]$ cat checknodes.pbs 
 #!/bin/bash
 #
-#PBS -q checkpt
-#PBS -l nodes=4:ppn=4
-#PBS -l walltime=00:10:00
+#PBS -q normal
+#PBS -l nodes=4:ppn=16
+#PBS -l walltime=00:30:00
 #PBS -V
 #PBS -o nodetest.out
 #PBS -e nodetest.err
 #PBS -N testing
+#PBS -M alp514@lehigh.edu
+#PBS -m abe
 #
 
 export WORK_DIR=$PBS_O_WORKDIR
 export NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'`
-NODES=(`cat "$PBS_NODEFILE"` )
-UNODES=(`uniq "$PBS_NODEFILE"` )
 
-echo "Nodes Available: " ${NODES[@]}
-echo "Unique Nodes Available: " ${UNODES[@]}
+NODES=(`cat ``$PBS_NODEFILE''` )
+UNODES=(`uniq ``$PBS_NODEFILE''` )
 
-echo "Get Hostnames for all processes"
+echo ``Nodes Available: `` ${NODES[@]}
+echo ``Unique Nodes Available: `` ${UNODES[@]}
+
+echo ``Get Hostnames for all processes''
 i=0
-for nodes in "${NODES[@]}"; do
+for nodes in ``${NODES[@]}''; do
   ssh -n $nodes 'echo $HOSTNAME '$i' ' &
   let i=i+1
 done
 wait
 
-echo "Get Hostnames for all unique nodes"
+echo ``Get Hostnames for all unique nodes''
 i=0
 NPROCS=`uniq $PBS_NODEFILE | wc -l |gawk '//{print $1}'`
 let NPROCS-=1
@@ -2262,93 +1992,102 @@ while [ $i -le $NPROCS ] ; do
   ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
   let i=i+1
 done
-[apacheco@eric2 traininglab]$ qsub checknodes.sh 
-[apacheco@eric2 traininglab]$ cat nodetest.out 
---------------------------------------
-Running PBS prologue script
---------------------------------------
-User and Job Data:
---------------------------------------
-Job ID:    422409.eric2
-Username:  apacheco
-Group:     loniadmin
-Date:      25-Sep-2012 11:01
-Node:      eric010 (3053)
---------------------------------------
-PBS has allocated the following nodes:
 
-eric010
-eric012
-eric013
-eric026
+[alp514@corona1 ~]$ qsub checknodes.pbs
+688825.corona1.cc.lehigh.edu
+  \end{lstlisting}
+\end{frame}
 
-A total of 16 processors on 4 nodes allocated
----------------------------------------------
-Check nodes and clean them of stray processes
----------------------------------------------
-Checking node eric010 11:01:52 
-Checking node eric012 11:01:54 
-Checking node eric013 11:01:56 
-Checking node eric026 11:01:57 
-Done clearing all the allocated nodes
-------------------------------------------------------
-Concluding PBS prologue script - 25-Sep-2012 11:01:57
-------------------------------------------------------
-Nodes Available:  eric010 eric010 eric010 eric010 eric012 eric012 eric012 eric012 eric013 eric013 eric013 eric013 eric026 eric026 
-eric026 eric026
-Unique Nodes Available:  eric010 eric012 eric013 eric026
+\begin{frame}[fragile,allowframebreaks]
+  \begin{lstlisting}[language=bash,deletekeywords={cat,for}]
+[alp514@corona1 ~]$ cat nodetest.out
+Wed Mar 11 08:20:40 EDT 2015 : erasing contents of corona63:/scratch
+Wed Mar 11 08:20:40 EDT 2015 : /scratch erased, resetting swap
+swapon on /dev/sda6
+Wed Mar 11 08:20:41 EDT 2015 : swap reset
+Wed Mar 11 08:20:41 EDT 2015 : erasing contents of corona56:/scratch
+Wed Mar 11 08:20:41 EDT 2015 : /scratch erased, resetting swap
+swapon on /dev/sda6
+Wed Mar 11 08:20:41 EDT 2015 : swap reset
+Wed Mar 11 08:20:41 EDT 2015 : erasing contents of corona50:/scratch
+Wed Mar 11 08:20:42 EDT 2015 : /scratch erased, resetting swap
+swapon on /dev/sda6
+Wed Mar 11 08:20:42 EDT 2015 : swap reset
+Wed Mar 11 08:20:43 EDT 2015 : erasing contents of corona27:/scratch
+Wed Mar 11 08:20:43 EDT 2015 : /scratch erased, resetting swap
+swapon on /dev/sda6
+Wed Mar 11 08:20:43 EDT 2015 : swap reset
+Nodes Available:  corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona56 corona56 c
+orona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona50 corona50 corona50 corona50 corona50 corona50 co
+rona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 cor
+ona27 corona27 corona27 corona27 corona27 corona27
+Unique Nodes Available:  corona63 corona56 corona50 corona27
 Get Hostnames for all processes
-eric010 3
-eric012 5
-eric010 1
-eric012 6
-eric012 4
-eric013 10
-eric010 2
-eric012 7
-eric013 8
-eric013 9
-eric026 15
-eric013 11
-eric010 0
-eric026 13
-eric026 12
-eric026 14
-Get Hostnames for all unique nodes
-eric010 0
-eric012 1
-eric013 2
-eric026 3
-------------------------------------------------------
-Running PBS epilogue script    - 25-Sep-2012 11:02:00
-------------------------------------------------------
-Checking node eric010 (MS)
-Checking node eric026 ok
-Checking node eric013 ok
-Checking node eric012 ok
-Checking node eric010 ok
-------------------------------------------------------
-Concluding PBS epilogue script - 25-Sep-2012 11:02:06
-------------------------------------------------------
-Exit Status:    
-Job ID:          422409.eric2
-Username:        apacheco
-Group:           loniadmin
-Job Name:        testing
-Session Id:      3052
-Resource Limits: ncpus=1,nodes=4:ppn=4,walltime=00:10:00
-Resources Used:  cput=00:00:00,mem=5260kb,vmem=129028kb,walltime=00:00:01
-Queue Used:      checkpt
-Account String:  loni_loniadmin1
-Node:            eric010
-Process id:      4101
-------------------------------------------------------
+corona27 52
+corona27 59
+corona27 60
+corona27 57
+corona27 51
+corona27 62
+corona27 54
+corona27 48
+corona27 63
+corona27 58
+corona27 53
+corona50 43
+corona50 40
+corona50 38
+corona50 33
+corona50 34
+corona50 47
+corona56 31
+corona63 13
+corona63 6
+corona56 22
+corona63 9
+corona63 14
+corona56 16
+corona56 25
+corona56 23
+corona56 17
+corona63 5
+corona63 10
+corona63 8
+corona63 15
+corona63 3
+corona50 32
+corona50 44
+corona56 18
+corona50 36
+corona50 46
+corona56 27
+corona50 42
+corona63 1
+corona63 12
+corona50 45
+corona50 41
+corona50 35
+corona56 29
+corona63 7
+corona56 28
+corona63 11
+corona56 26
+corona56 21
+corona63 4
+corona56 24
+corona63 0
+corona56 20
+Get Hostnames for all unique nodes   
+corona63 0
+corona56 1
+corona50 2
+corona27 3
   \end{lstlisting}
 \end{frame}
 
 \section{Wrap Up}
 \begin{frame}
-  \frametitle{\small References \& Further Reading}
+  \frametitle{References \& Further Reading}
   \begin{itemize}
     \fontsize{7}{9}\selectfont{
     \item BASH Programming \url{http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html}
@@ -2359,115 +2098,75 @@ Process id:      4101
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{\small Additional Help}
-  \begin{itemize}
-    \item Online Courses: \url{https://docs.loni.org/moodle}
-    \item Contact us
-    \begin{enumerate}
-      {\scriptsize
-        \item[$\vardiamond$]Email ticket system: sys-help@loni.org
-        \item[$\vardiamond$]Telephone Help Desk: 225-578-0900
-        \item[$\vardiamond$]Instant Messenger (AIM, Yahoo Messenger, Google Talk)
-        \begin{enumerate}
-          {\scriptsize
-            \item[$\bigstar$]Add "lsuhpchelp"
-          }
-        \end{enumerate}
-      }
-    \end{enumerate}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{}
-  \color{DarkBlue}{
-  \begin{center}
-    {\fontsize{40}{60}\selectfont The End}\\
-    \vspace{1cm}
-    {\fontsize{20}{30}\selectfont Any Questions?}\\
-    \vspace{0.5cm}
-    {\fontsize{15}{30}\selectfont
-      \color{red!80!black}{Next Week}\\      
-      \color{red!80!black}{Advanced Shell Scripting {\fontsize{10}{20}\selectfont(awk, sed, grep, regex)}}\\
-    }
-    \vspace{0.5cm}
-    {\fontsize{15}{20}\selectfont Survey: \color{red!90!white}{\url{http://www.hpc.lsu.edu/survey}}}
-  \end{center}
-  }
-\end{frame}
-
 \section{Hands-On Exercises: Day 1}
-\begin{frame}{\small Exercises}
+\begin{frame}{Exercises}
   \begin{enumerate}
     \item Create shell scripts to do the following
     \begin{itemize}
-      {\footnotesize
         \item Write a simple hello world script
         \item Modify the above script to use a variable
         \item Modify the above script to prompt you for your name and then display your name with a greeting.
-      }
     \end{itemize}
     \item Write a script to add/subtract/multiply/divide two numbers.
     \item Write a script to read your first and last name to an array.
     \begin{itemize}
-      {\footnotesize
       \item Add your salutation and suffix to the array.
       \item Drop either the salutation or suffix.
       \item Print the array after each of the three steps above.
-      }
     \end{itemize}
     \item Write a script to calculate the factorial and double factorial of an integer or list of integers.
   \end{enumerate}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{\small Solution 1}
+  \frametitle{Solution 1}
   \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{hellovariable.sh}
+    \column{0.45\textwidth}
+    \begin{exampleblock}{hellovariable.sh}
       \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/solution/hellovariable.sh}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{eblock}{helloname.sh}
+    \end{exampleblock}
+    \column{0.45\textwidth}
+    \begin{exampleblock}{helloname.sh}
       \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/solution/helloname.sh}
-    \end{eblock}
+    \end{exampleblock}
   \end{columns}
   \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{}
+    \column{0.45\textwidth}
+    \begin{exampleblock}{}
       \begin{lstlisting}[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./hellovariable.sh 
 Hello World!
       \end{lstlisting}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{eblock}{}
+    \end{exampleblock}
+    \column{0.45\textwidth}
+    \begin{exampleblock}{}
       \begin{lstlisting}[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./helloname.sh 
 Please Enter your name:
 Alex Pacheco
 Hello Alex Pacheco, Welcome to HPC Training
       \end{lstlisting}
-    \end{eblock}
+    \end{exampleblock}
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\small Solution 2}
+\begin{frame}[fragile]{Solution 2}
   \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{dosum.sh}
+    \column{0.45\textwidth}
+    \vspace{-0.5cm}
+    \begin{exampleblock}{dosum.sh}
       \lstinputlisting[language=bash]{./scripts/day1/solution/dosum.sh}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{bblock}{doratio.csh}
+    \end{exampleblock}
+    \column{0.45\textwidth}
+    \vspace{-0.5cm}
+    \begin{block}{doratio.csh}
       \lstinputlisting[language=csh]{./scripts/day1/solution/doratio.csh}
-    \end{bblock}
+    \end{block}
   \end{columns}
   \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{}
-      \begin{lstlisting}
+    \column{0.45\textwidth}
+    \begin{exampleblock}{}
+      \begin{lstlisting}[basicstyle=\tiny\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./dosum.sh 
 Enter two integers
 5 7
@@ -2477,10 +2176,10 @@ sum of 5 & 7 is  12
 5/7 =  .71428
 7/5 =  1.40000000000000000000
       \end{lstlisting}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{bblock}{}
-      \begin{lstlisting}
+    \end{exampleblock}
+    \column{0.45\textwidth}
+    \begin{block}{}
+      \begin{lstlisting}[basicstyle=\tiny\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./doratio.csh 
 Enter first integer
 5
@@ -2489,44 +2188,44 @@ Enter first integer
 ratio of 5 & 7 is  0
 ratio of 5 & 7 is  .71428
       \end{lstlisting}
-    \end{bblock}
+    \end{block}
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\small Alternate Solution 2}
+\begin{frame}[fragile]{Alternate Solution 2}
   \fontsize{7}{9}\selectfont{
     \begin{columns}
-      \column{0.4\textwidth}
-      \vspace{-0.5cm}
-      \begin{eblock}{dooper.sh}
+      \column{0.5\textwidth}
+      \vspace{-0.75cm}
+      \begin{exampleblock}{}%\small dooper.sh}
         \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/solution/dooper.sh}
-      \end{eblock}
+      \end{exampleblock}
       \column{0.4\textwidth}
-      \vspace{-0.5cm}
-      \begin{bblock}{dooper.csh}
+      \vspace{-0.75cm}
+      \begin{block}{}%\small dooper.csh}
         \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=csh]{./scripts/day1/solution/dooper.csh}
-      \end{bblock}
+      \end{block}
     \end{columns}
   }
 \end{frame}
 
-\begin{frame}[fragile]{\small Solution 3}
+\begin{frame}[fragile]{Solution 3}
   \fontsize{5}{5.5}\selectfont{
     \begin{columns}
-      \column{0.5\textwidth}
-      \vspace{-0.2cm}
-      \begin{eblock}{name.sh}
+      \column{0.45\textwidth}
+      \vspace{-0.5cm}
+      \begin{exampleblock}{name.sh}
         \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=bash]{./scripts/day1/solution/name.sh}
-      \end{eblock}
-    \column{0.5\textwidth}
-      \vspace{-0.2cm}
-      \begin{bblock}{name.csh}
+      \end{exampleblock}
+    \column{0.45\textwidth}
+      \vspace{-0.5cm}
+      \begin{block}{name.csh}
         \lstinputlisting[basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily,language=csh]{./scripts/day1/solution/name.csh}
-      \end{bblock}
+      \end{block}
     \end{columns}
     \begin{columns}
-      \column{0.5\textwidth}
-      \begin{eblock}{}
+      \column{0.45\textwidth}
+      \begin{exampleblock}{}
         \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./name.sh 
 Print your first and last name
@@ -2539,9 +2238,9 @@ the first
 Hello  Dr. Alex Pacheco the first
 Hello  Dr. Alex the first
         \end{lstlisting}
-      \end{eblock}
-      \column{0.5\textwidth}
-      \begin{bblock}{}
+      \end{exampleblock}
+      \column{0.45\textwidth}
+      \begin{block}{}
         \begin{lstlisting}[basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/solution> ./name.csh 
 Print your first name
@@ -2556,56 +2255,51 @@ the first
 Hello  Dr. Alex Pacheco the first
 Hello  Dr. Alex the first
         \end{lstlisting}
-      \end{bblock}
+      \end{block}
     \end{columns}
   }
 \end{frame}
 
-\begin{frame}[fragile]{\small Solution 4}
-  \fontsize{4}{5}\selectfont{
-    \begin{columns}
-      \column{0.45\textwidth}
-      \vspace{-0.4cm}
-      \begin{eblock}{fac2.sh}
-        \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4}\selectfont\ttfamily]{./scripts/day1/solution/fac2.sh}
-      \end{eblock}
-      \vspace{-0.2cm}
-      \begin{bblock}{fac2.csh}
-        \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4}\selectfont\ttfamily]{./scripts/day1/solution/fac2.csh}
-      \end{bblock}
-      \column{0.45\textwidth}
-      \vspace{-0.4cm}
-      \begin{eblock}{fac3.sh}
-        \lstinputlisting[language=bash,basicstyle=\fontsize{4}{4.5}\selectfont\ttfamily]{./scripts/day1/solution/fac3.sh}
-      \end{eblock}
-    \end{columns}
-  }
+\begin{frame}[fragile]{Solution 4}
+  \begin{columns}
+    \column{0.45\textwidth}
+    \vspace{-0.5cm}
+    \begin{exampleblock}{fac2.sh}
+      \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4}\selectfont\ttfamily]{./scripts/day1/solution/fac2.sh}
+    \end{exampleblock}
+    \column{0.45\textwidth}
+    \vspace{-0.5cm}
+    \begin{block}{fac2.csh}
+      \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4}\selectfont\ttfamily]{./scripts/day1/solution/fac2.csh}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]%{Alternate Solution 4 (bash only)}
+  \vspace{-0.3cm}
+  \begin{exampleblock}{fac3.sh: Alternate Solution 4 (bash only)}
+    \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4}\selectfont\ttfamily]{./scripts/day1/solution/fac3.sh}
+  \end{exampleblock}
 \end{frame}
 
 \part[Day 2]{Advanced Shell Scripting}
 \section{Regular Expressions}
-\begin{frame}
-  \frametitle{\small Regular Expressions}
-  {\scriptsize
+\begin{frame}[c]
+  \frametitle{Regular Expressions}
   \begin{itemize}
-%    \fontsize{7}{9}\selectfont{
     \item A regular expression (regex) is a method of representing a string matching pattern. 
     \item Regular expressions enable strings that match a particular pattern within textual data records to be located and modified and they are often used within utility programs and programming languages that manipulate textual data. 
     \item Regular expressions are extremely powerful.
     \item Supporting Software and Tools
     \begin{enumerate}
-      \fontsize{7}{10}\selectfont{
         \item Command Line Tools: grep, egrep, sed
         \item Editors: ed, vi, emacs
         \item Languages: awk, perl, python, php, ruby, tcl, java, javascript, .NET
-      }
     \end{enumerate}
-%    }
   \end{itemize}
-  }
 \end{frame}
 
-\begin{frame}{\small Shell Regular Expressions}
+\begin{frame}[c]{Shell Regular Expressions}
   \begin{itemize}
     \item The Unix shell recognises a limited form of regular expressions used with filename substitution
     \item[?]: match any single character.
@@ -2621,52 +2315,76 @@ Hello  Dr. Alex the first
   \end{itemize}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{\small POSIX Regular Expressions}
+\begin{frame}[c,allowframebreaks]{POSIX Regular Expressions}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
-      \item[.]: Matches any single character. For example, a.c matches "abc", etc.
-      \item[{[\quad]}]: A bracket expression. Matches a single character that is contained within the brackets. For example, [abc] matches "a", "b", or "c". [a-z] specifies a range which matches any lowercase letter from "a" to "z". These forms can be mixed: [abcx-z] matches "a", "b", "c", "x", "y", or "z", as does [a-cx-z].
-      \item[{[\string^\quad]}]: Matches a single character that is not contained within the brackets. For example, [\string^abc] matches any character other than "a", "b", or "c". [\string^a-z] matches any single character that is not a lowercase letter from "a" to "z".
-      \item[(\quad)]: Defines a marked subexpression. The string matched within the parentheses can be recalled later. A marked subexpression is also called a block or capturing group
-      \item[\string^]: Matches the starting position within the string. In line-based tools, it matches the starting position of any line.
-      \item[\$]: Matches the ending position of the string or the position just before a string-ending newline. In line-based tools, it matches the ending position of any line.
-      \item[$\ast$]: Matches the preceding element zero or more times. For example, ab*c matches "ac", "abc", "abbbc", etc. [xyz]* matches ", "x", "y", "z", "zx", "zyx", "xyzzy", and so on. (ab)* matches "", "ab", "abab", "ababab", and so on.
-      \item[\{m,n\}]: Matches the preceding element at least m and not more than n times. For example, a\{3,5\} matches only "aaa", "aaaa", and "aaaaa". 
-      \item[+]: Match the last "block" one or more times - "ba+" matches "ba", "baa", "baaa" and so on
-      \item[?]: Match the last "block" zero or one times - "ba?" matches "b" or "ba"
-      \item[|]: The choice (or set union) operator: match either the expression before or the expression after the operator - "abc|def" matches "abc" or "def".
-      \item These regular expressions can be used in most unix utilities such as awk, sed, grep, vim, etc. as will seen in the next few slides.
-    }
+    \item[{[\quad]}]: A bracket expression. Matches a single character that is contained within the brackets. 
+    \item[] For example, [abc] matches "a", "b", or "c". 
+    \item[] [a-z] specifies a range which matches any lowercase letter from "a" to "z". 
+    \item[] These forms can be mixed: [abcx-z] matches "a", "b", "c", "x", "y", or "z", as does [a-cx-z].
+    \item[{[\string^\quad]}]: Matches a single character that is not contained within the brackets. 
+    \item[] For example, [\string^abc] matches any character other than "a", "b", or "c". 
+    \item[] [\string^a-z] matches any single character that is not a lowercase letter from "a" to "z".
+    \item[(\quad)]: Defines a marked subexpression. 
+    \item[] The string matched within the parentheses can be recalled later. 
+    \item[] A marked subexpression is also called a block or capturing group
+    \item[$|$]: The choice (or set union) operator: match either the expression before or the expression after the operator 
+    \item[] For example, "abc$|$def" matches "abc" or "def".
+    \framebreak
+    \item[.]: Matches any single character. 
+    \item[] For example, a.c matches "abc", etc.
+    \item[$\ast$]: Matches the preceding element zero or more times. 
+    \item[] For example, ab*c matches "ac", "abc", "abbbc", etc. 
+    \item[] [xyz]* matches ", "x", "y", "z", "zx", "zyx", "xyzzy", and so on. 
+    \item[] (ab)* matches "", "ab", "abab", "ababab", and so on.
+    \item[\{m,n\}]: Matches the preceding element at least m and not more than n times. 
+    \item[\{m,\}]: Matches the preceding element at least m times.
+    \item[\{n\}]: Matches the preceding element exactly n times.
+    \item[] For example, a\{3,5\} matches only "aaa", "aaaa", and "aaaaa". 
+    \item[+]: Match the last "block" one or more times 
+    \item[] For example, "ba+" matches "ba", "baa", "baaa" and so on
+    \item[?]: Match the last "block" zero or one times  
+    \item[] For example, "ba?" matches "b" or "ba"
+    \framebreak
+    \item[\string^]: Matches the starting position within the string. In line-based tools, it matches the starting position of any line.
+    \item[\$]: Matches the ending position of the string or the position just before a string-ending newline. In line-based tools, it matches the ending position of any line.
+    \item[{\textbackslash}s]: Matches any whitespace.
+    \item[{\textbackslash}S]: Matches any non-whitespace.
+    \item[{\textbackslash}d]: Matches any digit.
+    \item[{\textbackslash}D]: Matches any non-digit.
+    \item[{\textbackslash}w]: Matches any word.
+    \item[{\textbackslash}W]: Matches any non-word.
+    \item[{\textbackslash}b]: Matches any word boundary.
+    \item[{\textbackslash}B]: Matches any non-word boundary.
   \end{itemize}
 \end{frame}
 
+
 \section{File Manipulation}
-\subsection{cut}
-\begin{frame}[fragile]
-  \frametitle{\small Linux cut command}
+%\subsection{cut}
+\begin{frame}[c,fragile]
+  \frametitle{Linux cut command}
   \begin{itemize}
     \item Linux command cut is used for text processing to extract portion of text from a file by selecting columns.
-    \item Usage: \texttt{cut <options> <filename>}
-    \item Common Options:
-    \begin{itemize}
-      {\scriptsize
-        \item[-c list]: The list specifies character positions.
-        \item[-b list]: The list specifies byte positions.
-        \item[-f list]: select only these fields.
-        \item[-d delim]: Use delim as the field delimiter character instead of the tab character.
-      }
-    \end{itemize}
+    \item \Verblubrown{Usage:} \Verbblue{cut <options> <filename>}
+    \item \Verblubrown{Common Options:}
+%  \end{itemize}
+    \item[]
+      \begin{tabular}{lcl}
+        \Verbblue{-c list} & : & The list specifies character positions. \\
+        \Verbblue{-b list} & : & The list specifies byte positions.\\
+        \Verbblue{-f list} & : & select only these fields.\\
+        \Verbblue{-d delim} & : & Use delim as the field delimiter character instead of the tab character. \\
+      \end{tabular}
     \item list is made up of one range, or many ranges separated by commas
-    \begin{itemize}
-      {\scriptsize
-        \item[N]: Nth byte, character or field. count begins from 1
-        \item[N-]: Nth byte, character or field to end of line
-        \item[N-M]: Nth to Mth (included) byte, character or field
-        \item[-M]: from first to Mth (included) byte, character or field 
-      }
-    \end{itemize}
+    \item[]
+      \begin{tabular}{lcl}
+        \Verbblue{N} & : & Nth byte, character or field. count begins from 1 \\
+        \Verbblue{N-} & : & Nth byte, character or field to end of line \\
+        \Verbblue{N-M} & : & Nth to Mth (included) byte, character or field \\
+        \Verbblue{-M} & : & from first to Mth (included) byte, character or field \\ 
+      \end{tabular}
   \end{itemize}
-  \begin{lstlisting}[language=bash]
+  \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> uptime 
  14:17pm  up 14 days  3:39,  5 users,  load average: 0.51, 0.22, 0.20
 ~/Tutorials/BASH/scripts/day1/examples> uptime | cut -c-8
@@ -2678,36 +2396,32 @@ Hello  Dr. Alex the first
   \end{lstlisting}
 \end{frame}
 
-\subsection{paste \& join}
-\begin{frame}[fragile]{\small paste}
+%\subsection{paste \& join}
+\begin{frame}[c,fragile]{paste}
   \begin{itemize}
     \item The paste utility concatenates the corresponding lines of the given input files, replacing all but the last file's newline characters with
      a single tab character, and writes the resulting lines to standard output.  
    \item[] If end-of-file is reached on an input file while other input
      files still contain data, the file is treated as if it were an endless source of empty lines.
-   \item Usage: \texttt{paste <option> <files>}
-   \item Common Options
-   \begin{itemize}
-     {\scriptsize
-       \item[-d delimiters] specifies a list of delimiters to be used instead of tabs for separating consecutive values on a single line. Each delimiter is used in turn; when the list has been exhausted, paste begins again at the first delimiter.
-       \item[-s] causes paste to append the data in serial rather than in parallel; that is, in a horizontal rather than vertical fashion.
-     }
-   \end{itemize}
+   \item \Verblubrown{Usage:} \Verbblue{paste <option> <files>}
+   \item \Verblubrown{Common Options}
+   \item[]\Verbblue{-d delimiters} specifies a list of delimiters to be used instead of tabs for separating consecutive values on a single line. Each delimiter is used in turn; when the list has been exhausted, paste begins again at the first delimiter.
+   \item[]\Verbblue{-s} causes paste to append the data in serial rather than in parallel; that is, in a horizontal rather than vertical fashion.
    \item Example
   \end{itemize}
   \begin{columns}
-    \column{0.3\textwidth}
+    \column{0.2\textwidth}
     \vspace{-0.5cm}
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 > cat names.txt
 Mark Smith
 Bobby Brown
 Sue Miller
 Jenny Igotit
     \end{lstlisting}
-    \column{0.3\textwidth}
+    \column{0.25\textwidth}
     \vspace{-0.5cm}
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 > cat numbers.txt
 555-1234
 555-9876
@@ -2716,7 +2430,7 @@ Jenny Igotit
     \end{lstlisting}
     \column{0.3\textwidth}
     \vspace{-0.5cm}
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 > paste names.txt numbers.txt
 Mark Smith      555-1234
 Bobby Brown     555-9876
@@ -2726,128 +2440,118 @@ Jenny Igotit    867-5309
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile,allowframebreaks]{\small join}
-  \begin{itemize}
-    \item join is a command in Unix-like operating systems that merges the lines of two sorted text files based on the presence of a common field.
-    \item The join command takes as input two text files and a number of options. 
-    \item If no command-line argument is given, this command looks for a pair of lines from the two files having the same first field (a sequence of characters that are different from space), and outputs a line composed of the first field followed by the rest of the two lines.
-    \item The program arguments specify which character to be used in place of space to separate the fields of the line, which field to use when looking for matching lines, and whether to output lines that do not match. The output can be stored to another file rather than printing using redirection.
-    \item Usage: \texttt{join <options> <FILE1> <FILE2>}
-    \framebreak
-    \item Common options:
-    \begin{itemize}
-      {\scriptsize
-        \item[-a FILENUM]: also print unpairable lines from file FILENUM, where FILENUM is 1 or 2, corresponding to FILE1 or FILE2
-        \item[-e EMPTY]: replace missing input fields with EMPTY
-        \item[-i]: ignore differences in case when comparing fields
-        \item[-1 FIELD]: join on this FIELD of file 1
-        \item[-2 FIELD]: join on this FIELD of file 2
-        \item[-j FIELD]: equivalent to '-1 FIELD -2 FIELD'
-        \item[-t CHAR]: use CHAR as input and output field separator
-      }
-    \end{itemize}
-  \end{itemize}
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day2/examples> cat file1
-george jim
-mary john
-~/Tutorials/BASH/scripts/day2/examples> cat file2
-albert martha
-george sophie
-~/Tutorials/BASH/scripts/day2/examples> join file1 file2
-george jim sophie
-    \end{lstlisting}
-  \end{columns}
-\end{frame}
+%\begin{frame}[c,fragile,allowframebreaks]{join}
+%  \begin{itemize}
+%    \item join is a command in Unix-like operating systems that merges the lines of two sorted text files based on the presence of a common field.
+%    \item The join command takes as input two text files and a number of options. 
+%    \item If no command-line argument is given, this command looks for a pair of lines from the two files having the same first field (a sequence of characters that are different from space), and outputs a line composed of the first field followed by the rest of the two lines.
+%    \item The program arguments specify which character to be used in place of space to separate the fields of the line, which field to use when looking for matching lines, and whether to output lines that do not match. The output can be stored to another file rather than printing using redirection.
+%    \item \Verblubrown{Usage:} \Verbblue{join <options> <FILE1> <FILE2>}
+%    \framebreak
+%    \item \Verblubrown{Common options:}
+%    \item[]
+%      \begin{tabular}{lcl}
+%        \Verbblue{-a FILENUM} & : & also print unpairable lines from file FILENUM, \\
+%                              &   & where FILENUM is 1 or 2, corresponding to FILE1 or FILE2\\
+%        \Verbblue{-e EMPTY} & : & replace missing input fields with EMPTY\\
+%        \Verbblue{-i} & : & ignore differences in case when comparing fields\\
+%        \Verbblue{-1 FIELD} & : & join on this FIELD of file 1\\
+%        \Verbblue{-2 FIELD} & : & join on this FIELD of file 2\\
+%        \Verbblue{-j FIELD} & : & equivalent to '-1 FIELD -2 FIELD'\\
+%        \Verbblue{-t CHAR} & : & use CHAR as input and output field separator\\
+%      \end{tabular}
+%  \end{itemize}
+%  \begin{columns}
+%    \column{0.8\textwidth}
+%    \begin{lstlisting}[language=bash]
+%~/Tutorials/BASH/scripts/day2/examples> cat file1
+%george jim
+%martha mary
+%~/Tutorials/BASH/scripts/day2/examples> cat file2
+%albert martha
+%george sophie
+%~/Tutorials/BASH/scripts/day2/examples> join file1 file2
+%george jim sophie
+%~/Tutorials/BASH/scripts/day2/examples> join -2 2 file1 file2
+%martha mary albert
+%    \end{lstlisting}
+%  \end{columns}
+%\end{frame}
 
-\subsection{split \& csplit}
-\begin{frame}{\small split}
+%\subsection{split \& csplit}
+\begin{frame}[c]{split}
   \begin{itemize}
     \item split is a Unix utility most commonly used to split a file into two or more smaller files.
-    \item Usage: \texttt{split <options> <file to be split> <name>}
-    \item Common Options:
-    \begin{itemize}
-      {\scriptsize
-        \item[-a suffix\_length]: Use suffix\_length letters to form the suffix of the file name.
-        \item[-b byte\_count{[k|m]}]: Create smaller files byte\_count bytes in length.  If "k" is appended to the number, the file is split into byte\_count kilobyte pieces.  If "m" is appended to the number, the file is split into byte\_count megabyte pieces.
-        \item[-l n]: (Lowercase L not uppercase i) Create smaller files n lines in length. 
+    \item \Verblubrown{Usage}: \Verbblue{split <options> <file to be split> <name>}
+    \item \Verblubrown{Common Options}:
+    \item[]\Verbblue{-a suffix\_length}: Use suffix\_length letters to form the suffix of the file name.
+    \item[]\Verbblue{-b byte\_count[k$\mid$m]}: Create smaller files byte\_count bytes in length.  
+      \begin{itemize}
+        \item[] If "k" is appended to the number, the file is split into byte\_count kilobyte pieces.  
+        \item[] If "m" is appended to the number, the file is split into byte\_count megabyte pieces.
+      \end{itemize}
+    \item[]\Verbblue{-l n}: (Lowercase L) Create smaller files n lines in length. 
 %        \item[-p pattern]: The file is split whenever an input line matches pattern, which is interpreted as an extended regular expression.  The matching line will be the first line of the next output file.  This option is incompatible with the -b and -l options. Works in BSD only.
-      }
-    \end{itemize}
     \item The default behavior of split is to generate output files of a fixed size, default 1000 lines. 
     \item The files are named by appending aa, ab, ac, etc. to output filename. 
-    \item If output filename (<name>) is not given, the default filename of x is used, for example, xaa, xab, etc
+    \item If output filename (\Verb|<name>|) is not given, the default filename of x is used, for example, xaa, xab, etc
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\small csplit}
-  \scriptsize{
+\begin{frame}[c]{csplit}
   \begin{itemize}
     \item The csplit command in Unix is a utility that is used to split a file into two or more smaller files determined by context lines.
-    \item Usage: \texttt{csplit <options> <file> <args>}
-    \item Common Options:
-    \begin{itemize}
-      {\scriptsize
-        \item[-f prefix]: Give created files names beginning with prefix.  The default is "xx".
-        \item[-k]: Do not remove output files if an error occurs or a HUP, INT or TERM signal is received.
-        \item[-s]: Do not write the size of each output file to standard output as it is created.
-        \item[-n number]: Use number of decimal digits after the prefix to form the file name.  The default is 2.
-      }
-    \end{itemize}
+    \item \Verblubrown{Usage}: \Verbblue{csplit <options> <file> <args>}
+    \item \Verblubrown{Common Options}:
+    \item[]\Verbblue{-f prefix}: Give created files names beginning with prefix.  The default is "xx".
+    \item[]\Verbblue{-k}: Do not remove output files if an error occurs or a HUP, INT or TERM signal is received.
+    \item[]\Verbblue{-s}: Do not write the size of each output file to standard output as it is created.
+    \item[]\Verbblue{-n number}: Use number of decimal digits after the prefix to form the file name.  The default is 2.
     \item The args operands may be a combination of the following patterns:
-    \begin{itemize}
-      \fontsize{7}{8}\selectfont{
-        \item[/regexp/{[[+|-]offset]}]: Create a file containing the input from the current line to (but not including) the next line matching the given basic regular expression.  An optional offset from the line that matched may be specified.
-        \item[{\%regexp\%[[+|-]offset]}]: Same as above but a file is not created for the output.
-        \item[line\_no]: Create containing the input from the current line to (but not including) the specified line number.
-        \item[\{num\}]: Repeat the previous pattern the specified number of times.  If it follows a line number pattern, a new file will be created for each line\_no lines, num times.  The first line of the file is line number 1 for historic reasons.
-      }
-    \end{itemize}
+    \item[] \Verblue{/regexp/[[+|-]offset]}: Create a file containing the input from the current line to (but not including) the next line matching the given basic regular expression.  An optional offset from the line that matched may be specified.
+    \item[] \Verblue{\%regexp\%[[+|-]offset]}: Same as above but a file is not created for the output.
+    \item[] \Verbblue{line\_no}: Create containing the input from the current line to (but not including) the specified line number.
+    \item[] \Verbblue{\{num\}}: Repeat the previous pattern the specified number of times.  If it follows a line number pattern, a new file will be created for each line\_no lines, num times.  The first line of the file is line number 1 for historic reasons.
   \end{itemize}
-  }
 \end{frame}
 
-\begin{frame}{\small split \& csplit examples}
+\begin{frame}[c]{split \& csplit examples}
   \begin{itemize}
     \item Example: Run a multi-step job using Gaussian 09, for example geometry optimization followed by frequency analysis of water molecule.
     \item Problem: Some visualization packages like molden cannot visualize such multi-step jobs. Each job needs to visualized separetly.
     \item Solution: Split the single output file into two files, one for the optimization calculation and the other for frequency calculation.
-    \item Source Files see /home/apacheco/CompChem/ElecStr/OptFreq/GAUSSIAN/h2o/h2o-opt-freq.log on Tezpur and LONI clusters.
-    \item Example: \texttt{split -l 1442 h2o-opt-freq.log}
-    \item Example: \texttt{csplit h2o-opt-freq.log "/Normal termination of Gaussian 09/+1"}
+    \item Source Files in scripts/day2/examples/h2o-opt-freq.log (Google Drive Downloads).
+    \item Examples: 
+    \item[] \Verblue{split -l 1442 h2o-opt-freq.log}
+    \item[] \Verblue{csplit h2o-opt-freq.log "/Normal termination of Gaussian 09/+1"}
   \end{itemize}
 \end{frame}
 
 \section{grep}
-\begin{frame}[allowframebreaks,fragile]
-  \frametitle{\small grep \& egrep}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{grep \& egrep}
   \begin{itemize}
-%    \fontsize{7}{9}\selectfont{
-    \item \texttt{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
-    \item \texttt{egrep} is extended grep, same as \texttt{grep -E}
-    \item Use \texttt{zgrep} for compressed files.
-    \item Usage: \texttt{grep <options> <search pattern> <files>} 
+    \item \Verbblue{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
+    \item \Verbblue{egrep} is extended grep, same as \Verbblue{grep -E}
+    \item Use \Verbblue{zgrep} for compressed files.
+    \item \Verblubrown{Usage}: \Verbblue{grep <options> <search pattern> <files>} 
     \item Commonly used options
-    \begin{itemize}
-      {\scriptsize
-      \item[-i]: ignore case during search
-      \item[-r]: search recursively
-      \item[-v]: invert match i.e. match everything except pattern
-      \item[-l]: list files that match pattern
-      \item[-L]: list files that do not match pattern
-      \item[-n]: prefix each line of output with the line number within its input file.
-      \item[-A num]: print  num  lines  of  trailing  context  after  matching lines.
-      \item[-B num]: print num lines of leading context before matching lines.
-      }
-    \end{itemize}
-%    }
+    \item[]
+      \begin{tabular}{lcl}
+      \Verbblue{-i} & : & ignore case during search\\
+      \Verbblue{-r} & : & search recursively\\
+      \Verbblue{-v} & : & invert match i.e. match everything except pattern\\
+      \Verbblue{-l} & : & list files that match pattern\\
+      \Verbblue{-L} & : & list files that do not match pattern \\
+      \Verbblue{-n} & : & prefix each line of output with the line number within its input file. \\
+      \Verbblue{-A num} & : & print  num  lines  of  trailing  context  after  matching lines.\\
+      \Verbblue{-B num} & : & print num lines of leading context before matching lines.\\
+    \end{tabular}
   \end{itemize}
   \framebreak
   \begin{itemize}
     \item Search files that contain the word node in the examples directory
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> egrep node *
 checknodes.pbs:#PBS -l nodes=4:ppn=4
 checknodes.pbs:#PBS -o nodetest.out
@@ -2857,7 +2561,7 @@ checknodes.pbs:  ssh -n $nodes 'echo $HOSTNAME '$i' ' &
 checknodes.pbs:echo ``Get Hostnames for all unique nodes''
       \end{lstlisting}
     \item Repeat above search using a case insensitive pattern match and print line number that matches the search pattern
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> egrep -in nodes *
 checknodes.pbs:5:#PBS -l nodes=4:ppn=4
 checknodes.pbs:20:NODES=(`cat ``$PBS_NODEFILE''` )
@@ -2870,14 +2574,15 @@ checknodes.pbs:34:echo ``Get Hostnames for all unique nodes''
 checknodes.pbs:39:  ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
       \end{lstlisting}
     \item Print files that contain the word "counter"
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> grep -l counter *
 factorial2.sh
 factorial.csh
 factorial.sh
       \end{lstlisting}
+      \framebreak
     \item List all files that contain a comment line i.e. lines that begin with "\#"
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> egrep -l ``^#'' *
 backups.sh
 checknodes.pbs
@@ -2899,8 +2604,9 @@ shift10.sh
 shift.csh
 shift.sh
       \end{lstlisting}
+      \framebreak
     \item List all files that are bash or csh scripts i.e. contain a line that end in bash or csh
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> egrep -l ``bash$|csh$'' *
 backups.sh
 checknodes.pbs
@@ -2922,18 +2628,36 @@ shift10.sh
 shift.csh
 shift.sh
       \end{lstlisting}
+
+    \item print the line immediately before regexp
+      \begin{lstlisting}[style=LINUX]
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> grep -B1 Normal h2o-opt-freq.log
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
+--
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
+      \end{lstlisting}
+      \framebreak
+    \item print the line immediately after regexp
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/csplit> grep -A1 Normal h2o-opt-freq.log
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
+ (Enter /usr/local/packages/gaussian09/g09/l1.exe)
+--
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
+      \end{lstlisting}
   \end{itemize}
 \end{frame}
 
 \section{sed}
-\begin{frame}[allowframebreaks,fragile]
-  \frametitle{\small sed}
-  {\scriptsize
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{sed}
   \begin{itemize}
     \item sed ("stream editor") is Unix utility for parsing and transforming text files.
     \item sed is line-oriented, it operates one line at a time and allows regular expression matching and substitution.
     \item sed has several commands, the most commonly used command and sometime the only one learned  is the substituion command, \textit{s}
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed 's/bash/tcsh/g'
 #!/bin/tcsh
 
@@ -2943,13 +2667,13 @@ echo ``Hello World!''
       \end{lstlisting}
     \item List of sed pattern flags and commands line options
     \begin{columns}
-      \column{0.5\textwidth}
+      \column{0.52\textwidth}
       \vspace{-0.6cm}
       \begin{center}
         \begin{tikzpicture}
           \node (tbl) {
-            \begin{tabularx}{1.1\textwidth}{cc}
-              \arrayrulecolor{tigersgold}
+            \begin{tabularx}{\textwidth}{cl}
+%              \arrayrulecolor{tigersgold}
               \textcolor{white}{\textbf{Pattern} }& \textcolor{white}{\textbf{Operation}} \\
               s\rule{0pt}{3.5ex} & substitution \\
               g & global replacement \\
@@ -2963,43 +2687,45 @@ echo ``Hello World!''
               [1.0ex]
           \end{tabularx}};
           \begin{pgfonlayer}{background}
-            \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-              draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+            \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+              draw=lubrown] ($(tbl.north west)+(0.14,0)$)
             rectangle ($(tbl.north east)-(0.13,0.9)$);
-            \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+            \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
             ($(tbl.north east)-(0.13,0.6)$)
             rectangle ($(tbl.south west)+(0.13,0.2)$);
           \end{pgfonlayer}
         \end{tikzpicture}
       \end{center} 
-      \column{0.5\textwidth}
+      \column{0.46\textwidth}
       \vspace{-0.6cm}
       \begin{center}
         \begin{tikzpicture}
           \node (tbl) {
-            \begin{tabularx}{1.05\textwidth}{cc}
-              \arrayrulecolor{tigersgold}
+            \begin{tabularx}{\textwidth}{cl}
+%              \arrayrulecolor{tigersgold}
               \textcolor{white}{\textbf{Command} }& \textcolor{white}{\textbf{Operation}} \\
               -e \rule{0pt}{3.5ex} & combine multiple commands \\
               -f & read commands from file \\
               -h & print help info \\
               -n & disable print \\
               -V & print version info \\
+              -i & in file subsitution \\
               [1.0ex]
           \end{tabularx}};
           \begin{pgfonlayer}{background}
-            \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-              draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+            \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+              draw=lubrown] ($(tbl.north west)+(0.14,0)$)
             rectangle ($(tbl.north east)-(0.13,0.9)$);
-            \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+            \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
             ($(tbl.north east)-(0.13,0.6)$)
             rectangle ($(tbl.south west)+(0.13,0.2)$);
           \end{pgfonlayer}
         \end{tikzpicture}
       \end{center} 
     \end{columns}
+    \framebreak
     \item Add the \texttt{-e} to carry out multiple matches.
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed -e 's/bash/tcsh/g' -e 's/First/First tcsh/g'
 #!/bin/tcsh
 
@@ -3007,8 +2733,10 @@ echo ``Hello World!''
 
 echo ``Hello World!''
       \end{lstlisting}
-    \item Alternate form
-      \begin{lstlisting}[language=bash]
+    \item Alternate forms
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed 's/bash/tcsh/g' | sed 's/First/First tcsh/g'
+OR
 ~/Tutorials/BASH/scripts/day1/examples> sed 's/bash/tcsh/g; s/First/First tcsh/g' hello.sh 
 #!/bin/tcsh
 
@@ -3017,25 +2745,26 @@ echo ``Hello World!''
 echo ``Hello World!''
       \end{lstlisting}
     \item The delimiter is slash (/). You can change it to whatever you want which is useful when you want to replace path names
-      \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> sed 's:/bin/bash:/bin/tcsh:g' hello.sh 
-#!/bin/tcsh
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 's:/bin/bash:/usr/bin/env tcsh:g' hello.sh 
+#!/usr/bin/env tcsh
 
 # My First Script
 
 echo ``Hello World!''
       \end{lstlisting}
+      \framebreak
     \item If you do not use an alternate delimiter, use backslash (\textbackslash) to escape the slash character in your pattern
-      \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> sed 's/\/bin\/bash/\/bin\/tcsh/g' hello.sh 
-#!/bin/tcsh
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 's/\/bin\/bash/\/usr\/bin\/env tcsh/g' hello.sh 
+#!/usr/bin/env tcsh
 
 # My First Script
 
 echo ``Hello World!''
       \end{lstlisting}
     \item If you enter all your sed commands in a file, say sedscript, you can use the -f flag to sed to read the sed commands
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> cat sedscript
 s/bash/tcsh/g
 ~/Tutorials/BASH/scripts/day1/examples> sed -f sedscript hello.sh 
@@ -3046,20 +2775,21 @@ s/bash/tcsh/g
 echo ``Hello World!''
       \end{lstlisting}
     \item sed can also delete blank files from a file
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '/^$/d' hello.sh 
 #!/bin/bash
 # My First Script
 echo ``Hello World!''
       \end{lstlisting}
     \item delete line n through m in a file
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '2,4d' hello.sh 
 #!/bin/bash
 echo ``Hello World!''
       \end{lstlisting}
+      \framebreak
       \item insert a blank line above every line which matches ``regex''
-        \begin{lstlisting}
+        \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '/First/{x;p;x;}' hello.sh 
 #!/bin/bash
 
@@ -3069,7 +2799,7 @@ echo ``Hello World!''
 echo ``Hello World!''
         \end{lstlisting}
       \item insert a blank line below every line which matches ``regex''
-        \begin{lstlisting}[language=bash]
+        \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '/First/G' hello.sh 
 #!/bin/bash
 
@@ -3078,9 +2808,8 @@ echo ``Hello World!''
 
 echo ``Hello World!''
         \end{lstlisting}
-        \framebreak
       \item insert a blank line above and below every line which matches ``regex''
-        \begin{lstlisting}
+        \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '/First/{x;p;x;G;}' hello.sh 
 #!/bin/bash
 
@@ -3090,8 +2819,9 @@ echo ``Hello World!''
 
 echo ``Hello World!''
         \end{lstlisting}
+        \framebreak
     \item delete lines matching pattern regex
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed '/First/d' hello.sh 
 #!/bin/bash
 
@@ -3099,12 +2829,12 @@ echo ``Hello World!''
 echo ``Hello World!''
       \end{lstlisting}
     \item print only lines which match regular expression (emulates grep)
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/p' hello.sh
 echo ``Hello World!''
       \end{lstlisting}
     \item print only lines which do NOT match regex (emulates grep -v)
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/!p' hello.sh
 #!/bin/bash
 
@@ -3112,7 +2842,7 @@ echo ``Hello World!''
 
       \end{lstlisting}
     \item print current line number to standard output
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/ =' quotes.sh 
 5
 6
@@ -3125,7 +2855,7 @@ echo ``Hello World!''
 13
       \end{lstlisting}
     \item If you want to make substitution in place, i.e. in the file, then use the -i command. If you append a suffix to -i, then the original file will be backed up as \textit{filename}suffix
-      \begin{lstlisting}[language=bash,basicstyle=\fontsize{4}{5}\selectfont\ttfamily]
+      \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{4}{5}\selectfont\ttfamily]
 ~/Tutorials/BASH/scripts/day1/examples> cat hello1.sh
 #!/bin/bash
 
@@ -3146,9 +2876,49 @@ echo ``Hello World!''
 
 echo ``Hello World!''
       \end{lstlisting}
+      \item double space a file
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed G hello.sh 
+#!/bin/bash
+
+
+
+# My First Script
+
+
+
+echo ``Hello World!''
+
+        \end{lstlisting}
+        \framebreak
+      \item double space a file which already has blank lines in it. Output file should contain no more than one blank line between lines of text.
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '2,4d' hello.sh | sed '/^$/d;G'
+#!/bin/bash
+
+echo ``Hello World!''
+
+        \end{lstlisting}
+      \item triple space a file \texttt{sed 'G;G'}
+      \item  undo double-spacing (assumes even-numbered lines are always blank)
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 'n;d' hello.sh 
+#!/bin/bash
+# My First Script
+echo ``Hello World!''
+        \end{lstlisting}
+    \item print the line immediately before or after a regexp, but not the line containing the regexp
+      \begin{lstlisting}[style=LINUX]
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{g;1!p;};h' h2o-opt-freq.log 
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{n;p;}' h2o-opt-freq.log 
+ (Enter /usr/local/packages/gaussian09/g09/l1.exe)
+      \end{lstlisting}
       \framebreak
     \item print section of file between two regex:
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day2/awk-sed> cat nh3-drc.out | sed -n '/START OF DRC CALCULATION/,/END OF ONE-ELECTRON INTEGRALS/p'
  START OF DRC CALCULATION
  ************************
@@ -3184,7 +2954,7 @@ echo ``Hello World!''
       \end{lstlisting}
       \framebreak
     \item print section of file from regex to end of file
-      \begin{lstlisting}[language=bash]
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day2/awk-sed> cat h2o-opt-freq.nwo | sed -n '/CITATION/,$p'
                                      CITATION
                                      --------
@@ -3216,119 +2986,61 @@ echo ``Hello World!''
 
       \end{lstlisting}
       \framebreak
-    \item print the line immediately before or after a regexp, but not the line containing the regexp
-      \begin{lstlisting}[language=bash]
-apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> grep -B1 Normal h2o-opt-freq.log
- File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
- Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
---
- File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
- Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
-apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{g;1!p;};h' h2o-opt-freq.log 
- File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
- File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
-~/Tutorials/BASH/scripts/day2/csplit> grep -A1 Normal h2o-opt-freq.log
- Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
- (Enter /usr/local/packages/gaussian09/g09/l1.exe)
---
- Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
-apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{n;p;}' h2o-opt-freq.log 
- (Enter /usr/local/packages/gaussian09/g09/l1.exe)
-      \end{lstlisting}
-      \item double space a file
-        \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> sed G hello.sh 
-#!/bin/bash
-
-
-
-# My First Script
-
-
-
-echo ``Hello World!''
-
-        \end{lstlisting}
-      \item double space a file which already has blank lines in it. Output file should contain no more than one blank line between lines of text.
-        \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> sed '2,4d' hello.sh | sed '/^$/d;G'
-#!/bin/bash
-
-echo ``Hello World!''
-
-        \end{lstlisting}
-      \item triple space a file \texttt{sed 'G;G'}
-      \item  undo double-spacing (assumes even-numbered lines are always blank)
-        \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> sed 'n;d' hello.sh 
-#!/bin/bash
-# My First Script
-echo ``Hello World!''
-        \end{lstlisting}
     \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
     \item sed is a handy utility very useful for writing scripts for file manipulation.
   \end{itemize}
-  }
 \end{frame}
 
 \section{awk}
-\begin{frame}[allowframebreaks,fragile]
-  \frametitle{\small awk}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{awk}
   \begin{itemize}
-    \fontsize{7}{9}\selectfont{
+%    \fontsize{7}{9}\selectfont{
     \item The Awk text-processing language is useful for such tasks as:
     \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
       \item[$\bigstar$] Tallying information from text files and creating reports from the results.
       \item[$\bigstar$]Adding additional functions to text editors like "vi".
       \item[$\bigstar$] Translating files from one format to another.
       \item[$\bigstar$] Creating small databases.
       \item[$\bigstar$]Performing mathematical operations on files of numeric data.
-      }
     \end{enumerate}
     \item Awk has two faces: 
     \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
       \item[$\bigstar$] it is a utility for performing simple text-processing tasks, and 
       \item[$\bigstar$] it is a programming language for performing complex text-processing tasks.
-      }
     \end{enumerate}
     \item awk comes in three variations
     \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
         \item[awk]: Original AWK by A. Aho, B. W. Kernighnan and P. Weinberger
         \item[nawk]: New AWK, AT\&T's version of AWK
         \item[gawk]: GNU AWK, all linux distributions come with gawk. In some distros, awk is a symbolic link to gawk.
-      }
     \end{enumerate}
     \framebreak
     \item Simplest form of using awk
     \begin{enumerate}
-      \fontsize{7}{9}\selectfont{
       \item[$\vardiamond$]\textbf{awk} \textit{pattern} \{\texttt{action}\}
       \item[$\vardiamond$] Most common action: \texttt{print}
       \item[$\vardiamond$] Print file dosum.sh: \texttt{awk '\{print \$0\}' dosum.sh}
       \item[$\vardiamond$] Print line matching bash in all files in current directory:
       \item[] \texttt{awk '/bash/\{print \$0\}' *.sh }
-        }
     \end{enumerate}
     \item awk patterns may be one of the following
     \begin{description}
-      \fontsize{6}{8}\selectfont{
-        \item[BEGIN]: special pattern which is not tested against input. Mostly used for preprocessing, setting constants, etc. before input is read.
-        \item[END]: special pattern which is not tested against input. Mostly used for postprocessing after input has been read.
+      {\scriptsize
+        \item[BEGIN]: special pattern which is not tested against input.\\ Mostly used for preprocessing, setting constants, etc. before input is read.
+        \item[END]: special pattern which is not tested against input.\\ Mostly used for postprocessing after input has been read.
         \item[/regular expression/]: the associated regular expression is matched to each input line that is read
         \item[relational expression]: used with the if, while relational operators
-        \item[\&\& ]: logical AND operator used as pattern1 \&\& pattern2. Execute action if pattern1 and pattern2 are true
-        \item[||]: logical OR operator used as pattern1 || pattern2. Execute action if either pattern1 or pattern2 is true
-        \item[!]: logical NOT operator used as !pattern. Execute action if pattern is not matched
-        \item[?:]: Used as pattern1 ? pattern2 : pattern3. If pattern1 is true use pattern2 for testing else use pattern3
+        \item[\&\& ]: logical AND operator used as pattern1 \&\& pattern2.\\ Execute action if pattern1 and pattern2 are true
+        \item[$||$]: logical OR operator used as pattern1 || pattern2.\\ Execute action if either pattern1 or pattern2 is true
+        \item[!]: logical NOT operator used as !pattern.\\ Execute action if pattern is not matched
+        \item[?:]: Used as pattern1 ? pattern2 : pattern3.\\ If pattern1 is true use pattern2 for testing else use pattern3
         \item[pattern1, pattern2]: Range pattern, match all records starting with record that matches pattern1 continuing until a record has been reached that matches pattern2
       }
     \end{description}
     \framebreak
     \item Example: Print list of files that are csh script files
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> awk '/^#\!\/bin\/tcsh/{print FILENAME}' *
 dooper.csh
 factorial.csh
@@ -3339,7 +3051,7 @@ quotes.csh
 shift.csh
     \end{lstlisting}
     \item Example: Print contents of hello.sh that lie between two patterns
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> awk '/^#\!\/bin\/bash/,/echo/{print $0}' hello.sh
 #!/bin/bash
 
@@ -3347,44 +3059,32 @@ shift.csh
 
 echo ``Hello World!''
     \end{lstlisting}
+    \framebreak
     \item awk reads the file being processed line by line. 
-    \item The entire content of each line is split into columns with space or tab as the delimiter. The delimiter can be changed as will be seen in the next few slides.
+    \item The entire content of each line is split into columns with space or tab as the delimiter.
+    \item By default the field separator is space or tab. To change the field separator use the -F command.
     \item To print the entire line, use \$0.
     \item The intrinsic variable NR contains the number of records (lines) read.
     \item The intrinsic variable NF contains the number of fields or columns in the current line.
-    \item By default the field separator is space or tab. To change the field separator use the -F command.
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples>awk '{print NR,'','',NF,'':'',$0}' hello.sh 
+1 , 1 : #!/bin/bash
+2 , 0 : 
+3 , 4 : # My First Script
+4 , 0 : 
+5 , 3 : echo ``Hello World!''
 ~/Tutorials/BASH/scripts/day1/examples> uptime
  11:18am  up 14 days  0:40,  5 users,  load average: 0.15, 0.11, 0.17
 apacheco@apacheco:~/Tutorials/BASH/scripts/day1/examples> uptime | awk '{print $1,$NF}'
 11:19am 0.17
 apacheco@apacheco:~/Tutorials/BASH/scripts/day1/examples> uptime | awk -F: '{print $1,$NF}'
  11  0.12, 0.10, 0.16
-~/Tutorials/BASH/scripts/day2> for i in $(seq 1 10); do touch file${i}.dat ; done
-~/Tutorials/BASH/scripts/day2> ls file*
-file10.dat  file2.dat  file4.dat  file6.dat  file8.dat
-file1.dat   file3.dat  file5.dat  file7.dat  file9.dat
-~/Tutorials/BASH/scripts/day2> for i in file* ; do
-> prefix=$(echo $i | awk -F. '{print $1}')
-> suffix=$(echo $i | awk -F. '{print $NF}')
-> echo $prefix $suffix $i
-> done
-file10 dat file10.dat
-file1 dat file1.dat
-file2 dat file2.dat
-file3 dat file3.dat
-file4 dat file4.dat
-file5 dat file5.dat
-file6 dat file6.dat
-file7 dat file7.dat
-file8 dat file8.dat
-file9 dat file9.dat
     \end{lstlisting}
-
+    \framebreak
     \item \textit{print expression} is the most common action in the awk statement. If formatted output is required, use the \textit{printf format, expression} action.
     \item Format specifiers are similar to the C-programming language
     \begin{description}
-      \fontsize{6}{8}\selectfont{
+      \fontsize{7}{9}\selectfont{
         \item[\%d,\%i]: decimal number
         \item[\%e,\%E]: floating point number of the form [-]d.dddddd.e[$\pm$]dd. The \%E format uses E instead of e.
         \item[\%f]: floating point number of the form [-]ddd.dddddd
@@ -3394,15 +3094,16 @@ file9 dat file9.dat
     \end{description}
     \item Format specifiers have additional parameter which may lie between the \% and the control letter
     \begin{description}
-      \fontsize{6}{8}\selectfont{
+      \fontsize{7}{9}\selectfont{
       \item[0]: A leading 0 (zero) acts as a flag, that indicates output should be padded with zeroes instead of spaces.
       \item[width]: The field should be padded to this width. The field is normally padded  with  spaces.  If the 0 flag has been used, it is padded with zeroes.
       \item[.prec]: A number that specifies the precision to use when printing.
       }
     \end{description}
+    \framebreak
     \item string constants supported by awk
     \begin{description}
-      \fontsize{6}{8}\selectfont{
+      \fontsize{7}{9}\selectfont{
         \item[\textbackslash\textbackslash]: Literal backslash
         \item[{\textbackslash}n]: newline
         \item[{\textbackslash}r]: carriage-return
@@ -3410,11 +3111,14 @@ file9 dat file9.dat
         \item[{\textbackslash}v]: vertical tab
       }
     \end{description}
-    \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> echo hello 0.2485 5 | awk '{printf ``%s %f %d %0.5d\n'',$1,$2,$3,$3}'                                                                                  
-hello 0.248500 5 00005
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo hello 0.2485 5 | awk '{printf ``%s \t %f \n %d \v %0.5d\n'',$1,$2,$3,$3}'
+hello    0.248500 
+ 5 
+    00005
     \end{lstlisting}
     \item The print command puts an explicit newline character at the end while the printf command does not.
+    \framebreak
     \item awk has in-built support for arithmetic operations
     \begin{columns}
       \column{0.5\textwidth}
@@ -3433,10 +3137,10 @@ hello 0.248500 5 00005
             [1.0ex]
         \end{tabularx}};
         \begin{pgfonlayer}{background}
-          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+            draw=lubrown] ($(tbl.north west)+(0.14,0)$)
           rectangle ($(tbl.north east)-(0.13,0.9)$);
-          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
           ($(tbl.north east)-(0.13,0.6)$)
           rectangle ($(tbl.south west)+(0.13,0.2)$);
         \end{pgfonlayer}
@@ -3459,27 +3163,28 @@ hello 0.248500 5 00005
             [1.0ex]
         \end{tabularx}};
         \begin{pgfonlayer}{background}
-          \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-            draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+          \draw[rounded corners,top color=lupurple,bottom color=lupurple,
+            draw=lubrown] ($(tbl.north west)+(0.14,0)$)
           rectangle ($(tbl.north east)-(0.13,0.9)$);
-          \draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+          \draw[rounded corners,top color=lulime,bottom color=lulime,draw=lulime]
           ($(tbl.north east)-(0.13,0.6)$)
           rectangle ($(tbl.south west)+(0.13,0.2)$);
         \end{pgfonlayer}
       \end{tikzpicture}
     \end{center}
     \end{columns}
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> echo | awk '{print 10%3}'
 1
 ~/Tutorials/BASH/scripts/day1/examples> echo | awk '{a=10;print a/=5}'
 2
     \end{lstlisting}
     \item awk also supports trignometric functions such as sin(expr) and cos(expr) where expr is in radians and atan2(y/x) where y/x is in radians
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> echo | awk '{pi=atan2(1,1)*4;print pi,sin(pi),cos(pi)}'
 3.14159 1.22465e-16 -1
     \end{lstlisting}
+    \framebreak
     \item Other Arithmetic operations supported are
     \begin{description}
       \item[exp(expr)]: The exponential function
@@ -3493,26 +3198,30 @@ hello 0.248500 5 00005
     \item if and while conditionals work similar to that in C-programming
     \begin{columns}
       \column{0.3\textwidth}
-      \begin{eblock}{}
+      \begin{exampleblock}{}
         \begin{lstlisting}[language=bash]
 if ( condition ) {
   command1 ;
   command2
 }
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
       \column{0.3\textwidth}
-      \begin{eblock}{}
+      \begin{exampleblock}{}
         \begin{lstlisting}[language=bash]
 while ( condition ) {
   command1 ;
   command2
 }
         \end{lstlisting}
-      \end{eblock}
+      \end{exampleblock}
     \end{columns}
+    \framebreak
     \item awk supports if ... else if .. else conditionals. 
-    \begin{lstlisting}[language=bash]
+    \begin{columns}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
 if (condition1) {
   command1 ;
   command2
@@ -3521,21 +3230,23 @@ if (condition1) {
 }  else {
   command4
 }
-    \end{lstlisting}
+        \end{lstlisting}
+      \end{exampleblock}
+    \end{columns}
     \item Relational operators supported by if and while
     \begin{description}
-      \fontsize{6}{8}\selectfont{
+%      \fontsize{6}{8}\selectfont{
         \item[==]: Is equal to
         \item[!=]: Is not equal to
-        \item[>]: Is greater than
-        \item[>=]: Is greater than or equal to
-        \item[<]: Is less than
-        \item[<=]: Is less than or equal to
+        \item[$>$]: Is greater than
+        \item[$>=$]: Is greater than or equal to
+        \item[$<$]: Is less than
+        \item[$<=$]: Is less than or equal to
         \item[$\sim$]: String Matches to
         \item[!$\sim$]: Doesn't Match
-      }
+%      }
     \end{description}
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> awk '{if (NR > 0 ){print NR,'':'', $0}}' hello.sh 
 1 : #!/bin/bash
 2 : 
@@ -3544,20 +3255,13 @@ if (condition1) {
 5 : echo ``Hello World!''
     \end{lstlisting}
     \item The for command can be used for processing the various columns of each line
-    \begin{lstlisting}[language=bash]
-~/Tutorials/BASH/scripts/day1/examples> cat << EOF | awk '{for (i=1;i<=NF;i++){if (i==1){a=$i}else if (i==NF){print a}else{a+=$i}}}'
-1 2 3 4 5 6
-7 8 9 10
-EOF
-
-15
-24
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> echo $(seq 1 10) | awk 'BEGIN{a=6}{for (i=1;i<=NF;i++){a+=$i}}END{print a}'                                                                                 
 61
     \end{lstlisting}
     \item Like all progamming languages, awk supports the use of variables. Like Shell, variable types do not have to be defined.
     \item awk variables can be user defined or could be one of the columns of the file being processed.
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day1/examples> awk '{print $1}' hello.sh 
 #!/bin/bash
 
@@ -3574,29 +3278,30 @@ echo ``Hello
     \end{lstlisting}
     \item Unlike Shell, awk variables are referenced as is i.e. no \$ prepended to variable name.
     \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
-    }
+%    }
   \end{itemize}
 \end{frame}
 
-\begin{frame}[allowframebreaks,fragile]{\small awk programming language}
+\begin{frame}[c,allowframebreaks,fragile]%{awk programming language}
   \fontsize{7}{9}\selectfont{
   \begin{itemize}
     \item awk can also be used as a programming language.
     \item The first line in awk scripts is the shebang line (\#!) which indicates the location of the awk binary. Use \texttt{which awk} to find the exact location
-    \item On my Linux desktop, the location is /usr/bin/awk while on SuperMike II, it is /bin/awk
+    \item On my Linux desktop, the location is /usr/bin/awk.
+    \item If unsure, just use /usr/bin/env awk
   \end{itemize}
   \begin{columns}
     \column{0.3\textwidth}
-    \begin{eblock}{hello.awk}
+    \begin{exampleblock}{hello.awk}
       \lstinputlisting[language=bash]{./scripts/day2/examples/hello.awk}
-    \end{eblock}
+    \end{exampleblock}
     \column{0.5\textwidth}
-    \begin{bblock}{}
-      \begin{lstlisting}[language=bash]
+%    \begin{block}{}
+      \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day2/examples> ./hello.awk 
 Hello World!
       \end{lstlisting}
-    \end{bblock}
+%    \end{block}
   \end{columns}
   \begin{itemize}
     \item To support scripting, awk has several built-in variables, which can also be used in one line commands
@@ -3610,13 +3315,19 @@ Hello World!
         \item[ORS]: output record separator, default is newline
       }
     \end{description}
+    \framebreak
     \item awk permits the use of arrays
     \item arrays are subscripted with an expression between square brackets ([$\cdots$])
-    \lstinputlisting[language=bash]{./scripts/day2/examples/hello1.awk}
-    \begin{lstlisting}[language=bash]
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{hello1.awk}
+          \lstinputlisting[language=bash]{./scripts/day2/examples/hello1.awk}
+        \end{exampleblock}
+        \begin{lstlisting}[style=LINUX]
 ~/Tutorials/BASH/scripts/day2/examples> ./hello1.awk 
  Hello, World!
-    \end{lstlisting}
+        \end{lstlisting}
+      \end{columns}
     \item Use the delete command to delete an array element
     \item awk has in-built functions to aid writing of scripts
     \begin{description}
@@ -3630,7 +3341,10 @@ Hello World!
       }
     \end{description}
     \item Similar to bash, GNU awk also supports user defined function
-    \begin{lstlisting}[language=bash]
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{}
+          \begin{lstlisting}[language=bash]
 #!/usr/bin/gawk -f
 {
     if (NF != 4) {
@@ -3645,41 +3359,35 @@ function error ( message ) {
     }
     printf(``line # %d, %s, line: %s\n'', NR, message, $0) >> ``/dev/tty'';
 }
-    \end{lstlisting}
+          \end{lstlisting}
+        \end{exampleblock}
+      \end{columns}
   \end{itemize}
   }
 \end{frame}
 
-\begin{frame}[allowframebreaks,fragile]{\small Example Scripts}
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{\tiny getcpmdvels.sh}
-      \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getcpmdvels.sh}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{eblock}{\tiny getengcons.sh}
-      \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getengcons.sh}
-    \end{eblock}
-  \end{columns}
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{eblock}{\tiny getmwvels.awk}
-      \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getmwvels.awk}
-    \end{eblock}
-    \column{0.5\textwidth}
-    \begin{eblock}{\tiny gettrajxyz.awk}
-      \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/gettrajxyz.awk}
-    \end{eblock}
-  \end{columns}
-  \begin{eblock}{\tiny getcoordvels.sh}
-    \vspace{-0.2cm}
-    \lstinputlisting[language=bash,firstline=1,lastline=62,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getcoordvels.sh}
-  \end{eblock}
+\begin{frame}[c,allowframebreaks,fragile]%{Example Scripts}
+  \begin{exampleblock}{getcpmdvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getcpmdvels.sh}
+  \end{exampleblock}
+  \begin{exampleblock}{getengcons.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getengcons.sh}
+  \end{exampleblock}
+%  \begin{exampleblock}{getcoordvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=86,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getcoordvels.sh}
+%  \end{exampleblock}
+    \framebreak
+  \begin{exampleblock}{getmwvels.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/getmwvels.awk}
+  \end{exampleblock}
+  \begin{exampleblock}{gettrajxyz.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/awk-sed/gettrajxyz.awk}
+  \end{exampleblock}
 \end{frame}
 
 \section{Wrap Up}
 \begin{frame}
-  \frametitle{\small References \& Further Reading}
+  \frametitle{References \& Further Reading}
   \begin{itemize}
     \fontsize{7}{9}\selectfont{
     \item BASH Programming \url{http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html}
@@ -3694,44 +3402,6 @@ function error ( message ) {
     \item Wiki Books \url{http://en.wikibooks.org/wiki/Subject:Computing}
     }
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Additional Help}
-  \begin{itemize}
-    \item Online Courses: \url{https://docs.loni.org/moodle}
-    \item Contact us
-    \begin{enumerate}
-      {\scriptsize
-        \item[$\vardiamond$]Email ticket system: sys-help@loni.org
-        \item[$\vardiamond$]Telephone Help Desk: 225-578-0900
-        \item[$\vardiamond$]Instant Messenger (AIM, Yahoo Messenger, Google Talk)
-        \begin{enumerate}
-          {\scriptsize
-            \item[$\bigstar$]Add "lsuhpchelp"
-          }
-        \end{enumerate}
-      }
-    \end{enumerate}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{}
-  \color{DarkBlue}{
-  \begin{center}
-    {\fontsize{40}{60}\selectfont The End}\\
-    \vspace{1cm}
-    {\fontsize{20}{30}\selectfont Any Questions?}\\
-    \vspace{0.5cm}
-    {\fontsize{15}{30}\selectfont
-      \color{red!80!black}{Next Week}\\      
-      \color{red!80!black}{Introduction to Perl}\\
-    }
-    \vspace{0.5cm}
-    {\fontsize{15}{20}\selectfont Survey: \color{red!90!white}{\url{http://www.hpc.lsu.edu/survey}}}
-  \end{center}
-  }
 \end{frame}
 
 \end{document}
