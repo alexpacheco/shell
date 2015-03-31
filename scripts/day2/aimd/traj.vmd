@@ -1,0 +1,58 @@
+#!/usr/local/bin/vmd
+# VMD script written by save_state $Revision: 1.34 $
+# VMD version: 1.8.4b11
+display projection   Orthographic
+display nearclip set 0.000000
+display farclip  set 10.000000
+display depthcue   off
+# store the molecule id for later use
+# change depending on input file
+
+# Representation 0: The molecule
+mol delrep 0 top
+mol representation CPK 0.70000 0.4 100 100
+mol color Name
+mol selection {all}
+mol material Opaque
+mol addrep top
+
+# Change for different orientation
+# Note that the axes changes after rotation
+# example rotating y by 90 interchanges x and z. 
+# To follow up with a rotation about the original x 
+# will now be a rotation about z
+#rotate y by 90
+#rotate x by 90
+#translate to -0.4 0.2 0
+#scale by 0.6
+rotate x by -80
+
+proc vmdrestoremycolors {} {
+color scale colors RGB {1.0 0.0 0.0} {0.0 1.0 0.0} {0.0 0.0 1.0}
+color scale colors BGR {0.0 0.0 1.0} {0.0 1.0 0.0} {1.0 0.0 0.0}
+color scale colors RWB {1.0 0.0 0.0} {1.0 1.0 1.0} {0.0 0.0 1.0}
+color scale colors BWR {0.0 0.0 1.0} {1.0 1.0 1.0} {1.0 0.0 0.0}
+color scale colors RWG {1.0 0.0 0.0} {1.0 1.0 1.0} {0.0 1.0 0.0}
+color scale colors GWR {0.0 1.0 0.0} {1.0 1.0 1.0} {1.0 0.0 0.0}
+color scale colors GWB {0.0 1.0 0.0} {1.0 1.0 1.0} {0.0 0.0 1.0}
+color scale colors BWG {0.0 0.0 1.0} {1.0 1.0 1.0} {0.0 1.0 0.0}
+color scale colors BlkW {0.0 0.0 0.0} {0.5 0.5 0.5} {1.0 1.0 1.0}
+color scale colors WBlk {1.0 1.0 1.0} {0.5 0.5 0.5} {0.0 0.0 0.0}
+  color scale method RGB
+# change for different background
+  color Display {Background} silver
+  color Display {FPS} white
+  color Axes {Labels} black
+  color Name {L} green
+  color Type {L} green
+  color Resname {} silver
+  color Chain {X} blue
+  color Segname {} blue
+  color Conformation {all} blue
+  color Molecule {0} blue
+  color Molecule {Electron Wavepacket surface} blue
+  color Surface {Grasp} gray
+  color Labels {Springs} orange
+}
+vmdrestoremycolors
+animate goto 0

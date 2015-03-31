@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+#PBS -q checkpt
+#PBS -A <enter your allocation>
+#PBS -l nodes=4:ppn=4
+## change to ppn=8 for QueenBee and Philip
+## change to ppn=16 for SuperMike II
+#PBS -l walltime=00:10:00
+#PBS -V
+#PBS -o nodetest.out
+#PBS -e nodetest.err
+#PBS -N testing
+#PBS -M <enter your email address here>
+#PBS -m abe
+#
+
+export WORK_DIR=$PBS_O_WORKDIR
+export NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'`
+
+NODES=(`cat "$PBS_NODEFILE"` )
+UNODES=(`uniq "$PBS_NODEFILE"` )
+
+echo "Nodes Available: " ${NODES[@]}
+echo "Unique Nodes Available: " ${UNODES[@]}
+
+echo "Get Hostnames for all processes"
+i=0
+for nodes in "${NODES[@]}"; do
+  ssh -n $nodes 'echo $HOSTNAME '$i' ' &
+  let i=i+1
+done
+wait
+
+echo "Get Hostnames for all unique nodes"
+i=0
+NPROCS=`uniq $PBS_NODEFILE | wc -l |gawk '//{print $1}'`
+let NPROCS-=1
+while [ $i -le $NPROCS ] ; do
+  ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
+  let i=i+1
+done
+

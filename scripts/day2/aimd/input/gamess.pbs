@@ -1,0 +1,35 @@
+#!/bin/bash
+
+## Specifiy the name SLURM gives to this job
+#SBATCH -J drc
+
+## Specify allocation name to charge jobs to
+#SBATCH -A TG-TRA140035
+
+## where to write standard output and error
+## %j expands to jobID, error goes to output if -e is not provided
+#SBATCH -o mydrc.o%j
+#SBATCH -e mydrc.e%j
+
+## number of mpi tasks requested
+#SBATCH -n 64
+
+## Queue to submit job on
+#SBATCH -p normal
+
+## Max walltime
+#SBATCH -t 48:00:00
+
+## Where to send notification
+#SBATCH --mail-user=alex.pacheco@lehigh.edu
+
+## When to send notification: begin,end,fail,all
+#SBATCH --mail-type=all
+
+
+module load gamess/05_2013
+
+echo "Job Started at " `date`
+rungms nh3-drc.inp > nh3-drc.out
+
+echo "Done" `date`
