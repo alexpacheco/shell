@@ -1,0 +1,1119 @@
+\documentclass[10pt,t]{beamer}
+
+\input{mypreamble}
+\beamertemplateballitem
+\usepackage{tabu}
+
+\newcolumntype{a}{>{\columncolor{lulime}}c}
+\newcolumntype{b}{>{\columncolor{lulime!50}}c}
+\newcolumntype{d}{>{\columncolor{lulime!40}}c}
+\newcolumntype{e}{>{\columncolor{lulime}}l}
+\newcolumntype{f}{>{\columncolor{lulime!50}}l}
+
+
+
+\title{Shell Scripting}
+\subtitle{REGEX, AWK, SED, \& GREP}
+\author{Alexander B. Pacheco}
+\institute{\href{http://researchcomputing.lehigh.edu}{LTS Research Computing}}%\\[2pt] \href{http://www.lehigh.edu}{Lehigh University}}
+\date{October 6, 2015}%\today}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSection[]
+{
+  \begingroup
+  \setbeamertemplate{background canvas}[vertical shading][bottom=lubrown,top=lubrown]
+  \setbeamertemplate{footline}[myfootline] 
+  \setbeamertemplate{section page}[mysection]
+  \frame[c]{
+    \sectionpage
+  }
+  \endgroup
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\footnotesize
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Regular Expressions}
+\begin{frame}[c]
+  \frametitle{Regular Expressions}
+  \begin{itemize}
+    \item A regular expression (regex) is a method of representing a string matching pattern. 
+    \item Regular expressions enable strings that match a particular pattern within textual data records to be located and modified and they are often used within utility programs and programming languages that manipulate textual data. 
+    \item Regular expressions are extremely powerful.
+    \item Supporting Software and Tools
+    \begin{enumerate}
+        \item Command Line Tools: grep, egrep, sed
+        \item Editors: ed, vi, emacs
+        \item Languages: awk, perl, python, php, ruby, tcl, java, javascript, .NET
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Shell Regular Expressions}
+  \begin{itemize}
+    \item The Unix shell recognises a limited form of regular expressions used with filename substitution
+    \item[?]: match any single character.
+    \item[$\ast$]: match zero or more characters.
+    \item[{[\quad]}]: match list of characters in the list specified
+    \item[{[!\quad]}]: match characters not in the list specified
+    \item Examples:
+    \begin{enumerate}
+      \item \texttt{ls *}
+      \item \texttt{cp [a-z]* lower/}
+      \item \texttt{cp [!a-z]* upper\_digit/}
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,allowframebreaks]{POSIX Regular Expressions}
+  \begin{itemize}
+    \item[{[\quad]}]: A bracket expression. Matches a single character that is contained within the brackets. 
+    \item[] For example, [abc] matches "a", "b", or "c". 
+    \item[] [a-z] specifies a range which matches any lowercase letter from "a" to "z". 
+    \item[] These forms can be mixed: [abcx-z] matches "a", "b", "c", "x", "y", or "z", as does [a-cx-z].
+    \item[{[\string^\quad]}]: Matches a single character that is not contained within the brackets. 
+    \item[] For example, [\string^abc] matches any character other than "a", "b", or "c". 
+    \item[] [\string^a-z] matches any single character that is not a lowercase letter from "a" to "z".
+    \item[(\quad)]: Defines a marked subexpression. 
+    \item[] The string matched within the parentheses can be recalled later. 
+    \item[] A marked subexpression is also called a block or capturing group
+    \item[$|$]: The choice (or set union) operator: match either the expression before or the expression after the operator 
+    \item[] For example, "abc$|$def" matches "abc" or "def".
+    \framebreak
+    \item[.]: Matches any single character. 
+    \item[] For example, a.c matches "abc", etc.
+    \item[$\ast$]: Matches the preceding element zero or more times. 
+    \item[] For example, ab*c matches "ac", "abc", "abbbc", etc. 
+    \item[] [xyz]* matches ", "x", "y", "z", "zx", "zyx", "xyzzy", and so on. 
+    \item[] (ab)* matches "", "ab", "abab", "ababab", and so on.
+    \item[\{m,n\}]: Matches the preceding element at least m and not more than n times. 
+    \item[\{m,\}]: Matches the preceding element at least m times.
+    \item[\{n\}]: Matches the preceding element exactly n times.
+    \item[] For example, a\{3,5\} matches only "aaa", "aaaa", and "aaaaa". 
+    \item[+]: Match the last "block" one or more times 
+    \item[] For example, "ba+" matches "ba", "baa", "baaa" and so on
+    \item[?]: Match the last "block" zero or one times  
+    \item[] For example, "ba?" matches "b" or "ba"
+    \framebreak
+    \item[\string^]: Matches the starting position within the string. In line-based tools, it matches the starting position of any line.
+    \item[\$]: Matches the ending position of the string or the position just before a string-ending newline. In line-based tools, it matches the ending position of any line.
+    \item[{\textbackslash}s]: Matches any whitespace.
+    \item[{\textbackslash}S]: Matches any non-whitespace.
+    \item[{\textbackslash}d]: Matches any digit.
+    \item[{\textbackslash}D]: Matches any non-digit.
+    \item[{\textbackslash}w]: Matches any word.
+    \item[{\textbackslash}W]: Matches any non-word.
+    \item[{\textbackslash}b]: Matches any word boundary.
+    \item[{\textbackslash}B]: Matches any non-word boundary.
+  \end{itemize}
+\end{frame}
+
+
+\section{File Manipulation}
+%\subsection{cut}
+\begin{frame}[c,fragile]
+  \frametitle{Linux cut command}
+  \begin{itemize}
+    \item Linux command cut is used for text processing to extract portion of text from a file by selecting columns.
+    \item \Verblubrown{Usage:} \Verbblue{cut <options> <filename>}
+    \item \Verblubrown{Common Options:}
+%  \end{itemize}
+    \item[]
+      \begin{tabular}{lcl}
+        \Verbblue{-c list} & : & The list specifies character positions. \\
+        \Verbblue{-b list} & : & The list specifies byte positions.\\
+        \Verbblue{-f list} & : & select only these fields.\\
+        \Verbblue{-d delim} & : & Use delim as the field delimiter character instead of the tab character. \\
+      \end{tabular}
+    \item list is made up of one range, or many ranges separated by commas
+    \item[]
+      \begin{tabular}{lcl}
+        \Verbblue{N} & : & Nth byte, character or field. count begins from 1 \\
+        \Verbblue{N-} & : & Nth byte, character or field to end of line \\
+        \Verbblue{N-M} & : & Nth to Mth (included) byte, character or field \\
+        \Verbblue{-M} & : & from first to Mth (included) byte, character or field \\ 
+      \end{tabular}
+  \end{itemize}
+  \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> uptime 
+ 14:17pm  up 14 days  3:39,  5 users,  load average: 0.51, 0.22, 0.20
+~/Tutorials/BASH/scripts/day1/examples> uptime | cut -c-8
+ 14:17pm
+~/Tutorials/BASH/scripts/day1/examples> uptime | cut -c14-20
+14 days
+~/Tutorials/BASH/scripts/day1/examples> uptime | cut -d'':'' -f4
+ 0.41, 0.22, 0.20
+  \end{lstlisting}
+\end{frame}
+
+%\subsection{paste \& join}
+\begin{frame}[c,fragile]{paste}
+  \begin{itemize}
+    \item The paste utility concatenates the corresponding lines of the given input files, replacing all but the last file's newline characters with
+     a single tab character, and writes the resulting lines to standard output.  
+   \item[] If end-of-file is reached on an input file while other input
+     files still contain data, the file is treated as if it were an endless source of empty lines.
+   \item \Verblubrown{Usage:} \Verbblue{paste <option> <files>}
+   \item \Verblubrown{Common Options}
+   \item[]\Verbblue{-d delimiters} specifies a list of delimiters to be used instead of tabs for separating consecutive values on a single line. Each delimiter is used in turn; when the list has been exhausted, paste begins again at the first delimiter.
+   \item[]\Verbblue{-s} causes paste to append the data in serial rather than in parallel; that is, in a horizontal rather than vertical fashion.
+   \item Example
+  \end{itemize}
+  \begin{columns}
+    \column{0.2\textwidth}
+    \vspace{-0.5cm}
+    \begin{lstlisting}[style=LINUX]
+> cat names.txt
+Mark Smith
+Bobby Brown
+Sue Miller
+Jenny Igotit
+    \end{lstlisting}
+    \column{0.25\textwidth}
+    \vspace{-0.5cm}
+    \begin{lstlisting}[style=LINUX]
+> cat numbers.txt
+555-1234
+555-9876
+555-6743
+867-5309
+    \end{lstlisting}
+    \column{0.3\textwidth}
+    \vspace{-0.5cm}
+    \begin{lstlisting}[style=LINUX]
+> paste names.txt numbers.txt
+Mark Smith      555-1234
+Bobby Brown     555-9876
+Sue Miller      555-6743
+Jenny Igotit    867-5309
+    \end{lstlisting}
+  \end{columns}
+\end{frame}
+
+%\begin{frame}[c,fragile,allowframebreaks]{join}
+%  \begin{itemize}
+%    \item join is a command in Unix-like operating systems that merges the lines of two sorted text files based on the presence of a common field.
+%    \item The join command takes as input two text files and a number of options. 
+%    \item If no command-line argument is given, this command looks for a pair of lines from the two files having the same first field (a sequence of characters that are different from space), and outputs a line composed of the first field followed by the rest of the two lines.
+%    \item The program arguments specify which character to be used in place of space to separate the fields of the line, which field to use when looking for matching lines, and whether to output lines that do not match. The output can be stored to another file rather than printing using redirection.
+%    \item \Verblubrown{Usage:} \Verbblue{join <options> <FILE1> <FILE2>}
+%    \framebreak
+%    \item \Verblubrown{Common options:}
+%    \item[]
+%      \begin{tabular}{lcl}
+%        \Verbblue{-a FILENUM} & : & also print unpairable lines from file FILENUM, \\
+%                              &   & where FILENUM is 1 or 2, corresponding to FILE1 or FILE2\\
+%        \Verbblue{-e EMPTY} & : & replace missing input fields with EMPTY\\
+%        \Verbblue{-i} & : & ignore differences in case when comparing fields\\
+%        \Verbblue{-1 FIELD} & : & join on this FIELD of file 1\\
+%        \Verbblue{-2 FIELD} & : & join on this FIELD of file 2\\
+%        \Verbblue{-j FIELD} & : & equivalent to '-1 FIELD -2 FIELD'\\
+%        \Verbblue{-t CHAR} & : & use CHAR as input and output field separator\\
+%      \end{tabular}
+%  \end{itemize}
+%  \begin{columns}
+%    \column{0.8\textwidth}
+%    \begin{lstlisting}[language=bash]
+%~/Tutorials/BASH/scripts/day2/examples> cat file1
+%george jim
+%martha mary
+%~/Tutorials/BASH/scripts/day2/examples> cat file2
+%albert martha
+%george sophie
+%~/Tutorials/BASH/scripts/day2/examples> join file1 file2
+%george jim sophie
+%~/Tutorials/BASH/scripts/day2/examples> join -2 2 file1 file2
+%martha mary albert
+%    \end{lstlisting}
+%  \end{columns}
+%\end{frame}
+
+%\subsection{split \& csplit}
+\begin{frame}[c]{split}
+  \begin{itemize}
+    \item split is a Unix utility most commonly used to split a file into two or more smaller files.
+    \item \Verblubrown{Usage}: \Verbblue{split <options> <file to be split> <name>}
+    \item \Verblubrown{Common Options}:
+    \item[]\Verbblue{-a suffix\_length}: Use suffix\_length letters to form the suffix of the file name.
+    \item[]\Verbblue{-b byte\_count[k$\mid$m]}: Create smaller files byte\_count bytes in length.  
+      \begin{itemize}
+        \item[] If "k" is appended to the number, the file is split into byte\_count kilobyte pieces.  
+        \item[] If "m" is appended to the number, the file is split into byte\_count megabyte pieces.
+      \end{itemize}
+    \item[]\Verbblue{-l n}: (Lowercase L) Create smaller files n lines in length. 
+%        \item[-p pattern]: The file is split whenever an input line matches pattern, which is interpreted as an extended regular expression.  The matching line will be the first line of the next output file.  This option is incompatible with the -b and -l options. Works in BSD only.
+    \item The default behavior of split is to generate output files of a fixed size, default 1000 lines. 
+    \item The files are named by appending aa, ab, ac, etc. to output filename. 
+    \item If output filename (\Verb|<name>|) is not given, the default filename of x is used, for example, xaa, xab, etc
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{csplit}
+  \begin{itemize}
+    \item The csplit command in Unix is a utility that is used to split a file into two or more smaller files determined by context lines.
+    \item \Verblubrown{Usage}: \Verbblue{csplit <options> <file> <args>}
+    \item \Verblubrown{Common Options}:
+    \item[]\Verbblue{-f prefix}: Give created files names beginning with prefix.  The default is "xx".
+    \item[]\Verbblue{-k}: Do not remove output files if an error occurs or a HUP, INT or TERM signal is received.
+    \item[]\Verbblue{-s}: Do not write the size of each output file to standard output as it is created.
+    \item[]\Verbblue{-n number}: Use number of decimal digits after the prefix to form the file name.  The default is 2.
+    \item The args operands may be a combination of the following patterns:
+    \item[] \Verblue{/regexp/[[+|-]offset]}: Create a file containing the input from the current line to (but not including) the next line matching the given basic regular expression.  An optional offset from the line that matched may be specified.
+    \item[] \Verblue{\%regexp\%[[+|-]offset]}: Same as above but a file is not created for the output.
+    \item[] \Verbblue{line\_no}: Create containing the input from the current line to (but not including) the specified line number.
+    \item[] \Verbblue{\{num\}}: Repeat the previous pattern the specified number of times.  If it follows a line number pattern, a new file will be created for each line\_no lines, num times.  The first line of the file is line number 1 for historic reasons.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{split \& csplit examples}
+  \begin{itemize}
+    \item Example: Run a multi-step job using Gaussian 09, for example geometry optimization followed by frequency analysis of water molecule.
+    \item Problem: Some visualization packages like molden cannot visualize such multi-step jobs. Each job needs to visualized separetly.
+    \item Solution: Split the single output file into two files, one for the optimization calculation and the other for frequency calculation.
+    \item Source Files in scripts/day2/examples/h2o-opt-freq.log (Google Drive Downloads).
+    \item Examples: 
+    \item[] \Verblue{split -l 1442 h2o-opt-freq.log}
+    \item[] \Verblue{csplit h2o-opt-freq.log "/Normal termination of Gaussian 09/+1"}
+  \end{itemize}
+\end{frame}
+
+\section{grep}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{grep \& egrep}
+  \begin{itemize}
+    \item \Verbblue{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
+    \item \Verbblue{egrep} is extended grep, same as \Verbblue{grep -E}
+    \item Use \Verbblue{zgrep} for compressed files.
+    \item \Verblubrown{Usage}: \Verbblue{grep <options> <search pattern> <files>} 
+    \item Commonly used options
+    \item[]
+      \begin{tabular}{lcl}
+      \Verbblue{-i} & : & ignore case during search\\
+      \Verbblue{-r} & : & search recursively\\
+      \Verbblue{-v} & : & invert match i.e. match everything except pattern\\
+      \Verbblue{-l} & : & list files that match pattern\\
+      \Verbblue{-L} & : & list files that do not match pattern \\
+      \Verbblue{-n} & : & prefix each line of output with the line number within its input file. \\
+      \Verbblue{-A num} & : & print  num  lines  of  trailing  context  after  matching lines.\\
+      \Verbblue{-B num} & : & print num lines of leading context before matching lines.\\
+    \end{tabular}
+  \end{itemize}
+  \framebreak
+  \begin{itemize}
+    \item Search files that contain the word node in the examples directory
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> egrep node *
+checknodes.pbs:#PBS -l nodes=4:ppn=4
+checknodes.pbs:#PBS -o nodetest.out
+checknodes.pbs:#PBS -e nodetest.err
+checknodes.pbs:for nodes in ``${NODES[@]}''; do
+checknodes.pbs:  ssh -n $nodes 'echo $HOSTNAME '$i' ' &
+checknodes.pbs:echo ``Get Hostnames for all unique nodes''
+      \end{lstlisting}
+    \item Repeat above search using a case insensitive pattern match and print line number that matches the search pattern
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> egrep -in nodes *
+checknodes.pbs:5:#PBS -l nodes=4:ppn=4
+checknodes.pbs:20:NODES=(`cat ``$PBS_NODEFILE''` )
+checknodes.pbs:21:UNODES=(`uniq ``$PBS_NODEFILE''` )
+checknodes.pbs:23:echo ``Nodes Available: `` ${NODES[@]}
+checknodes.pbs:24:echo ``Unique Nodes Available: `` ${UNODES[@]}
+checknodes.pbs:28:for nodes in ``${NODES[@]}''; do
+checknodes.pbs:29:  ssh -n $nodes 'echo $HOSTNAME '$i' ' &
+checknodes.pbs:34:echo ``Get Hostnames for all unique nodes''
+checknodes.pbs:39:  ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
+      \end{lstlisting}
+    \item Print files that contain the word "counter"
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> grep -l counter *
+factorial2.sh
+factorial.csh
+factorial.sh
+      \end{lstlisting}
+      \framebreak
+    \item List all files that contain a comment line i.e. lines that begin with "\#"
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> egrep -l ``^#'' *
+backups.sh
+checknodes.pbs
+dooper1.sh
+dooper.csh
+dooper.sh
+factorial2.sh
+factorial3.sh
+factorial.csh
+factorial.sh
+hello.sh
+name.csh
+name.sh
+nestedloops.csh
+nestedloops.sh
+quotes.csh
+quotes.sh
+shift10.sh
+shift.csh
+shift.sh
+      \end{lstlisting}
+      \framebreak
+    \item List all files that are bash or csh scripts i.e. contain a line that end in bash or csh
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> egrep -l ``bash$|csh$'' *
+backups.sh
+checknodes.pbs
+dooper1.sh
+dooper.csh
+dooper.sh
+factorial2.sh
+factorial3.sh
+factorial.csh
+factorial.sh
+hello.sh
+name.csh
+name.sh
+nestedloops.csh
+nestedloops.sh
+quotes.csh
+quotes.sh
+shift10.sh
+shift.csh
+shift.sh
+      \end{lstlisting}
+
+    \item print the line immediately before regexp
+      \begin{lstlisting}[style=LINUX]
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> grep -B1 Normal h2o-opt-freq.log
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
+--
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
+      \end{lstlisting}
+      \framebreak
+    \item print the line immediately after regexp
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/csplit> grep -A1 Normal h2o-opt-freq.log
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:07 2010.
+ (Enter /usr/local/packages/gaussian09/g09/l1.exe)
+--
+ Normal termination of Gaussian 09 at Thu Nov 11 08:44:17 2010.
+      \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\section{sed}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{sed}
+  \begin{itemize}
+    \item sed ("stream editor") is Unix utility for parsing and transforming text files.
+    \item sed is line-oriented, it operates one line at a time and allows regular expression matching and substitution.
+    \item sed has several commands, the most commonly used command and sometime the only one learned  is the substituion command, \textit{s}
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed 's/bash/tcsh/g'
+#!/bin/tcsh
+
+# My First Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item List of sed pattern flags and commands line options
+    \begin{columns}
+      \column{0.52\textwidth}
+      \vspace{-0.6cm}
+      \begin{center}
+	\taburulecolor{lublue}
+            \begin{tabular}{a|b}
+              \rowcolor{lublue}{\textbf{Pattern} }& {\textbf{Operation}} \\
+              s & substitution \\
+              g & global replacement \\
+              p & print \\
+              I & ignore case \\
+              d & delete \\
+              G & add newline \\
+              w & write to file\\
+              x & exchange pattern with hold buffer\\
+              h & copy pattern to hold buffer\\
+          \end{tabular}
+      \end{center} 
+      \column{0.48\textwidth}
+      \vspace{-0.6cm}
+      \begin{center}
+	\taburulecolor{lublue}
+            \begin{tabular}{a|b}
+              \rowcolor{lublue}{\textbf{Command} }& {\textbf{Operation}} \\
+              -e & combine multiple commands \\
+              -f & read commands from file \\
+              -h & print help info \\
+              -n & disable print \\
+              -V & print version info \\
+              -i & in file subsitution \\
+          \end{tabular}
+      \end{center} 
+    \end{columns}
+    \framebreak
+    \item Add the \texttt{-e} to carry out multiple matches.
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed -e 's/bash/tcsh/g' -e 's/First/First tcsh/g'
+#!/bin/tcsh
+
+# My First tcsh Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item Alternate forms
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed 's/bash/tcsh/g' | sed 's/First/First tcsh/g'
+OR
+~/Tutorials/BASH/scripts/day1/examples> sed 's/bash/tcsh/g; s/First/First tcsh/g' hello.sh 
+#!/bin/tcsh
+
+# My First tcsh Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item The delimiter is slash (/). You can change it to whatever you want which is useful when you want to replace path names
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 's:/bin/bash:/usr/bin/env tcsh:g' hello.sh 
+#!/usr/bin/env tcsh
+
+# My First Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+      \framebreak
+    \item If you do not use an alternate delimiter, use backslash (\textbackslash) to escape the slash character in your pattern
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 's/\/bin\/bash/\/usr\/bin\/env tcsh/g' hello.sh 
+#!/usr/bin/env tcsh
+
+# My First Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item If you enter all your sed commands in a file, say sedscript, you can use the -f flag to sed to read the sed commands
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat sedscript
+s/bash/tcsh/g
+~/Tutorials/BASH/scripts/day1/examples> sed -f sedscript hello.sh 
+#!/bin/tcsh
+
+# My First Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item sed can also delete blank files from a file
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '/^$/d' hello.sh 
+#!/bin/bash
+# My First Script
+echo ``Hello World!''
+      \end{lstlisting}
+    \item delete line n through m in a file
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '2,4d' hello.sh 
+#!/bin/bash
+echo ``Hello World!''
+      \end{lstlisting}
+      \framebreak
+      \item insert a blank line above every line which matches ``regex''
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '/First/{x;p;x;}' hello.sh 
+#!/bin/bash
+
+
+# My First Script
+
+echo ``Hello World!''
+        \end{lstlisting}
+      \item insert a blank line below every line which matches ``regex''
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '/First/G' hello.sh 
+#!/bin/bash
+
+# My First Script
+
+
+echo ``Hello World!''
+        \end{lstlisting}
+      \item insert a blank line above and below every line which matches ``regex''
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '/First/{x;p;x;G;}' hello.sh 
+#!/bin/bash
+
+
+# My First Script
+
+
+echo ``Hello World!''
+        \end{lstlisting}
+        \framebreak
+    \item delete lines matching pattern regex
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '/First/d' hello.sh 
+#!/bin/bash
+
+
+echo ``Hello World!''
+      \end{lstlisting}
+    \item print only lines which match regular expression (emulates grep)
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/p' hello.sh
+echo ``Hello World!''
+      \end{lstlisting}
+    \item print only lines which do NOT match regex (emulates grep -v)
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/!p' hello.sh
+#!/bin/bash
+
+# My First Script
+
+      \end{lstlisting}
+    \item print current line number to standard output
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed -n '/echo/ =' quotes.sh 
+5
+6
+7
+8
+9
+10
+11
+12
+13
+      \end{lstlisting}
+    \item If you want to make substitution in place, i.e. in the file, then use the -i command. If you append a suffix to -i, then the original file will be backed up as \textit{filename}suffix
+      \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{4}{5}\selectfont\ttfamily]
+~/Tutorials/BASH/scripts/day1/examples> cat hello1.sh
+#!/bin/bash
+
+# My First Script
+
+echo ``Hello World!''
+~/Tutorials/BASH/scripts/day1/examples> sed -i.bak -e 's/bash/tcsh/g' -e 's/First/First tcsh/g' hello1.sh 
+~/Tutorials/BASH/scripts/day1/examples> cat hello1.sh
+#!/bin/tcsh
+
+# My First tcsh Script
+
+echo ``Hello World!''
+~/Tutorials/BASH/scripts/day1/examples> cat hello1.sh.bak
+#!/bin/bash
+
+# My First Script
+
+echo ``Hello World!''
+      \end{lstlisting}
+      \item double space a file
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed G hello.sh 
+#!/bin/bash
+
+
+
+# My First Script
+
+
+
+echo ``Hello World!''
+
+        \end{lstlisting}
+        \framebreak
+      \item double space a file which already has blank lines in it. Output file should contain no more than one blank line between lines of text.
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed '2,4d' hello.sh | sed '/^$/d;G'
+#!/bin/bash
+
+echo ``Hello World!''
+
+        \end{lstlisting}
+      \item triple space a file \texttt{sed 'G;G'}
+      \item  undo double-spacing (assumes even-numbered lines are always blank)
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> sed 'n;d' hello.sh 
+#!/bin/bash
+# My First Script
+echo ``Hello World!''
+        \end{lstlisting}
+    \item print the line immediately before or after a regexp, but not the line containing the regexp
+      \begin{lstlisting}[style=LINUX]
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{g;1!p;};h' h2o-opt-freq.log 
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+ File lengths (MBytes):  RWF=      5 Int=      0 D2E=      0 Chk=      1 Scr=      1
+
+apacheco@apacheco:~/Tutorials/BASH/scripts/day2/csplit> sed -n '/Normal/{n;p;}' h2o-opt-freq.log 
+ (Enter /usr/local/packages/gaussian09/g09/l1.exe)
+      \end{lstlisting}
+      \framebreak
+    \item print section of file between two regex:
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/awk-sed> cat nh3-drc.out | sed -n '/START OF DRC CALCULATION/,/END OF ONE-ELECTRON INTEGRALS/p'
+ START OF DRC CALCULATION
+ ************************
+ ---------------------------------------------------------------------------
+   TIME     MODE     Q              P     KINETIC      POTENTIAL          TOTAL
+    FS       BOHR*SQRT(AMU) BOHR*SQRT(AMU)/FS   E         ENERGY         ENERGY
+    0.0000  L 1      1.007997  0.052824   0.00159      -56.52247      -56.52087
+            L 2      0.000000  0.000000
+            L 3     -0.000004  0.000000
+            L 4      0.000000  0.000000
+            L 5      0.000005  0.000001
+            L 6     -0.138966 -0.014065
+ ---------------------------------------------------------------------------
+           CARTESIAN COORDINATES (BOHR)               VELOCITY (BOHR/FS)
+ ---------------------------------------------------------------------------
+  7.0     0.00000    0.00000    0.00000       0.00000    0.00000   -0.00616
+  1.0    -0.92275    1.59824    0.00000       0.00000    0.00000    0.02851
+  1.0    -0.92275   -1.59824    0.00000       0.00000    0.00000    0.02851
+  1.0     1.84549    0.00000    0.00000       0.00000    0.00000    0.02851
+ ---------------------------------------------------------------------------
+
+                         ----------------------
+                         GRADIENT OF THE ENERGY
+                         ----------------------
+
+ UNITS ARE HARTREE/BOHR    E'X               E'Y               E'Z 
+    1 NITROGEN         0.000042455       0.000000188       0.000000000
+    2 HYDROGEN         0.012826176      -0.022240529       0.000000000
+    3 HYDROGEN         0.012826249       0.022240446       0.000000000
+    4 HYDROGEN        -0.025694880      -0.000000105       0.000000000
+ 
+ ...... END OF ONE-ELECTRON INTEGRALS ......
+      \end{lstlisting}
+      \framebreak
+    \item print section of file from regex to end of file
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/awk-sed> cat h2o-opt-freq.nwo | sed -n '/CITATION/,$p'
+                                     CITATION
+                                     --------
+
+          Please use the following citation when publishing results
+          obtained with NWChem:
+
+          E. J. Bylaska, W. A. de Jong, N. Govind, K. Kowalski, T. P. Straatsma,
+          M. Valiev, D. Wang, E. Apra, T. L. Windus, J. Hammond, P. Nichols,
+          S. Hirata, M. T. Hackler, Y. Zhao, P.-D. Fan, R. J. Harrison,
+          M. Dupuis, D. M. A. Smith, J. Nieplocha, V. Tipparaju, M. Krishnan,
+          Q. Wu, T. Van Voorhis, A. A. Auer, M. Nooijen,
+          E. Brown, G. Cisneros, G. I. Fann, H. Fruchtl, J. Garza, K. Hirao,
+          R. Kendall, J. A. Nichols, K. Tsemekhman, K. Wolinski, J. Anchell,
+          D. Bernholdt, P. Borowski, T. Clark, D. Clerc, H. Dachsel, M. Deegan,
+          K. Dyall, D. Elwood, E. Glendening, M. Gutowski, A. Hess, J. Jaffe,
+          B. Johnson, J. Ju, R. Kobayashi, R. Kutteh, Z. Lin, R. Littlefield,
+          X. Long, B. Meng, T. Nakajima, S. Niu, L. Pollack, M. Rosing,
+          G. Sandrone, M. Stave, H. Taylor, G. Thomas, J. van Lenthe, A. Wong,
+          and Z. Zhang,
+          ``NWChem, A Computational Chemistry Package for Parallel Computers, 
+          Version 5.1'' (2007),
+                      Pacific Northwest National Laboratory,
+                      Richland, Washington 99352-0999, USA.
+
+
+
+ Total times  cpu:        3.4s     wall:       18.5s
+
+      \end{lstlisting}
+      \framebreak
+    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
+    \item sed is a handy utility very useful for writing scripts for file manipulation.
+  \end{itemize}
+\end{frame}
+
+\section{awk}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{awk}
+  \begin{itemize}
+%    \fontsize{7}{9}\selectfont{
+    \item The Awk text-processing language is useful for such tasks as:
+    \begin{enumerate}
+      \item[$\bigstar$] Tallying information from text files and creating reports from the results.
+      \item[$\bigstar$]Adding additional functions to text editors like "vi".
+      \item[$\bigstar$] Translating files from one format to another.
+      \item[$\bigstar$] Creating small databases.
+      \item[$\bigstar$]Performing mathematical operations on files of numeric data.
+    \end{enumerate}
+    \item Awk has two faces: 
+    \begin{enumerate}
+      \item[$\bigstar$] it is a utility for performing simple text-processing tasks, and 
+      \item[$\bigstar$] it is a programming language for performing complex text-processing tasks.
+    \end{enumerate}
+    \item awk comes in three variations
+    \begin{enumerate}
+        \item[awk]: Original AWK by A. Aho, B. W. Kernighnan and P. Weinberger
+        \item[nawk]: New AWK, AT\&T's version of AWK
+        \item[gawk]: GNU AWK, all linux distributions come with gawk. In some distros, awk is a symbolic link to gawk.
+    \end{enumerate}
+    \framebreak
+    \item Simplest form of using awk
+    \begin{enumerate}
+      \item[$\vardiamond$]\textbf{awk} \textit{pattern} \{\texttt{action}\}
+      \item[$\vardiamond$] Most common action: \texttt{print}
+      \item[$\vardiamond$] Print file dosum.sh: \texttt{awk '\{print \$0\}' dosum.sh}
+      \item[$\vardiamond$] Print line matching bash in all files in current directory:
+      \item[] \texttt{awk '/bash/\{print \$0\}' *.sh }
+    \end{enumerate}
+    \item awk patterns may be one of the following
+    \begin{description}
+      {\scriptsize
+        \item[BEGIN]: special pattern which is not tested against input.\\ Mostly used for preprocessing, setting constants, etc. before input is read.
+        \item[END]: special pattern which is not tested against input.\\ Mostly used for postprocessing after input has been read.
+        \item[/regular expression/]: the associated regular expression is matched to each input line that is read
+        \item[relational expression]: used with the if, while relational operators
+        \item[\&\& ]: logical AND operator used as pattern1 \&\& pattern2.\\ Execute action if pattern1 and pattern2 are true
+        \item[$||$]: logical OR operator used as pattern1 || pattern2.\\ Execute action if either pattern1 or pattern2 is true
+        \item[!]: logical NOT operator used as !pattern.\\ Execute action if pattern is not matched
+        \item[?:]: Used as pattern1 ? pattern2 : pattern3.\\ If pattern1 is true use pattern2 for testing else use pattern3
+        \item[pattern1, pattern2]: Range pattern, match all records starting with record that matches pattern1 continuing until a record has been reached that matches pattern2
+      }
+    \end{description}
+    \framebreak
+    \item Example: Print list of files that are csh script files
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '/^#\!\/bin\/tcsh/{print FILENAME}' *
+dooper.csh
+factorial.csh
+hello1.sh
+name.csh
+nestedloops.csh
+quotes.csh
+shift.csh
+    \end{lstlisting}
+    \item Example: Print contents of hello.sh that lie between two patterns
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '/^#\!\/bin\/bash/,/echo/{print $0}' hello.sh
+#!/bin/bash
+
+# My First Script
+
+echo ``Hello World!''
+    \end{lstlisting}
+    \framebreak
+    \item awk reads the file being processed line by line. 
+    \item The entire content of each line is split into columns with space or tab as the delimiter.
+    \item By default the field separator is space or tab. To change the field separator use the -F command.
+    \item To print the entire line, use \$0.
+    \item The intrinsic variable NR contains the number of records (lines) read.
+    \item The intrinsic variable NF contains the number of fields or columns in the current line.
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples>awk '{print NR,'','',NF,'':'',$0}' hello.sh 
+1 , 1 : #!/bin/bash
+2 , 0 : 
+3 , 4 : # My First Script
+4 , 0 : 
+5 , 3 : echo ``Hello World!''
+~/Tutorials/BASH/scripts/day1/examples> uptime
+ 11:18am  up 14 days  0:40,  5 users,  load average: 0.15, 0.11, 0.17
+apacheco@apacheco:~/Tutorials/BASH/scripts/day1/examples> uptime | awk '{print $1,$NF}'
+11:19am 0.17
+apacheco@apacheco:~/Tutorials/BASH/scripts/day1/examples> uptime | awk -F: '{print $1,$NF}'
+ 11  0.12, 0.10, 0.16
+    \end{lstlisting}
+    \framebreak
+    \item \textit{print expression} is the most common action in the awk statement. If formatted output is required, use the \textit{printf format, expression} action.
+    \item Format specifiers are similar to the C-programming language
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+        \item[\%d,\%i]: decimal number
+        \item[\%e,\%E]: floating point number of the form [-]d.dddddd.e[$\pm$]dd. The \%E format uses E instead of e.
+        \item[\%f]: floating point number of the form [-]ddd.dddddd
+        \item[\%g,\%G]: Use \%e or \%f conversion with nonsignificant zeros truncated. The \%G format uses \%E instead of \%e
+        \item[\%s]: character string
+      }
+    \end{description}
+    \item Format specifiers have additional parameter which may lie between the \% and the control letter
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+      \item[0]: A leading 0 (zero) acts as a flag, that indicates output should be padded with zeroes instead of spaces.
+      \item[width]: The field should be padded to this width. The field is normally padded  with  spaces.  If the 0 flag has been used, it is padded with zeroes.
+      \item[.prec]: A number that specifies the precision to use when printing.
+      }
+    \end{description}
+    \framebreak
+    \item string constants supported by awk
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+        \item[\textbackslash\textbackslash]: Literal backslash
+        \item[{\textbackslash}n]: newline
+        \item[{\textbackslash}r]: carriage-return
+        \item[{\textbackslash}t]: horizontal tab
+        \item[{\textbackslash}v]: vertical tab
+      }
+    \end{description}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo hello 0.2485 5 | awk '{printf ``%s \t %f \n %d \v %0.5d\n'',$1,$2,$3,$3}'
+hello    0.248500 
+ 5 
+    00005
+    \end{lstlisting}
+    \item The print command puts an explicit newline character at the end while the printf command does not.
+    \framebreak
+    \item awk has in-built support for arithmetic operations
+    \begin{columns}
+      \column{0.5\textwidth}
+    \begin{center}
+      \taburulecolor{lublue}
+          \begin{tabular}{a|b}
+            \rowcolor{lublue}{\textbf{Operation} }& {\textbf{Operator}} \\
+            Addition & + \\
+            Subtraction & - \\
+            Multiplication & * \\
+            Division & / \\
+            Exponentiation & ** \\
+            Modulo & \% \\
+        \end{tabular}
+    \end{center} 
+      \column{0.5\textwidth}
+    \begin{center}
+      \taburulecolor{lublue}
+          \begin{tabular}{a|b}
+            \rowcolor{lublue}{\textbf{Assignment Operation} }& {\textbf{Operator}} \\
+            Autoincrement & ++ \\
+            Autodecrement & -- \\
+            Add result to varibale & += \\
+            Subtract result from variable & -= \\
+            Multiple variable by result & *= \\
+            Divide variable by result & /= \\
+        \end{tabular}
+    \end{center}
+    \end{columns}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{print 10%3}'
+1
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{a=10;print a/=5}'
+2
+    \end{lstlisting}
+    \item awk also supports trignometric functions such as sin(expr) and cos(expr) where expr is in radians and atan2(y/x) where y/x is in radians
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{pi=atan2(1,1)*4;print pi,sin(pi),cos(pi)}'
+3.14159 1.22465e-16 -1
+    \end{lstlisting}
+    \framebreak
+    \item Other Arithmetic operations supported are
+    \begin{description}
+      \item[exp(expr)]: The exponential function
+      \item[int(expr)]: Truncates to an integer
+      \item[log(expr)]: The natural Logarithm function
+      \item[sqrt(expr)]: The square root function
+      \item[rand()]: Returns a random number $N$ between 0 and 1 such that $0\le N < 1$
+      \item[srand(expr)]: Uses expr as a new seed for random number generator. If expr is not provided, time of day is used.
+    \end{description}
+    \item \textbf{awk} supports the if and while conditional and for loops
+    \item if and while conditionals work similar to that in C-programming
+    \begin{columns}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+if ( condition ) {
+  command1 ;
+  command2
+}
+        \end{lstlisting}
+      \end{exampleblock}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+while ( condition ) {
+  command1 ;
+  command2
+}
+        \end{lstlisting}
+      \end{exampleblock}
+    \end{columns}
+    \framebreak
+    \item awk supports if ... else if .. else conditionals. 
+    \begin{columns}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+if (condition1) {
+  command1 ;
+  command2
+} else if (condition2 ) {
+  command3
+}  else {
+  command4
+}
+        \end{lstlisting}
+      \end{exampleblock}
+    \end{columns}
+    \item Relational operators supported by if and while
+    \begin{description}
+%      \fontsize{6}{8}\selectfont{
+        \item[==]: Is equal to
+        \item[!=]: Is not equal to
+        \item[$>$]: Is greater than
+        \item[$>=$]: Is greater than or equal to
+        \item[$<$]: Is less than
+        \item[$<=$]: Is less than or equal to
+        \item[$\sim$]: String Matches to
+        \item[!$\sim$]: Doesn't Match
+%      }
+    \end{description}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '{if (NR > 0 ){print NR,'':'', $0}}' hello.sh 
+1 : #!/bin/bash
+2 : 
+3 : # My First Script
+4 : 
+5 : echo ``Hello World!''
+    \end{lstlisting}
+    \item The for command can be used for processing the various columns of each line
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo $(seq 1 10) | awk 'BEGIN{a=6}{for (i=1;i<=NF;i++){a+=$i}}END{print a}'                                                                                 
+61
+    \end{lstlisting}
+    \item Like all progamming languages, awk supports the use of variables. Like Shell, variable types do not have to be defined.
+    \item awk variables can be user defined or could be one of the columns of the file being processed.
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '{print $1}' hello.sh 
+#!/bin/bash
+
+#
+
+echo
+
+~/Tutorials/BASH/scripts/day1/examples> awk '{col=$1;print col,$2}' hello.sh 
+#!/bin/bash 
+ 
+# My
+ 
+echo ``Hello
+    \end{lstlisting}
+    \item Unlike Shell, awk variables are referenced as is i.e. no \$ prepended to variable name.
+    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
+%    }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,allowframebreaks,fragile]%{awk programming language}
+  \fontsize{7}{9}\selectfont{
+  \begin{itemize}
+    \item awk can also be used as a programming language.
+    \item The first line in awk scripts is the shebang line (\#!) which indicates the location of the awk binary. Use \texttt{which awk} to find the exact location
+    \item On my Linux desktop, the location is /usr/bin/awk.
+    \item If unsure, just use /usr/bin/env awk
+  \end{itemize}
+  \begin{columns}
+    \column{0.3\textwidth}
+    \begin{exampleblock}{hello.awk}
+      \lstinputlisting[language=bash]{./scripts/day2/examples/hello.awk}
+    \end{exampleblock}
+    \column{0.5\textwidth}
+%    \begin{block}{}
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/examples> ./hello.awk 
+Hello World!
+      \end{lstlisting}
+%    \end{block}
+  \end{columns}
+  \begin{itemize}
+    \item To support scripting, awk has several built-in variables, which can also be used in one line commands
+    \begin{description}
+      \fontsize{6}{8}\selectfont{
+        \item[ARGC]: number of command line arguments
+        \item[ARGV]: array of command line arguments
+        \item[FILENAME]: name of current input file
+        \item[FS]: field separator
+        \item[OFS]: output field separator
+        \item[ORS]: output record separator, default is newline
+      }
+    \end{description}
+    \framebreak
+    \item awk permits the use of arrays
+    \item arrays are subscripted with an expression between square brackets ([$\cdots$])
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{hello1.awk}
+          \lstinputlisting[language=bash]{./scripts/day2/examples/hello1.awk}
+        \end{exampleblock}
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/examples> ./hello1.awk 
+ Hello, World!
+        \end{lstlisting}
+      \end{columns}
+    \item Use the delete command to delete an array element
+    \item awk has in-built functions to aid writing of scripts
+    \begin{description}
+      \fontsize{6}{8}\selectfont{
+        \item[length]: length() function calculates the length of a string.
+        \item[toupper]: toupper() converts string to uppercase (GNU awk only)
+        \item[tolower]: tolower() converts to lower case (GNU awk only)
+        \item[split]: used to split a string. Takes three arguments: the string, an array and a separator
+        \item[gsub]: add primitive sed like functionality. Usage gsub(/pattern/,"replacement pattern",string)
+        \item[getline]: force reading of new line
+      }
+    \end{description}
+    \item Similar to bash, GNU awk also supports user defined function
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{}
+          \begin{lstlisting}[language=bash]
+#!/usr/bin/gawk -f
+{
+    if (NF != 4) {
+        error(``Expected 4 fields'');
+    } else {
+        print;
+    }
+}
+function error ( message ) {
+    if (FILENAME != ``-'') {
+        printf(``%s: ``, FILENAME) > ``/dev/tty'';
+    }
+    printf(``line # %d, %s, line: %s\n'', NR, message, $0) >> ``/dev/tty'';
+}
+          \end{lstlisting}
+        \end{exampleblock}
+      \end{columns}
+  \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}[c,allowframebreaks,fragile]%{Example Scripts}
+  \begin{exampleblock}{getcpmdvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getcpmdvels.sh}
+  \end{exampleblock}
+  \begin{exampleblock}{getengcons.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getengcons.sh}
+  \end{exampleblock}
+%  \begin{exampleblock}{getcoordvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=86,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getcoordvels.sh}
+%  \end{exampleblock}
+    \framebreak
+  \begin{exampleblock}{getmwvels.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getmwvels.awk}
+  \end{exampleblock}
+  \begin{exampleblock}{gettrajxyz.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/gettrajxyz.awk}
+  \end{exampleblock}
+\end{frame}
+
+\section{Wrap Up}
+\begin{frame}
+  \frametitle{References \& Further Reading}
+  \begin{itemize}
+    \fontsize{7}{9}\selectfont{
+    \item BASH Programming \url{http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html}
+    \item Advanced Bash-Scripting Guide \url{http://tldp.org/LDP/abs/html/}
+    \item Regular Expressions \url{http://www.grymoire.com/Unix/Regular.html}
+    \item AWK Programming \url{http://www.grymoire.com/Unix/Awk.html}
+    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
+    \item sed \url{http://www.grymoire.com/Unix/Sed.html}
+    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
+    \item CSH Programming \url{http://www.grymoire.com/Unix/Csh.html}
+    \item csh Programming Considered Harmful \url{http://www.faqs.org/faqs/unix-faq/shell/csh-whynot/}
+    \item Wiki Books \url{http://en.wikibooks.org/wiki/Subject:Computing}
+    }
+  \end{itemize}
+\end{frame}
+
+\end{document}
+

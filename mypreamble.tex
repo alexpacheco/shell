@@ -1,0 +1,68 @@
+
+\setbeamersize{text margin left=10pt,text margin right=10pt}
+\usetheme{lehigh}
+
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+% add packages to use
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{trees,matrix,shapes,arrows}
+\usetikzlibrary{calc}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+
+                                                         
+%\usepackage{times}
+%\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb,amsfonts,subfigure,pifont}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{keystroke}
+\usepackage{etex}
+
+\input{mylistingsenv}
+
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+%\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\smark}{\ding{77}}
+\newcommand*\vardiamond{\textcolor{lubrown}{%
+  \ensuremath{\blacklozenge}}}
+\newcommand*\mybigstar{\textcolor{lubrown!90!yellow}{%
+  \ensuremath{\bigstar}}}
+\newcommand*\up{\textcolor{green!80!black}{%
+  \ensuremath{\blacktriangle}}}
+\newcommand*\down{\textcolor{red}{%
+  \ensuremath{\blacktriangledown}}}
+\newcommand*\const{\textcolor{darkgray}%
+  {\textbf{--}}}
+\newcommand*\enter{\tikz[baseline=-0.5ex] \draw[<-] (0,0) -| (0.5,0.1);}
+
+\newcommand{\Verblubrown}[1]{\Verb[formatcom=\color{lubrown},fontseries=b,commandchars=\\\{\}]|#1|}
+\newcommand{\Verblue}[1]{\Verb[formatcom=\color{lublue},fontseries=b,commandchars=\\\{\}]!#1!}
+\newcommand{\Verbblue}[2][b]{\Verb[formatcom=\color{lublue},fontshape=#1,commandchars=\\\{\}]|#2|}
+\newcommand{\Verblubrownp}[1]{\Verb[formatcom=\color{lubrown},fontseries=b,commandchars=\\\{\}]!#1!}
+
+
+% LOGOS
+% footer logo
+\pgfdeclareimage[width=0.3\paperwidth]{university-logo}{lulogo}
+\tllogo{\pgfuseimage{university-logo}}
+
+%titlepage logo
+\titlegraphic{\includegraphics[scale=0.5]{lu}}
+

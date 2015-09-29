@@ -5,15 +5,15 @@ set counter = $<
 @ factorial = 1
 @ i = $counter
 while ( $i > 1 )
-  @ factorial = $factorial * $i 
-	@ i--
+    @ factorial = $factorial * $i 
+    @ i--
 end
 
 @ i = $counter
 @ dfactorial = 1
 while ( $i >= 1 )
-	@ dfactorial = $dfactorial * $i
-	@ i = $i - 2
+    @ dfactorial = $dfactorial * $i
+    @ i = $i - 2
 end
 
 echo "$counter\! = $factorial & $counter\!\! = $dfactorial"
