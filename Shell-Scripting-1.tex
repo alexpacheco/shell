@@ -14,7 +14,8 @@
 \subtitle{Variables, Arrays \& Control Constructs}
 \author{Alexander B. Pacheco}
 \institute{\href{http://researchcomputing.lehigh.edu}{LTS Research Computing}}%\\[2pt] \href{http://www.lehigh.edu}{Lehigh University}}
-\date{September 29 2015}%\today}
+\date{ }
+%\date{September 29 2015}%\today}
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
@@ -204,13 +205,21 @@
     \item[] \Verblubrown{chmod -R 755 \$\{HOME\}/*}
     \item[] What is the permission on \$\{HOME\}?
   \end{itemize}
+  \begin{exampleblock}{HPC Users}
+    If you want to share your files with your colleagues
+    \begin{enumerate}
+      \item Make your home directory read accessible to the world
+      \item[] \Verblubrown{chmod 755 \$\{HOME\}}
+      \item[] \textsc{do not use the recursive -R flag}
+      \item Change to your home directory and give read access to the directory that you want to share using the -R flag
+    \end{enumerate} 
+  \end{exampleblock}
 \end{frame}
 
 \subsection{Input and Output}
 \begin{frame}[fragile,allowframebreaks]
   \frametitle{Input/Output}
   \begin{itemize}
-    \item The command \Verblubrown{echo} is used for displaying output to screen 
     \item For reading input from screen/keyboard/prompt
     \item[]\textbf{bash} \Verblubrown{read}
     \item[]\textbf{tcsh} \Verblubrown{\$<}
@@ -223,6 +232,8 @@
     \item[]Example: \Verbblue{set name = "\$<"\Enter}
     \item[] \Verbblue{\textit{Alex Pacheco}}
     \item In the above examples, the name that you enter in stored in the variable \texttt{name}.
+    \newpage
+    \item The command \Verblubrown{echo} is used for displaying output to screen 
     \item Use the \Verblubrown{echo} command to print the variable \texttt{name} to the screen
     \item[] \Verbblue{echo \$name\Enter}
     \item The \Verblubrown{echo} statement can print multiple arguments. 
@@ -282,9 +293,9 @@
   \end{itemize}
 \end{frame}
 
-\section{Shell Scripting Basics}
+\section{Shell Scripting}
 \begin{frame}
-  \frametitle{What is a scripting Language?}
+  \frametitle{What is a scripting language?}
   \begin{exampleblock}{}%{What is a Scripting Language?}
     \begin{itemize}
       \item A \textbf{scripting language} or \textbf{script language} is a \emph{programming language} that supports the writing of \textbf{scripts}.
@@ -423,7 +434,6 @@ HelloAlex
   \end{lstlisting}
 \end{frame}
 
-\section{Beyond Basic Shell Scripting}
 \subsection{Arithmetic Operations}
 \begin{frame}[fragile,allowframebreaks]
   \frametitle{Arithmetic Operations}
@@ -484,111 +494,6 @@ HelloAlex
     \end{enumerate}
     \item You can also use \textbf{awk} for floating point arithmetic. 
   \end{itemize}
-\end{frame}
-
-
-\subsection{Arrays}
-\begin{frame}[fragile,allowframebreaks]
-  \frametitle{Arrays}
-  \begin{itemize}
-    \item \textbf{bash} and \textbf{tcsh} supports one-dimensional arrays.
-    \item Array elements may be initialized with the \texttt{variable[xx]} notation
-    \item[] \texttt{variable[xx]=1}
-    \item Initialize an array during declaration
-    \item[\textbf{bash}] \texttt{name=(firstname 'last name')}
-    \item[\textbf{tcsh}] \texttt{set name = (firstname 'last name')}
-    \item reference an element \texttt{i} of an array \texttt{name}
-    \item[] \texttt{\$\{name[i]\}}
-    \item print the whole array
-    \item[\textbf{bash}] \texttt{\$\{name[@]\}}
-    \item[\textbf{tcsh}] \texttt{\$\{name\}}
-    \item print length of array
-    \item[\textbf{bash}] \texttt{\$\{\#name[@]\}}
-    \item[\textbf{tcsh}] \texttt{\$\{\#name\}}
-      \framebreak
-    \item print length of element \texttt{i} of array \texttt{name}
-    \item[] \texttt{\$\{\#name[i]\}}
-    \item[] Note: In \textbf{bash} \texttt{\$\{\#name\}} prints the length of the first element of the array
-    \item Add an element to an existing array
-    \item[\textbf{bash}] \texttt{name=(title \$\{name[@]\})}
-    \item[\textbf{tcsh}] \texttt{set name = ( title  "\$\{name\}")}
-    \item In \textbf{tcsh} everything within "..." is one variable.
-    \item In the above \textbf{tcsh} example, \texttt{title} is first element of new array while the second element is the old array \texttt{name}
-    \item copy an array \texttt{name} to an array \texttt{user}
-    \item[\textbf{bash}] \texttt{user=(\$\{name[@]\})}
-    \item[\textbf{tcsh}] \texttt{set user = ( \$\{name\} )}
-    \framebreak
-    \item concatenate two arrays
-    \item[\textbf{bash}] \texttt{nameuser=(\$\{name[@]\} \$\{user[@]\})}
-    \item[\textbf{tcsh}] \texttt{set nameuser=( \$\{name\} \$\{user\} )}
-    \item delete an entire array
-    \item[] \texttt{unset name}
-    \item remove an element \texttt{i} from an array
-    \item[\textbf{bash}] \texttt{unset name[i]}
-    \item[\textbf{tcsh}] \texttt{ @ j = \$i - 1}
-    \item[ ] \texttt{ @ k =\$i + 1 }
-    \item[ ] \texttt{ set name = ( \$\{name[1-\$j]\} \$\{name[\$k-]\})}
-    \item[\textbf{bash}] the first array index is zero (0)
-    \item[\textbf{tcsh}] the first array index is one (1)
-  \end{itemize}
-%  \framebreak
-%  \begin{block}{Exercise}
-%    \begin{enumerate}
-%      \item Write a script to read your first and last name to an array.
-%      \item Add your salutation and suffix to the array.
-%      \item Drop either the salutation or suffix.
-%      \item Print the array after each of the three steps above.
-%    \end{enumerate}
-%  \end{block}
-  \framebreak
-  \fontsize{5}{5.5}\selectfont{
-    \begin{columns}
-      \column{0.47\textwidth}
-      \vspace{-0.5cm}
-      \begin{exampleblock}{name.sh}
-        \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.sh}
-      \end{exampleblock}
-    \column{0.47\textwidth}
-      \vspace{-0.5cm}
-      \begin{block}{name.csh}
-        \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.csh}
-      \end{block}
-    \end{columns}
-    \begin{columns}
-      \column{0.47\textwidth}
-%      \begin{exampleblock}{}
-        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples> ./name.sh 
-Print your first and last name
-Alex Pacheco
-Hello  Alex Pacheco
-Enter your salutation
-Dr.
-Enter your suffix
-the first
-Hello  Dr. Alex Pacheco the first
-Hello  Dr. Alex the first
-        \end{lstlisting}
-%     \end{exampleblock}
-      \column{0.47\textwidth}
-%      \begin{block}{}
-        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
-~/Tutorials/BASH/scripts/day1/examples> ./name.csh 
-Print your first name
-Alex
-Print your last name
-Pacheco
-Hello  Alex Pacheco
-Enter your salutation
-Dr.
-Enter your suffix
-the first
-Hello  Dr. Alex Pacheco the first
-Hello  Dr. Alex the first
-        \end{lstlisting}
-%      \end{block}
-    \end{columns}
-  }
 \end{frame}
 
 \subsection{Flow Control}
@@ -1143,6 +1048,111 @@ all
 \end{frame}
 
 
+\subsection{Arrays}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{Arrays}
+  \begin{itemize}
+    \item \textbf{bash} and \textbf{tcsh} supports one-dimensional arrays.
+    \item Array elements may be initialized with the \texttt{variable[xx]} notation
+    \item[] \texttt{variable[xx]=1}
+    \item Initialize an array during declaration
+    \item[\textbf{bash}] \texttt{name=(firstname 'last name')}
+    \item[\textbf{tcsh}] \texttt{set name = (firstname 'last name')}
+    \item reference an element \texttt{i} of an array \texttt{name}
+    \item[] \texttt{\$\{name[i]\}}
+    \item print the whole array
+    \item[\textbf{bash}] \texttt{\$\{name[@]\}}
+    \item[\textbf{tcsh}] \texttt{\$\{name\}}
+    \item print length of array
+    \item[\textbf{bash}] \texttt{\$\{\#name[@]\}}
+    \item[\textbf{tcsh}] \texttt{\$\{\#name\}}
+      \framebreak
+    \item print length of element \texttt{i} of array \texttt{name}
+    \item[] \texttt{\$\{\#name[i]\}}
+    \item[] Note: In \textbf{bash} \texttt{\$\{\#name\}} prints the length of the first element of the array
+    \item Add an element to an existing array
+    \item[\textbf{bash}] \texttt{name=(title \$\{name[@]\})}
+    \item[\textbf{tcsh}] \texttt{set name = ( title  "\$\{name\}")}
+    \item In \textbf{tcsh} everything within "..." is one variable.
+    \item In the above \textbf{tcsh} example, \texttt{title} is first element of new array while the second element is the old array \texttt{name}
+    \item copy an array \texttt{name} to an array \texttt{user}
+    \item[\textbf{bash}] \texttt{user=(\$\{name[@]\})}
+    \item[\textbf{tcsh}] \texttt{set user = ( \$\{name\} )}
+    \framebreak
+    \item concatenate two arrays
+    \item[\textbf{bash}] \texttt{nameuser=(\$\{name[@]\} \$\{user[@]\})}
+    \item[\textbf{tcsh}] \texttt{set nameuser=( \$\{name\} \$\{user\} )}
+    \item delete an entire array
+    \item[] \texttt{unset name}
+    \item remove an element \texttt{i} from an array
+    \item[\textbf{bash}] \texttt{unset name[i]}
+    \item[\textbf{tcsh}] \texttt{ @ j = \$i - 1}
+    \item[ ] \texttt{ @ k =\$i + 1 }
+    \item[ ] \texttt{ set name = ( \$\{name[1-\$j]\} \$\{name[\$k-]\})}
+    \item[\textbf{bash}] the first array index is zero (0)
+    \item[\textbf{tcsh}] the first array index is one (1)
+  \end{itemize}
+%  \framebreak
+%  \begin{block}{Exercise}
+%    \begin{enumerate}
+%      \item Write a script to read your first and last name to an array.
+%      \item Add your salutation and suffix to the array.
+%      \item Drop either the salutation or suffix.
+%      \item Print the array after each of the three steps above.
+%    \end{enumerate}
+%  \end{block}
+  \framebreak
+  \fontsize{5}{5.5}\selectfont{
+    \begin{columns}
+      \column{0.47\textwidth}
+      \vspace{-0.5cm}
+      \begin{exampleblock}{name.sh}
+        \lstinputlisting[language=bash,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.sh}
+      \end{exampleblock}
+    \column{0.47\textwidth}
+      \vspace{-0.5cm}
+      \begin{block}{name.csh}
+        \lstinputlisting[language=csh,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]{./scripts/day1/examples/name.csh}
+      \end{block}
+    \end{columns}
+    \begin{columns}
+      \column{0.47\textwidth}
+%      \begin{exampleblock}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+~/Tutorials/BASH/scripts/day1/examples> ./name.sh 
+Print your first and last name
+Alex Pacheco
+Hello  Alex Pacheco
+Enter your salutation
+Dr.
+Enter your suffix
+the first
+Hello  Dr. Alex Pacheco the first
+Hello  Dr. Alex the first
+        \end{lstlisting}
+%     \end{exampleblock}
+      \column{0.47\textwidth}
+%      \begin{block}{}
+        \begin{lstlisting}[style=LINUX,basicstyle=\fontsize{3.5}{4.5}\selectfont\ttfamily]
+~/Tutorials/BASH/scripts/day1/examples> ./name.csh 
+Print your first name
+Alex
+Print your last name
+Pacheco
+Hello  Alex Pacheco
+Enter your salutation
+Dr.
+Enter your suffix
+the first
+Hello  Dr. Alex Pacheco the first
+Hello  Dr. Alex the first
+        \end{lstlisting}
+%      \end{block}
+    \end{columns}
+  }
+\end{frame}
+
+
 \subsection{Command Line Arguments}
 \begin{frame}
   \frametitle{Command Line Arguments}
@@ -1594,18 +1604,428 @@ corona27 3
   \end{lstlisting}
 \end{frame}
 
+\section{Unix Utilities}
+\subsection{grep}
+\begin{frame}[c,fragile]
+ \frametitle{grep}
+  \begin{itemize}
+    \item \Verbblue{grep} is a Unix utility that searches through either information piped to it or files in the current directory.
+    \item \Verbblue{egrep} is extended grep, same as \Verbblue{grep -E}
+    \item Use \Verbblue{zgrep} for compressed files.
+    \item \Verblubrown{Usage}: \Verbblue{grep <options> <search pattern> <files>} 
+    \item Commonly used options
+    \item[]
+      \begin{tabular}{a|b}
+        \rowcolor{lublue}{\textbf{Option} }& {\textbf{Operation}} \\
+      \Verbblue{-i} &  ignore case during search\\
+      \Verbblue{-r} &  search recursively\\
+      \Verbblue{-v} &  invert match i.e. match everything except pattern\\
+      \Verbblue{-l} &  list files that match pattern\\
+      \Verbblue{-L} &  list files that do not match pattern \\
+      \Verbblue{-n} &  prefix each line of output with the line number within its input file. \\
+      \Verbblue{-A num} &  print  num  lines  of  trailing  context  after  matching lines.\\
+      \Verbblue{-B num} &  print num lines of leading context before matching lines.\\
+    \end{tabular}
+  \end{itemize}
+\end{frame}
+
+\subsection{sed}
+\begin{frame}[c,fragile]
+  \frametitle{sed}
+  \begin{itemize}
+    \item sed (``stream editor'') is Unix utility for parsing and transforming text files.
+    \item sed is line-oriented, it operates one line at a time and allows regular expression matching and substitution.
+    \item sed has several commands, the most commonly used command and sometime the only one learned  is the substituion command, \textit{s}
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> cat hello.sh | sed 's/bash/tcsh/g'
+#!/bin/tcsh
+# My First Script
+echo ``Hello World!''
+      \end{lstlisting}
+    \item List of sed pattern flags and commands line options
+    \begin{columns}
+      \column{0.52\textwidth}
+      \vspace{-0.6cm}
+      \begin{center}
+    \taburulecolor{lublue}
+            \begin{tabular}{a|b}
+              \rowcolor{lublue}{\textbf{Pattern} }& {\textbf{Operation}} \\
+              s & substitution \\
+              g & global replacement \\
+              p & print \\
+              I & ignore case \\
+              d & delete \\
+              G & add newline \\
+              w & write to file\\
+              x & exchange pattern with hold buffer\\
+              h & copy pattern to hold buffer\\
+          \end{tabular}
+      \end{center} 
+      \column{0.48\textwidth}
+      \vspace{-0.6cm}
+      \begin{center}
+    \taburulecolor{lublue}
+            \begin{tabular}{a|b}
+              \rowcolor{lublue}{\textbf{Command} }& {\textbf{Operation}} \\
+              -e & combine multiple commands \\
+              -f & read commands from file \\
+              -h & print help info \\
+              -n & disable print \\
+              -V & print version info \\
+              -i & in file subsitution \\
+          \end{tabular}
+      \end{center} 
+    \end{columns}
+    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
+    \item sed is a handy utility very useful for writing scripts for file manipulation.
+  \end{itemize}
+\end{frame}
+
+\section{awk programming}
+\begin{frame}[c,allowframebreaks,fragile]
+%  \frametitle{awk}
+  \begin{itemize}
+%    \fontsize{7}{9}\selectfont{
+    \item The Awk text-processing language is useful for such tasks as:
+    \begin{enumerate}
+      \item[$\bigstar$] Tallying information from text files and creating reports from the results.
+      \item[$\bigstar$]Adding additional functions to text editors like ``vi''.
+      \item[$\bigstar$] Translating files from one format to another.
+      \item[$\bigstar$] Creating small databases.
+      \item[$\bigstar$]Performing mathematical operations on files of numeric data.
+    \end{enumerate}
+    \item Awk has two faces: 
+    \begin{enumerate}
+      \item[$\bigstar$] it is a utility for performing simple text-processing tasks, and 
+      \item[$\bigstar$] it is a programming language for performing complex text-processing tasks.
+    \end{enumerate}
+    \item awk comes in three variations
+    \begin{enumerate}
+        \item[awk]: Original AWK by A. Aho, B. W. Kernighnan and P. Weinberger
+        \item[nawk]: New AWK, AT\&T's version of AWK
+        \item[gawk]: GNU AWK, all linux distributions come with gawk. In some distros, awk is a symbolic link to gawk.
+    \end{enumerate}
+%    \framebreak
+    \item Simplest form of using awk
+    \begin{enumerate}
+      \item[$\vardiamond$]\textbf{awk} \textit{pattern} \{\texttt{action}\}
+      \item[$\vardiamond$] Most common action: \texttt{print}
+      \item[$\vardiamond$] Print file dosum.sh: \texttt{awk '\{print \$0\}' dosum.sh}
+      \item[$\vardiamond$] Print line matching bash in all files in current directory:
+      \item[] \texttt{awk '/bash/\{print \$0\}' *.sh }
+    \end{enumerate}
+    \framebreak
+    \item awk patterns may be one of the following
+    \begin{description}
+      {\scriptsize
+        \item[BEGIN]: special pattern which is not tested against input.\\ Mostly used for preprocessing, setting constants, etc. before input is read.
+        \item[END]: special pattern which is not tested against input.\\ Mostly used for postprocessing after input has been read.
+        \item[/regular expression/]: the associated regular expression is matched to each input line that is read
+        \item[relational expression]: used with the if, while relational operators
+        \item[\&\& ]: logical AND operator used as pattern1 \&\& pattern2.\\ Execute action if pattern1 and pattern2 are true
+        \item[$||$]: logical OR operator used as pattern1 || pattern2.\\ Execute action if either pattern1 or pattern2 is true
+        \item[!]: logical NOT operator used as !pattern.\\ Execute action if pattern is not matched
+        \item[?:]: Used as pattern1 ? pattern2 : pattern3.\\ If pattern1 is true use pattern2 for testing else use pattern3
+        \item[pattern1, pattern2]: Range pattern, match all records starting with record that matches pattern1 continuing until a record has been reached that matches pattern2
+      }
+    \end{description}
+%    \framebreak
+    \item \textit{print expression} is the most common action in the awk statement. If formatted output is required, use the \textit{printf format, expression} action.
+    \item Format specifiers are similar to the C-programming language
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+        \item[\%d,\%i]: decimal number
+        \item[\%e,\%E]: floating point number of the form [-]d.dddddd.e[$\pm$]dd. The \%E format uses E instead of e.
+        \item[\%f]: floating point number of the form [-]ddd.dddddd
+        \item[\%g,\%G]: Use \%e or \%f conversion with nonsignificant zeros truncated. The \%G format uses \%E instead of \%e
+        \item[\%s]: character string
+      }
+    \end{description}
+%    \framebreak
+    \item Format specifiers have additional parameter which may lie between the \% and the control letter
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+      \item[0]: A leading 0 (zero) acts as a flag, that indicates output should be padded with zeroes instead of spaces.
+      \item[width]: The field should be padded to this width. The field is normally padded  with  spaces.  If the 0 flag has been used, it is padded with zeroes.
+      \item[.prec]: A number that specifies the precision to use when printing.
+      }
+    \end{description}
+%    \framebreak
+    \item string constants supported by awk
+    \begin{description}
+      \fontsize{7}{9}\selectfont{
+        \item[\textbackslash\textbackslash]: Literal backslash
+        \item[{\textbackslash}n]: newline
+        \item[{\textbackslash}r]: carriage-return
+        \item[{\textbackslash}t]: horizontal tab
+        \item[{\textbackslash}v]: vertical tab
+      }
+    \end{description}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo hello 0.2485 5 | awk '{printf ``%s \t %f \n %d \v %0.5d\n'',$1,$2,$3,$3}'
+hello    0.248500 
+ 5 
+    00005
+    \end{lstlisting}
+    \item The print command puts an explicit newline character at the end while the printf command does not.
+    \framebreak
+    \item awk has in-built support for arithmetic operations
+    \begin{columns}
+      \column{0.5\textwidth}
+    \begin{center}
+      \taburulecolor{lublue}
+          \begin{tabular}{a|b}
+            \rowcolor{lublue}{\textbf{Operation} }& {\textbf{Operator}} \\
+            Addition & + \\
+            Subtraction & - \\
+            Multiplication & * \\
+            Division & / \\
+            Exponentiation & ** \\
+            Modulo & \% \\
+        \end{tabular}
+    \end{center} 
+      \column{0.5\textwidth}
+    \begin{center}
+      \taburulecolor{lublue}
+          \begin{tabular}{a|b}
+            \rowcolor{lublue}{\textbf{Assignment Operation} }& {\textbf{Operator}} \\
+            Autoincrement & ++ \\
+            Autodecrement & -- \\
+            Add result to varibale & += \\
+            Subtract result from variable & -= \\
+            Multiple variable by result & *= \\
+            Divide variable by result & /= \\
+        \end{tabular}
+    \end{center}
+    \end{columns}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{print 10%3}'
+1
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{a=10;print a/=5}'
+2
+    \end{lstlisting}
+    \item awk also supports trignometric functions such as sin(expr) and cos(expr) where expr is in radians and atan2(y/x) where y/x is in radians
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo | awk '{pi=atan2(1,1)*4;print pi,sin(pi),cos(pi)}'
+3.14159 1.22465e-16 -1
+    \end{lstlisting}
+    \framebreak
+    \item Other Arithmetic operations supported are
+    \begin{description}
+      \item[exp(expr)]: The exponential function
+      \item[int(expr)]: Truncates to an integer
+      \item[log(expr)]: The natural Logarithm function
+      \item[sqrt(expr)]: The square root function
+      \item[rand()]: Returns a random number $N$ between 0 and 1 such that $0\le N < 1$
+      \item[srand(expr)]: Uses expr as a new seed for random number generator. If expr is not provided, time of day is used.
+    \end{description}
+    \item \textbf{awk} supports the if and while conditional and for loops
+    \item if and while conditionals work similar to that in C-programming
+    \begin{columns}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+if ( condition ) {
+  command1 ;
+  command2
+}
+        \end{lstlisting}
+      \end{exampleblock}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+while ( condition ) {
+  command1 ;
+  command2
+}
+        \end{lstlisting}
+      \end{exampleblock}
+    \end{columns}
+    \framebreak
+    \item awk supports if ... else if .. else conditionals. 
+    \begin{columns}
+      \column{0.3\textwidth}
+      \begin{exampleblock}{}
+        \begin{lstlisting}[language=bash]
+if (condition1) {
+  command1 ;
+  command2
+} else if (condition2 ) {
+  command3
+}  else {
+  command4
+}
+        \end{lstlisting}
+      \end{exampleblock}
+    \end{columns}
+    \item Relational operators supported by if and while
+    \begin{description}
+%      \fontsize{6}{8}\selectfont{
+        \item[==]: Is equal to
+        \item[!=]: Is not equal to
+        \item[$>$]: Is greater than
+        \item[$>=$]: Is greater than or equal to
+        \item[$<$]: Is less than
+        \item[$<=$]: Is less than or equal to
+        \item[$\sim$]: String Matches to
+        \item[!$\sim$]: Doesn't Match
+%      }
+    \end{description}
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '{if (NR > 0 ){print NR,'':'', $0}}' hello.sh 
+1 : #!/bin/bash
+2 : 
+3 : # My First Script
+4 : 
+5 : echo ``Hello World!''
+    \end{lstlisting}
+    \item The for command can be used for processing the various columns of each line
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> echo $(seq 1 10) | awk 'BEGIN{a=6}{for (i=1;i<=NF;i++){a+=$i}}END{print a}'                                                                                 
+61
+    \end{lstlisting}
+    \item Like all progamming languages, awk supports the use of variables. Like Shell, variable types do not have to be defined.
+    \item awk variables can be user defined or could be one of the columns of the file being processed.
+    \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day1/examples> awk '{print $1}' hello.sh 
+#!/bin/bash
+#
+echo
+~/Tutorials/BASH/scripts/day1/examples> awk '{col=$1;print col,$2}' hello.sh 
+#!/bin/bash 
+ 
+# My
+ 
+echo ``Hello
+    \end{lstlisting}
+    \item Unlike Shell, awk variables are referenced as is i.e. no \$ prepended to variable name.
+    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
+%    }
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,allowframebreaks,fragile]%{awk programming language}
+  \fontsize{7}{9}\selectfont{
+  \begin{itemize}
+    \item awk can also be used as a programming language.
+    \item The first line in awk scripts is the shebang line (\#!) which indicates the location of the awk binary. Use \texttt{which awk} to find the exact location
+    \item On my Linux desktop, the location is /usr/bin/awk.
+    \item If unsure, just use /usr/bin/env awk
+  \end{itemize}
+  \begin{columns}
+    \column{0.3\textwidth}
+    \begin{exampleblock}{hello.awk}
+      \lstinputlisting[language=bash]{./scripts/day2/examples/hello.awk}
+    \end{exampleblock}
+    \column{0.5\textwidth}
+%    \begin{block}{}
+      \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/examples> ./hello.awk 
+Hello World!
+      \end{lstlisting}
+%    \end{block}
+  \end{columns}
+  \begin{itemize}
+    \item To support scripting, awk has several built-in variables, which can also be used in one line commands
+    \begin{description}
+      \fontsize{6}{8}\selectfont{
+        \item[ARGC]: number of command line arguments
+        \item[ARGV]: array of command line arguments
+        \item[FILENAME]: name of current input file
+        \item[FS]: field separator
+        \item[OFS]: output field separator
+        \item[ORS]: output record separator, default is newline
+      }
+    \end{description}
+    \framebreak
+    \item awk permits the use of arrays
+    \item arrays are subscripted with an expression between square brackets ([$\cdots$])
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{hello1.awk}
+          \lstinputlisting[language=bash]{./scripts/day2/examples/hello1.awk}
+        \end{exampleblock}
+        \begin{lstlisting}[style=LINUX]
+~/Tutorials/BASH/scripts/day2/examples> ./hello1.awk 
+ Hello, World!
+        \end{lstlisting}
+      \end{columns}
+    \item Use the delete command to delete an array element
+    \item awk has in-built functions to aid writing of scripts
+    \begin{description}
+      \fontsize{6}{8}\selectfont{
+        \item[length]: length() function calculates the length of a string.
+        \item[toupper]: toupper() converts string to uppercase (GNU awk only)
+        \item[tolower]: tolower() converts to lower case (GNU awk only)
+        \item[split]: used to split a string. Takes three arguments: the string, an array and a separator
+        \item[gsub]: add primitive sed like functionality. Usage gsub(/pattern/,''replacement pattern'',string)
+        \item[getline]: force reading of new line
+      }
+    \end{description}
+    \item Similar to bash, GNU awk also supports user defined function
+      \begin{columns}
+        \column{0.6\textwidth}
+        \begin{exampleblock}{}
+          \begin{lstlisting}[language=bash]
+#!/usr/bin/gawk -f
+{
+    if (NF != 4) {
+        error(``Expected 4 fields'');
+    } else {
+        print;
+    }
+}
+function error ( message ) {
+    if (FILENAME != ``-'') {
+        printf(``%s: ``, FILENAME) > ``/dev/tty'';
+    }
+    printf(``line # %d, %s, line: %s\n'', NR, message, $0) >> ``/dev/tty'';
+}
+          \end{lstlisting}
+        \end{exampleblock}
+      \end{columns}
+  \end{itemize}
+  }
+\end{frame}
+\begin{frame}[c,allowframebreaks,fragile]%{Example Scripts}
+  \begin{exampleblock}{getcpmdvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getcpmdvels.sh}
+  \end{exampleblock}
+  \begin{exampleblock}{getengcons.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getengcons.sh}
+  \end{exampleblock}
+%  \begin{exampleblock}{getcoordvels.sh}
+    \lstinputlisting[language=bash,firstline=1,lastline=86,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getcoordvels.sh}
+%  \end{exampleblock}
+    \framebreak
+  \begin{exampleblock}{getmwvels.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/getmwvels.awk}
+  \end{exampleblock}
+  \begin{exampleblock}{gettrajxyz.awk}
+    \lstinputlisting[language=awk,firstline=1,lastline=64,basicstyle=\fontsize{3}{3}\selectfont\ttfamily]{./scripts/day2/aimd/gettrajxyz.awk}
+  \end{exampleblock}
+\end{frame}
 \section{Wrap Up}
 \begin{frame}
   \frametitle{References \& Further Reading}
   \begin{itemize}
     \fontsize{7}{9}\selectfont{
     \item BASH Programming \url{http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html}
+    \item Advanced Bash-Scripting Guide \url{http://tldp.org/LDP/abs/html/}
+    \item Regular Expressions \url{http://www.grymoire.com/Unix/Regular.html}
+    \item AWK Programming \url{http://www.grymoire.com/Unix/Awk.html}
+    \item awk one-liners: \url{http://www.pement.org/awk/awk1line.txt}
+    \item sed \url{http://www.grymoire.com/Unix/Sed.html}
+    \item sed one-liners: \url{http://sed.sourceforge.net/sed1line.txt}
     \item CSH Programming \url{http://www.grymoire.com/Unix/Csh.html}
     \item csh Programming Considered Harmful \url{http://www.faqs.org/faqs/unix-faq/shell/csh-whynot/}
     \item Wiki Books \url{http://en.wikibooks.org/wiki/Subject:Computing}
     }
   \end{itemize}
 \end{frame}
+
+\end{document}
 
 \section{Hands-On Exercises}
 \begin{frame}{Exercises}
