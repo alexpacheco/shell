@@ -9,7 +9,13 @@ second part
     + Sep. 26, 2012 
     + Feb. 27, 2013
     + Sep. 25 and Oct. 2, 2013  
-  * LTS Seminar Series at Lehigh University in Mar. 2015
+  * LTS Seminar Series at Lehigh University on 
+    + Mar. 2015
+    + Sep. 2015
+    + Oct. 2016
+    + Feb. 2017
+    + Sep. 2017
+    + Jun. 2018
 
 # Contributer
 Alex Pacheco  

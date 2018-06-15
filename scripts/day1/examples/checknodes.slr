@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+#SBATCH --partition=lts
+#SBATCH --ntasks-per-node=4
+#SBATCH --nodes=4
+#SBATCH --time=5
+#SBATCH --output=nodetest.out
+#SBATCH --error=nodetest.err
+#SBATCH --job-name=testing
+#
+
+export WORK_DIR=${SLURM_SUBMIT_DIR}
+srun -s hostname > hostfile
+export NPROCS=`wc -l hostfile |gawk '//{print $1}'`
+
+NODES=(`cat hostfile` )
+UNODES=(`sort hostfile | uniq` )
+
+echo "Nodes Available: " ${NODES[@]}
+echo "Unique Nodes Available: " ${UNODES[@]}
+
+echo "Get Hostnames for all processes"
+i=0
+for nodes in "${NODES[@]}"; do
+  ssh -n $nodes 'echo $HOSTNAME '$i' ' &
+  let i=i+1
+done
+wait
+
+echo "Get Hostnames for all unique nodes"
+i=0
+NPROCS=`sort hostfile | uniq | wc -l |gawk '//{print $1}'`
+let NPROCS-=1
+while [ $i -le $NPROCS ] ; do
+  ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
+  let i=i+1
+done
+

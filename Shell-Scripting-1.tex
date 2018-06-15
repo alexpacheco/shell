@@ -2,6 +2,8 @@
 
 \input{mypreamble}
 \beamertemplateballitem
+\usetikzlibrary{mindmap,trees}
+\usetikzlibrary{decorations.text,calc,arrows.meta}
 \usepackage{tabu}
 
 \newcolumntype{a}{>{\columncolor{lulime}}c}
@@ -53,6 +55,27 @@
       \item The shell is simply an application running on top of the kernel and provides a powerful interface to the system.
     \end{itemize}
   \end{exampleblock}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65]
+      \coordinate (O) at (0,0);
+      \draw[fill=blue!10,blue!10] (O) circle (3.4);
+      %\onslide<4>{\draw[fill=blue,blue] (O) circle (3.4);}
+      \draw[fill=blue,blue] (O) circle (2.6);
+      %\onslide<3>{\draw[fill=blue,blue] (O) circle (2.6);}
+      \draw[fill=blue!30,blue!30] (O) circle (1.8);
+      %\onslide<2>{\draw[fill=blue,blue] (O) circle (1.8);}
+      \draw[fill=blue!40,blue!40] (O) circle (1.0);
+
+      \draw[decoration={text along path,reverse path,text
+align={align=center},text={Other Software}},decorate] (2.9,0) arc (0:180:2.9);
+      \draw[decoration={text along path,reverse path,text
+align={align=center},text={Shell}},decorate] (2.1,0) arc (0:180:2.1);
+      \draw[decoration={text along path,reverse path,text
+align={align=center},text={Kernel}},decorate] (1.3,0) arc (0:180:1.3);
+      \draw[decoration={text along path,reverse path,text
+align={align=center},text={Hardware}},decorate] (0.6,0) arc (0:180:0.6);
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 \subsection{Types of Shell} 
@@ -272,7 +295,7 @@
         \item STDOUT: Standard Output
         \item STDERR: Standard Error
     \end{enumerate}
-    \item 1 represents STDOUT and 2 represents STDOUT
+    \item 1 represents STDOUT and 2 represents STDERR
     \item I/O redirection allows users to connect applications
     \begin{itemize}
       \item[$<$]: connects a file to STDIN of an application
@@ -561,7 +584,7 @@ endif
       greater than & \texttt{if [ \$a -gt \$b ]} & \texttt{if (\$a > \$b)}\\
       greater than or equal to & \texttt{if [ 1 -ge \$b ]} & \texttt{if (1 >= \$b)}\\
       less than & \texttt{if [ \$a -lt 2 ]} & \texttt{if (\$a < 2)}\\
-      less than or equal to & \texttt{if [[ \$a -le \$b ]]} & \texttt{if (\$a <= \$b)} \\
+      less than or equal to & \texttt{if [ \$a -le \$b ]} & \texttt{if (\$a <= \$b)} \\
     \end{tabular}
    \end{center}
    \begin{center}
@@ -1472,25 +1495,24 @@ Factorial of 11 is 39916800
 
 \begin{frame}[fragile]
   \begin{lstlisting}[language=bash]
-[alp514@corona1 ~]$ cat checknodes.pbs 
+[alp514.sol](1012): cat checknodes.slr
 #!/bin/bash
 #
-#PBS -q normal
-#PBS -l nodes=4:ppn=16
-#PBS -l walltime=00:30:00
-#PBS -V
-#PBS -o nodetest.out
-#PBS -e nodetest.err
-#PBS -N testing
-#PBS -M alp514@lehigh.edu
-#PBS -m abe
+#SBATCH --partition=lts
+#SBATCH --ntasks-per-node=4
+#SBATCH --nodes=4
+#SBATCH --time=5
+#SBATCH --output=nodetest.out
+#SBATCH --error=nodetest.err
+#SBATCH --job-name=testing
 #
 
-export WORK_DIR=$PBS_O_WORKDIR
-export NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'`
+export WORK_DIR=${SLURM_SUBMIT_DIR}
+srun -s hostname > hostfile
+export NPROCS=`wc -l hostfile |gawk '//{print $1}'`
 
-NODES=(`cat ``$PBS_NODEFILE''` )
-UNODES=(`uniq ``$PBS_NODEFILE''` )
+NODES=(`cat hostfile` )
+UNODES=(`sort hostfile | uniq` )
 
 echo ``Nodes Available: `` ${NODES[@]}
 echo ``Unique Nodes Available: `` ${UNODES[@]}
@@ -1505,102 +1527,45 @@ wait
 
 echo ``Get Hostnames for all unique nodes''
 i=0
-NPROCS=`uniq $PBS_NODEFILE | wc -l |gawk '//{print $1}'`
+NPROCS=`sort hostfile | uniq | wc -l |gawk '//{print $1}'`
 let NPROCS-=1
 while [ $i -le $NPROCS ] ; do
   ssh -n ${UNODES[$i]} 'echo $HOSTNAME '$i' '
   let i=i+1
 done
 
-[alp514@corona1 ~]$ qsub checknodes.pbs
-688825.corona1.cc.lehigh.edu
+[alp514.sol](1013): sbatch -p imlab checknodes.slr
+Submitted batch job 620045
   \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile,allowframebreaks]
   \begin{lstlisting}[language=bash,deletekeywords={cat,for}]
-[alp514@corona1 ~]$ cat nodetest.out
-Wed Mar 11 08:20:40 EDT 2015 : erasing contents of corona63:/scratch
-Wed Mar 11 08:20:40 EDT 2015 : /scratch erased, resetting swap
-swapon on /dev/sda6
-Wed Mar 11 08:20:41 EDT 2015 : swap reset
-Wed Mar 11 08:20:41 EDT 2015 : erasing contents of corona56:/scratch
-Wed Mar 11 08:20:41 EDT 2015 : /scratch erased, resetting swap
-swapon on /dev/sda6
-Wed Mar 11 08:20:41 EDT 2015 : swap reset
-Wed Mar 11 08:20:41 EDT 2015 : erasing contents of corona50:/scratch
-Wed Mar 11 08:20:42 EDT 2015 : /scratch erased, resetting swap
-swapon on /dev/sda6
-Wed Mar 11 08:20:42 EDT 2015 : swap reset
-Wed Mar 11 08:20:43 EDT 2015 : erasing contents of corona27:/scratch
-Wed Mar 11 08:20:43 EDT 2015 : /scratch erased, resetting swap
-swapon on /dev/sda6
-Wed Mar 11 08:20:43 EDT 2015 : swap reset
-Nodes Available:  corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona63 corona56 corona56 c
-orona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona56 corona50 corona50 corona50 corona50 corona50 corona50 co
-rona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona50 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 corona27 cor
-ona27 corona27 corona27 corona27 corona27 corona27
-Unique Nodes Available:  corona63 corona56 corona50 corona27
+[alp514.sol](1014): cat nodetest.out
+Nodes Available:  sol-b411 sol-b411 sol-b411 sol-b411 sol-b413 sol-b412 sol-b501 sol-b413 sol-b413 sol-b413 sol-b412 sol-b412 sol-b412 sol-b501 sol-b501 sol-b501
+Unique Nodes Available:  sol-b411 sol-b412 sol-b413 sol-b501
 Get Hostnames for all processes
-corona27 52
-corona27 59
-corona27 60
-corona27 57
-corona27 51
-corona27 62
-corona27 54
-corona27 48
-corona27 63
-corona27 58
-corona27 53
-corona50 43
-corona50 40
-corona50 38
-corona50 33
-corona50 34
-corona50 47
-corona56 31
-corona63 13
-corona63 6
-corona56 22
-corona63 9
-corona63 14
-corona56 16
-corona56 25
-corona56 23
-corona56 17
-corona63 5
-corona63 10
-corona63 8
-corona63 15
-corona63 3
-corona50 32
-corona50 44
-corona56 18
-corona50 36
-corona50 46
-corona56 27
-corona50 42
-corona63 1
-corona63 12
-corona50 45
-corona50 41
-corona50 35
-corona56 29
-corona63 7
-corona56 28
-corona63 11
-corona56 26
-corona56 21
-corona63 4
-corona56 24
-corona63 0
-corona56 20
-Get Hostnames for all unique nodes   
-corona63 0
-corona56 1
-corona50 2
-corona27 3
+sol-b501 14
+sol-b501 6
+sol-b501 15
+sol-b501 13
+sol-b413 4
+sol-b413 9
+sol-b412 11
+sol-b412 10
+sol-b413 7
+sol-b413 8
+sol-b412 5
+sol-b411 1
+sol-b412 12
+sol-b411 3
+sol-b411 2
+sol-b411 0
+Get Hostnames for all unique nodes
+sol-b411 0
+sol-b412 1
+sol-b413 2
+sol-b501 3
   \end{lstlisting}
 \end{frame}
 

@@ -1,0 +1,22 @@
+getcpmdvels.sh : BASH script to extract velocity information from CPMD Trajectory files and obtain Velocity Fourier Transforms using octave
+ Usage: ./getcpmdvels.sh 18 <output vels file>
+
+getengcons.sh : BASH script to extract energy data from GAMESS DRC calculation 
+ Usage: ./getengcons.sh nh3-drc.out (output is written to energy.dat)
+
+getcoordvels.sh : BASH script to extract coordinates and velocities from GAMESS DRC calculations and obtain Velocity Fourier Transforms using octave
+ Usage: ./getcoordvels.sh nh3-drc.out 4 0.25 <output: coords file in xyz format> <output: vels file> <output: ftvels file> 
+ Visualize using vmd: vmd -e traj.vmd <output: coords file in xyz format>
+
+getmwvels.awk : AWK script to extract mass weighted velocities from GAUSSIAN ADMP calculations
+ Usage: ./getmwvels.awk water-hexamer-cage-admp.log 18 <output: mwvels file> 
+
+gettrajxyz.awk : AWK script to extract nuclear coordinates from GAUSSIAN ADMP calculations
+ Usage: ./gettrajxyz.awk water-hexamer-cage-admp.log 18 <output: coords file in xyz format>
+ Visualize using vmd: vmd -e traj.vmd <output: coords file in xyz format>
+
+nh3-drc.out : GAMESS DRC output file
+
+TRAJECTORY : CPMD Trajectory file
+
+water-hexamer-cage-admp.log : GAUSSIAN ADMP output file
