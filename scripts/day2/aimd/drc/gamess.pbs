@@ -30,6 +30,6 @@
 module load gamess/05_2013
 
 echo "Job Started at " `date`
-rungms nh3-drc.inp 
+rungms nh3-drc.inp > nh3-drc.out
 
 echo "Done" `date`

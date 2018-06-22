@@ -1,0 +1,38 @@
+mkdir: cannot create directory ‘/scratch/alp514/622024’: Permission denied
+cp nh3-drc.inp /scratch/alp514/622024/gmsscr/nh3-drc.F05
+unset echo
+setenv MV2_USE_BLOCKING 1
+setenv MV2_ENABLE_AFFINITY 0
+setenv MV2_SHOW_CPU_BINDING 1
+setenv MV2_USE_THREAD_WARNING 0
+unset echo
+setenv HYDRA_ENV all
+unset echo
+srun -n 40 /share/Apps/gamess/5Dec2014/intel-16.0.3-mvapich2-2.1/gamess.01.x
+slurmstepd: error: couldn't chdir to `/scratch/alp514/622024/gmsscr': No such file or directory: going to /tmp instead
+-------------CPU AFFINITY-------------
+RANK:0  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:1  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:2  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:3  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:4  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:5  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:6  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:7  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:8  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:9  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:10  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:11  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:12  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:13  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:14  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:15  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:16  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:17  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:18  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+RANK:19  CPU_SET:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+-------------------------------------
+unset echo
+ls: No match.
+ls: No match.
+ls: No match.

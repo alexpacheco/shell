@@ -1,0 +1,61 @@
+#!/bin/bash
+#SBATCH -p lts
+#SBATCH --ntasks-per-node=4
+#SBATCH --nodes=1
+#SBATCH --time=12:00:00
+#SBATCH -o water-hexamer-admp-std.out
+#SBATCH --job-name=cage-admp
+
+module load gaussian/g09
+### Define working directory and cd to it
+### Use SLURM_SUBMIT_DIR or set the directory expilicity
+export WORK_DIR=${SLURM_SUBMIT_DIR}
+cd $WORK_DIR
+### The next two lines may not be needed for serial jobs
+### The number MUST match nprocshared in the input file and ppn in the PBS commands above
+export OMP_NUM_THREADS=4
+export NPROCS=$SLURM_NTASKS
+### Get Optimized Geometry and Harmonic Frequency Analysis
+g09 < water-hexamer-cage-opt-freq.com > water-hexamer-cage-opt-freq.log
+### Setting up PREFIX variable since the submit script does more than just run G09
+export PREFIX=$(ls *admp.com | awk -F. '{print $1}')
+### Input is set up to read guess from checkpoint file
+### Copy checkpoint file from Opt + Freq calculation
+### else remove guess=read from input file
+cp -p water-hexamer-cage-opt-freq.chk $PREFIX.chk
+### Run Gaussian, either G09 or G03
+g09 < $PREFIX.com > ../output/$PREFIX.log
+
+########## Analysis of ADMP Calculations ##################
+##### Use scripts as is ###################################
+##### If you encounter errors, feel free to edit them #####
+#####   (and send me the revised script, if you like) #####
+##### If you prefer different scripting languages, I ######
+#####   appreciate contributions to these sets of worked ##
+#####   examples                       ####################
+#####    -- Alex Pacheco, LSU HPC & LONI USER Support #####
+#####    -- apacheco@cct.lsu.edu or sys-help@loni.org #####
+###########################################################
+
+cd ../output 
+
+NAtoms=18
+Deltat=0.25 ### time step in fs
+
+#### Extract Nuclear Positions in XYZ format for visualization in VMD
+../gettrajxyz.awk $PREFIX.log $NAtoms $PREFIX.xyz
+#### visualize using vmd $PREFIX.xyz
+
+#### Extract Mass Weighted Velocities (amu^0.5*bohr/sec)
+../getmwvels.awk $PREFIX.log $NAtoms $PREFIX.mwvels
+### Output format for $PREFIX/mwvels
+### [Time in fs] [3N MW Velocities]
+
+#### Obtain Fourier Transform Velocity Auto Correlation (FT-VAC) Spectra
+../getftmwvels.sh $PREFIX.mwvels $PREFIX.ftmwvels $NAtoms $Deltat
+#### Output format for $PREFIX.ftmwvels
+#### [Frequency in fs^-1] [FT-VAC=sum_i(V_i*V_i)] where i=1,3N
+#### Conversion factor 1fs^-1 = 33356cm^-1
+#### Use plotting software to see spectra
+
+
